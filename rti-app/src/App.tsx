@@ -1,5 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Suspense, lazy, useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Suspense, lazy, useState } from 'react';
 import { PostHogProvider } from '@/components/PostHogProvider';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { BootSequence } from '@/components/BootSequence';
@@ -14,11 +14,14 @@ const TrackPage = lazy(() => import('@/pages/track'));
 const CheckReplyPage = lazy(() => import('@/pages/check-reply'));
 const AboutPage = lazy(() => import('@/pages/about'));
 const DocumentsPage = lazy(() => import('@/pages/documents'));
+const ToolkitPage = lazy(() => import('@/pages/toolkit'));
 
 export default function App() {
   const [hasBooted, setHasBooted] = useState(() => {
     return sessionStorage.getItem("rti_booted") === "true";
   });
+  
+  const location = useLocation();
 
   if (!hasBooted) {
     return (
@@ -34,7 +37,7 @@ export default function App() {
   return (
     <PostHogProvider>
       <div className="min-h-screen flex flex-col bg-gray-50">
-        <LanguageSwitcher />
+        {location.pathname !== '/home' && <LanguageSwitcher />}
         <main className="flex-1 flex flex-col">
           <Suspense fallback={
             <div className="flex-1 flex items-center justify-center">
@@ -54,6 +57,7 @@ export default function App() {
               <Route path="/check-reply" element={<CheckReplyPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/documents" element={<DocumentsPage />} />
+              <Route path="/toolkit" element={<ToolkitPage />} />
 
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>

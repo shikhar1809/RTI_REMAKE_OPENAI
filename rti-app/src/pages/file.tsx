@@ -91,6 +91,7 @@ export default function FilePage() {
 
           <div className="card shadow-sm">
             {currentStep === 1 ? (
+              <>
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   {t("step1Title", "What is your problem?")}
@@ -115,8 +116,9 @@ export default function FilePage() {
                     </button>
                   ))}
                 </div>
+              </div>
 
-                <textarea
+              <textarea
                   value={problemDescription}
                   onChange={(e) => setProblemDescription(e.target.value)}
                   placeholder={t("step1Placeholder", "For example: I applied for a ration card 6 months ago...")}
