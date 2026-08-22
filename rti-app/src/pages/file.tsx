@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2, ShieldCheck } from "lucide-react";
 import { useRTIStore } from "@/store/rtiStore";
 import { useDocumentStore } from "@/store/documentStore";
 import { generateMockDraft, translateDraft } from "@/data/mockDrafts";
@@ -124,9 +124,16 @@ export default function FilePage() {
                       </button>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-sm text-gray-500 mb-3">
                     This information is required by the RTI Act and will be automatically added to your draft.
                   </p>
+                  
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-5 flex items-start gap-2">
+                    <ShieldCheck size={16} className="text-green-600 mt-0.5 shrink-0" />
+                    <p className="text-xs text-green-800 font-medium leading-tight">
+                      <strong>100% Private & Secure:</strong> Your details are stored strictly locally on your device. We do not track, collect, or upload your personal information to any server.
+                    </p>
+                  </div>
                   
                   <div className="space-y-4">
                     <div>
