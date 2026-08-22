@@ -154,3 +154,7 @@ Rationale: The user requested to completely remove Next.js and replace it with a
 D-016: Added Document Locker & Boot Sequence.
 Rationale: User requested a DigiLocker mock integration for checking documents, and an initial 8-second boot sequence screen (simulating component loading and prerequisite checking) for the showcase.
 
+
+D-017: Implemented 4 Major features: Print PDF, Hindi Translation, Common Templates, BPL Exemption.
+Rationale: Requested by user to enhance non-tech user experience.
+
