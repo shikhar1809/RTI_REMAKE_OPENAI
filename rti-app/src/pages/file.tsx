@@ -27,6 +27,8 @@ export default function FilePage() {
     setCurrentStep,
   } = useRTIStore();
 
+  const { lastSynced } = useDocumentStore();
+
   const { savedFullName, savedAddress, savedMobile, saveProfileDetails } = useAuthStore();
   
   const [name, setName] = useState("");
@@ -96,22 +98,37 @@ export default function FilePage() {
           <Link to="/home" className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 mb-6 transition-colors">
             <ArrowLeft size={16} /> Home
           </Link>
-          <div className="mb-8">
-            <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
-              <span>
-                {tc("step", "Step")} {currentStep} {tc("of", "of")} {TOTAL_STEPS}
-              </span>
+          {lastSynced && (
+            <div className="mb-8">
+              <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+                <span>
+                  {tc("step", "Step")} {currentStep} {tc("of", "of")} {TOTAL_STEPS}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
+                />
+              </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
-              />
-            </div>
-          </div>
+          )}
 
           <div className="card shadow-sm">
-            {currentStep === 1 ? (
+            {!lastSynced ? (
+              <div className="text-center py-10 px-4">
+                <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <ShieldCheck size={40} className="text-amber-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">Identity Verification Required</h2>
+                <p className="text-gray-500 mb-8 max-w-md mx-auto">
+                  To legally file a Right to Information (RTI) request, you must first sync your official documents (like Aadhaar/PAN) to verify your identity.
+                </p>
+                <Link to="/documents" className="btn-primary inline-flex">
+                  Go to Document Vault <ArrowRight size={16} className="ml-2" />
+                </Link>
+              </div>
+            ) : currentStep === 1 ? (
               <>
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
