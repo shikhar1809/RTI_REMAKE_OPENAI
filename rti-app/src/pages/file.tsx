@@ -8,6 +8,7 @@ import { STATES, UNSUPPORTED_STATE_GUIDANCE } from "@/data/states";
 import { trackWizardStarted, trackWizardStep, trackDraftGenerated, trackDraftCopied } from "@/lib/analytics";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "@/store/authStore";
 
 const TOTAL_STEPS = 4;
 
