@@ -28,6 +28,11 @@ export interface AuthState {
   whatsappNumber: string | null;
   notificationEmail: string | null;
 
+  // Saved Profile for RTIs
+  savedFullName: string;
+  savedAddress: string;
+  savedMobile: string;
+
   // Actions
   login: (email: string, password: string) => { success: boolean; error?: string };
   logout: () => void;
@@ -35,6 +40,7 @@ export interface AuthState {
   completeRightsStep: () => void;
   setNotificationsEnabled: (enabled: boolean) => void;
   verifyContact: (wa: string, email: string) => void;
+  saveProfileDetails: (name: string, address: string, mobile: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -51,6 +57,10 @@ export const useAuthStore = create<AuthState>()(
       contactVerified: false,
       whatsappNumber: null,
       notificationEmail: null,
+      
+      savedFullName: "",
+      savedAddress: "",
+      savedMobile: "",
 
       login: (email, password) => {
         const match = VALID_CREDENTIALS.find(
@@ -80,6 +90,9 @@ export const useAuthStore = create<AuthState>()(
       
       verifyContact: (wa, email) => 
         set({ contactVerified: true, whatsappNumber: wa, notificationEmail: email, notificationsEnabled: true }),
+        
+      saveProfileDetails: (name, address, mobile) =>
+        set({ savedFullName: name, savedAddress: address, savedMobile: mobile }),
     }),
     {
       name: "rti-auth",

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink } from "lucide-react";
+import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2 } from "lucide-react";
 import { useRTIStore } from "@/store/rtiStore";
 import { useDocumentStore } from "@/store/documentStore";
 import { generateMockDraft, translateDraft } from "@/data/mockDrafts";
@@ -9,7 +9,7 @@ import { trackWizardStarted, trackWizardStep, trackDraftGenerated, trackDraftCop
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Link } from "react-router-dom";
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 export default function FilePage() {
   const { t } = useTranslation(undefined, { keyPrefix: "file" });
@@ -26,15 +26,35 @@ export default function FilePage() {
     setCurrentStep,
   } = useRTIStore();
 
+  const { savedFullName, savedAddress, savedMobile, saveProfileDetails } = useAuthStore();
+  
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [mobile, setMobile] = useState("");
   const [copied, setCopied] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  function handleImport() {
+    setName(savedFullName);
+    setAddress(savedAddress);
+    setMobile(savedMobile);
+  }
+
+  function handleSaveProfile() {
+    saveProfileDetails(name, address, mobile);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  }
 
   function goNext() {
-    if (currentStep === 1 && problemDescription.length < 10) return;
-    if (currentStep === 2 && !selectedStateId) return;
+    if (currentStep === 1 && (!name || !address || !mobile)) return;
+    if (currentStep === 2 && problemDescription.length < 10) return;
+    if (currentStep === 3 && !selectedStateId) return;
 
-    if (currentStep === 2) {
+    if (currentStep === 3) {
       const isBpl = useDocumentStore.getState().isBPLVerified();
-      const newDraft = generateMockDraft(problemDescription, selectedStateId, isBpl);
+      const profile = { name, address, mobile };
+      const newDraft = generateMockDraft(problemDescription, selectedStateId, isBpl, profile);
       setDraft(newDraft);
       trackDraftGenerated(selectedStateId, "General");
     }
@@ -92,6 +112,68 @@ export default function FilePage() {
           <div className="card shadow-sm">
             {currentStep === 1 ? (
               <>
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-semibold text-gray-700">
+                      Your Details
+                    </label>
+                    {savedFullName && (
+                      <button onClick={handleImport} className="text-xs text-blue-600 font-semibold hover:underline">
+                        Auto-fill from saved profile
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-500 mb-4">
+                    This information is required by the RTI Act and will be automatically added to your draft.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <input 
+                        type="text" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                        placeholder="Full Name" 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <textarea 
+                        value={address} 
+                        onChange={(e) => setAddress(e.target.value)} 
+                        placeholder="Complete Postal Address" 
+                        className="w-full h-24 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none resize-none" 
+                      />
+                    </div>
+                    <div>
+                      <input 
+                        type="tel" 
+                        value={mobile} 
+                        onChange={(e) => setMobile(e.target.value)} 
+                        placeholder="Mobile Number" 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none" 
+                      />
+                    </div>
+                  </div>
+                  
+                  {name && address && mobile && (
+                    <button onClick={handleSaveProfile} className="mt-4 text-xs font-semibold text-green-600 hover:underline">
+                      Save details for next time
+                    </button>
+                  )}
+                </div>
+                
+                <button
+                  onClick={goNext}
+                  disabled={!name || !address || !mobile}
+                  className="btn-primary w-full"
+                >
+                  {tc("next", "Next")}
+                  <ArrowRight size={16} />
+                </button>
+              </>
+            ) : currentStep === 2 ? (
+              <>
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   {t("step1Title", "What is your problem?")}
@@ -124,16 +206,22 @@ export default function FilePage() {
                   placeholder={t("step1Placeholder", "For example: I applied for a ration card 6 months ago...")}
                   className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm resize-none mb-6"
                 />
-                <button
-                  onClick={goNext}
-                  disabled={problemDescription.length < 10}
-                  className="btn-primary w-full"
-                >
-                  {tc("next", "Next")}
-                  <ArrowRight size={16} />
-                </button>
+                <div className="flex gap-3">
+                  <button onClick={goBack} className="btn-secondary flex-1">
+                    <ArrowLeft size={16} />
+                    {tc("back", "Back")}
+                  </button>
+                  <button
+                    onClick={goNext}
+                    disabled={problemDescription.length < 10}
+                    className="btn-primary flex-1"
+                  >
+                    {tc("next", "Next")}
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
               </>
-            ) : currentStep === 2 ? (
+            ) : currentStep === 3 ? (
               <>
                 <h1 className="text-xl font-bold text-gray-900 mb-2">{t("step2Title", "Select the Authority")}</h1>
                 <p className="text-sm text-gray-500 mb-6">{t("step2Desc", "Which state government or central authority?")}</p>
@@ -163,7 +251,7 @@ export default function FilePage() {
                   </button>
                 </div>
               </>
-            ) : currentStep === 3 && draft ? (
+            ) : currentStep === 4 && draft ? (
               <>
                 <div className="flex items-start justify-between mb-2">
                   <h1 className="text-xl font-bold text-gray-900">{t("step3Title", "Your RTI Draft is Ready")}</h1>
@@ -230,6 +318,14 @@ export default function FilePage() {
           </div>
         </div>
       </div>
+      
+      {/* Toast */}
+      {showToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5">
+          <CheckCircle2 size={20} className="text-green-400" />
+          <span className="text-sm font-medium">Details saved for later!</span>
+        </div>
+      )}
     </ProtectedRoute>
   );
 }

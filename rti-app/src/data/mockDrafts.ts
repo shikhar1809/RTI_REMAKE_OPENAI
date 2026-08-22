@@ -194,7 +194,7 @@ Yours sincerely,
 [Date]`,
 };
 
-export function generateMockDraft(problem: string, stateId: string, isBpl: boolean = false): RTIDraft {
+export function generateMockDraft(problem: string, stateId: string, isBpl: boolean = false, profile?: { name: string, address: string, mobile: string }): RTIDraft {
   const p = problem.toLowerCase();
   
   let draft = DRAFT_TEMPLATES.find((t) =>
@@ -210,6 +210,14 @@ export function generateMockDraft(problem: string, stateId: string, isBpl: boole
     body += `\n\nNote: I belong to the BPL category (BPL Card details attached). I request you to exempt the application fee as per section 7(5) of the Right to Information Act, 2005.`;
   } else {
     body += `\n\nI have affixed/attached the required RTI fee of Rs 10/- via Postal Order / Online Payment.`;
+  }
+
+  if (profile && profile.name) {
+    body = body.replace(/\[Your Name\]/g, profile.name);
+    body = body.replace(/\[Your Address\]/g, profile.address);
+    body = body.replace(/\[Your Mobile Number\]/g, profile.mobile);
+    body = body.replace(/\[Mobile Number\]/g, profile.mobile);
+    body = body.replace(/\[Date\]/g, new Date().toLocaleDateString("en-IN"));
   }
 
   return {
