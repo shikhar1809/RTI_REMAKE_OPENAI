@@ -6,13 +6,13 @@ import { FcHighPriority, FcIdea } from "react-icons/fc";
 export default function ToolkitPage() {
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+      <div className="flex flex-col items-center py-8 px-4">
+        <div className="w-full max-w-3xl p-4 sm:p-8">
+          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
             <ArrowLeft size={16} /> Back to Home
           </Link>
           
-          <div className="mb-8">
+          <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">RTI Toolkit</h1>
             <p className="text-gray-500">Advanced tools to help you manage your RTI applications.</p>
           </div>

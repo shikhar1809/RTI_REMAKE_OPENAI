@@ -16,6 +16,7 @@ const CheckReplyPage = lazy(() => import('@/pages/check-reply'));
 const AboutPage = lazy(() => import('@/pages/about'));
 const DocumentsPage = lazy(() => import('@/pages/documents'));
 const ToolkitPage = lazy(() => import('@/pages/toolkit'));
+const StatsPage = lazy(() => import('@/pages/stats'));
 
 export default function App() {
   const [hasBooted, setHasBooted] = useState(() => {
@@ -37,7 +38,7 @@ export default function App() {
 
   return (
     <PostHogProvider>
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-home-responsive">
         <PageTransitionLoader />
         {location.pathname !== '/home' && <LanguageSwitcher />}
         <main className="flex-1 flex flex-col">
@@ -60,6 +61,7 @@ export default function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/documents" element={<DocumentsPage />} />
               <Route path="/toolkit" element={<ToolkitPage />} />
+              <Route path="/stats" element={<StatsPage />} />
 
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>

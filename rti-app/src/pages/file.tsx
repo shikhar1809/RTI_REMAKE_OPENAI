@@ -10,7 +10,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 export default function FilePage() {
   const { t } = useTranslation(undefined, { keyPrefix: "file" });
@@ -36,6 +36,7 @@ export default function FilePage() {
   const [mobile, setMobile] = useState("");
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [rating, setRating] = useState(0);
 
   function handleImport() {
     setName(savedFullName);
@@ -93,14 +94,14 @@ export default function FilePage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
-          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+      <div className="flex flex-col items-center py-8 px-4">
+        <div className="w-full max-w-2xl p-4 sm:p-8">
+          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
             <ArrowLeft size={16} /> Home
           </Link>
           {lastSynced && (
-            <div className="mb-8">
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+            <div className="mb-8 bg-white/95 border-2 border-gray-300 rounded-2xl p-4 shadow-md">
+              <div className="flex items-center justify-between text-sm font-bold text-gray-700 mb-2">
                 <span>
                   {tc("step", "Step")} {currentStep} {tc("of", "of")} {TOTAL_STEPS}
                 </span>
@@ -338,7 +339,46 @@ export default function FilePage() {
                     {copied ? tc("copied", "Copied!") : tc("copy", "Copy")}
                   </button>
                 </div>
+                
+                <div className="mt-6 flex justify-center">
+                  <button onClick={() => setCurrentStep(5)} className="text-green-600 font-semibold hover:underline flex items-center gap-1">
+                    I have filed the RTI <ArrowRight size={16} />
+                  </button>
+                </div>
               </>
+            ) : currentStep === 5 ? (
+              <div className="text-center py-6 px-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 size={32} className="text-green-600" />
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">Filing Complete!</h1>
+                <p className="text-gray-500 mb-8 max-w-md mx-auto">
+                  How was your experience using our platform to draft and file your RTI?
+                </p>
+                
+                <div className="max-w-xs mx-auto mb-6">
+                  <div className="flex justify-center gap-2 mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button 
+                        key={star} 
+                        onClick={() => setRating(star)}
+                        className={`transition-colors ${rating >= star ? 'text-amber-400' : 'text-gray-300 hover:text-amber-400 focus:text-amber-400'}`}
+                      >
+                        <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                      </button>
+                    ))}
+                  </div>
+                  <textarea 
+                    placeholder="Short description of your experience..." 
+                    className="w-full h-24 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none resize-none mb-4"
+                  />
+                  <Link to="/home" className="btn-primary w-full">
+                    Submit Survey & Go Home
+                  </Link>
+                </div>
+              </div>
             ) : null}
           </div>
         </div>

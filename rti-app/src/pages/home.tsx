@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { STATES } from "@/data/states";
-import { MOCK_APPLICATIONS } from "@/data/mockRTIs";
+import { useApplicationsStore } from "@/store/applicationsStore";
 import { useTranslation } from "react-i18next";
 import { FcGlobe, FcSmartphoneTablet } from "react-icons/fc";
 import { Bell, BellOff, X, CheckCircle2 } from "lucide-react";
@@ -17,7 +17,8 @@ export default function HomePage() {
   const stateInfo = STATES[selectedStateId];
   const { t, i18n } = useTranslation(undefined, { keyPrefix: "dashboard" });
 
-  const newRepliesCount = MOCK_APPLICATIONS.filter((app) => app.status === "replied").length;
+  const { applications } = useApplicationsStore();
+  const newRepliesCount = applications.filter((app) => app.status === "replied").length;
 
   const [showModal, setShowModal] = useState(false);
   const [wa, setWa] = useState("");
@@ -48,16 +49,16 @@ export default function HomePage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-4xl">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{t("welcome", "Welcome")}, {userName}</h1>
-            <p className="text-gray-500 text-sm md:text-base">{t("whatWouldYouLike", "What would you like to do today?")}</p>
+      <div className="flex flex-col items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
+        <div className="w-full max-w-xl p-4 sm:p-8">
+          <div className="text-center mb-6">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 drop-shadow-md">{t("welcome", "Welcome")}, {userName}</h1>
+            <p className="text-gray-600 font-medium text-sm drop-shadow">{t("whatWouldYouLike", "What would you like to do today?")}</p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-10">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
             {stateInfo && (
-              <div className="bg-white border border-gray-200 shadow-sm rounded-full px-5 py-2 flex items-center gap-3">
+              <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-4 py-1.5 flex items-center gap-2">
                 <span className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                   <select
@@ -72,56 +73,54 @@ export default function HomePage() {
                     ))}
                   </select>
                 </span>
-                <div className="w-px h-4 bg-gray-200"></div>
-                <span className="text-sm text-gray-500 font-medium">{t("fee", "Fee")}: ₹{stateInfo.fee}</span>
+                <div className="w-px h-3 bg-gray-300"></div>
+                <span className="text-xs text-gray-500 font-bold">₹{stateInfo.fee}</span>
               </div>
             )}
             
-            <div className="bg-white border border-gray-200 shadow-sm rounded-full px-4 py-1.5 flex items-center gap-2">
-              <FcGlobe size={18} />
+            <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-3 py-1.5 flex items-center gap-1.5">
+              <FcGlobe size={16} />
               <select 
                 value={i18n.language}
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
-                className="bg-transparent text-sm font-medium text-gray-700 outline-none cursor-pointer hover:text-gray-900"
+                className="bg-transparent text-sm font-bold text-gray-700 outline-none cursor-pointer hover:text-gray-900"
               >
-                <option value="en">English</option>
-                <option value="hi">हिंदी (Hindi)</option>
-                <option value="bn">বাংলা (Bengali)</option>
-                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="en">EN</option>
+                <option value="hi">HI</option>
+                <option value="bn">BN</option>
+                <option value="ta">TA</option>
               </select>
             </div>
-          </div>
 
-          <div className="flex justify-center mb-8">
             <button 
               onClick={handleToggle}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-colors border ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold transition-all border-2 shadow-sm ${
                 notificationsEnabled 
-                  ? "bg-green-50 border-green-200 text-green-700 hover:bg-green-100" 
-                  : "bg-gray-100 border-gray-200 text-gray-500 hover:bg-gray-200"
+                  ? "bg-green-50/95 border-green-400 text-green-700 hover:bg-green-100" 
+                  : "bg-white/95 border-gray-300 text-gray-600 hover:bg-gray-50"
               }`}
             >
-              {notificationsEnabled ? <Bell size={16} /> : <BellOff size={16} />}
-              {notificationsEnabled ? "Notifications On" : "Notifications Off"}
+              {notificationsEnabled ? <Bell size={14} /> : <BellOff size={14} />}
+              {notificationsEnabled ? "Alerts On" : "Alerts Off"}
             </button>
           </div>
 
-          <div className="flex flex-col gap-4 max-w-sm mx-auto w-full">
+          <div className="flex flex-col gap-3 max-w-sm mx-auto w-full">
             
             <Link
               to="/file"
-              className="bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-bold text-center transition-colors text-lg shadow-sm relative"
+              className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 relative"
             >
               {t("fileNewReq", "FILE NEW REQUEST")}
             </Link>
 
             <Link
               to="/track"
-              className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 py-4 px-6 rounded-xl font-bold text-center transition-colors text-lg shadow-sm relative"
+              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md relative"
             >
               {t("viewTrack", "VIEW / TRACK EXISTING REPORTS")}
               {newRepliesCount > 0 && (
-                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-7 h-7 flex items-center justify-center rounded-full shadow-md border-2 border-white">
+                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
                   {newRepliesCount}
                 </div>
               )}
@@ -129,31 +128,38 @@ export default function HomePage() {
 
             <Link
               to="/documents"
-              className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 py-4 px-6 rounded-xl font-bold text-center transition-colors text-lg shadow-sm"
+              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
               {t("docConnect", "DOCUMENT CONNECT")}
             </Link>
 
             <Link
               to="/about"
-              className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 py-4 px-6 rounded-xl font-bold text-center transition-colors text-lg shadow-sm"
+              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
-              {t("knowRules", "KNOW RTI RULES")}
+              {t("knowRules", "KNOW YOUR RTI")}
+            </Link>
+
+            <Link
+              to="/stats"
+              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
+            >
+              {t("rtiStats", "CHECK RTI STATS")}
             </Link>
 
             <Link
               to="/toolkit"
-              className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 py-4 px-6 rounded-xl font-bold text-center transition-colors text-lg shadow-sm"
+              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
               {t("rtiToolkit", "RTI TOOLKIT")}
             </Link>
 
           </div>
           
-          <div className="mt-12 text-center">
+          <div className="mt-6 text-center flex justify-center">
             <button
               onClick={() => useAuthStore.getState().logout()}
-              className="text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors"
+              className="px-5 py-2 bg-white hover:bg-red-50 text-red-600 font-bold rounded-lg shadow-sm border border-red-200 transition-colors flex items-center gap-2 text-sm"
             >
               {t("signOut", "Sign out securely")}
             </button>

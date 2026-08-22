@@ -35,22 +35,23 @@ export default function LoginPage() {
 
   return (
     <ProtectedRoute publicOnly>
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-10">
-        <div className="mb-8 text-center">
-          <div className="w-20 h-20 rounded-3xl bg-white flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
-            <FcPrivacy size={48} />
+      <div className="flex flex-col items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
+        <div className="w-full max-w-md card flex flex-col items-center">
+          <div className="mb-6 text-center">
+            <div className="w-20 h-20 rounded-3xl bg-gray-50 flex items-center justify-center mx-auto mb-4 border border-gray-100">
+              <FcPrivacy size={48} />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900">RTI Easy</h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Your Right to Information, simplified
+            </p>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">RTI Easy</h1>
-          <p className="text-gray-500 text-sm mt-2">
-            Your Right to Information, simplified
-          </p>
-        </div>
 
-        <div className="w-full max-w-sm card shadow-md">
-          <h2 className="text-xl font-semibold text-gray-900 mb-1">Welcome</h2>
-          <p className="text-sm text-gray-500 mb-6">
-            Sign in to file or track your RTI applications
-          </p>
+          <div className="w-full mt-2">
+            <h2 className="text-xl font-semibold text-gray-900 mb-1 text-center">Welcome</h2>
+            <p className="text-sm text-gray-500 mb-6 text-center">
+              Sign in to file or track your RTI applications
+            </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -114,6 +115,7 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+          </div>
         </div>
       </div>
     </ProtectedRoute>

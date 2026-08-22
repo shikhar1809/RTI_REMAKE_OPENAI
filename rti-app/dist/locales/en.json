@@ -140,5 +140,31 @@
     "whatIfNoDesc": "File a First Appeal within 30 days of the deadline. If that fails, escalate to the State or Central Information Commission.",
     "rightsSummary": "Your rights in one sentence",
     "rightsSummaryDesc": "You can ask any government body for any document, and they must give it to you — or give you a lawful reason why not."
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "fileNew": "File New RTI",
+    "fileDesc": "Draft & route instantly",
+    "track": "Track Applications",
+    "trackDesc": "Check 30-day deadlines",
+    "analyze": "Analyze Reply",
+    "analyzeDesc": "Grade government response",
+    "activeCases": "Active Cases",
+    "awaitingReply": "Awaiting Reply",
+    "daysLeft": "days left",
+    "overdue": "Overdue",
+    "quickActions": "Quick Actions",
+    "newDraft": "Start New Draft",
+    "checkReply": "Check Official Reply",
+    "viewPast": "View All Past Cases",
+    "docLocker": "Document Locker (DigiLocker)",
+    "signOut": "Sign out securely",
+    "whatWouldYouLike": "What would you like to do today?",
+    "fileNewReq": "FILE NEW REQUEST",
+    "viewTrack": "VIEW / TRACK EXISTING REPORTS",
+    "docConnect": "DOCUMENT VAULT",
+    "knowRules": "KNOW RTI RULES",
+    "rtiToolkit": "RTI TOOLKIT",
+    "fee": "Fee"
   }
 }

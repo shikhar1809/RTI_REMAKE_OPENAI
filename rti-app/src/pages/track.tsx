@@ -1,23 +1,24 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Clock, AlertCircle, CheckCircle2, MessageSquare, Plus, Timer, ArrowLeft } from "lucide-react";
-import { MOCK_APPLICATIONS, getDaysRemaining, type RTIApplication } from "@/data/mockRTIs";
+import { useApplicationsStore } from "@/store/applicationsStore";
+import { getDaysRemaining, type RTIApplication } from "@/data/mockRTIs";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 export default function TrackPage() {
   const { t } = useTranslation(undefined, { keyPrefix: "track" });
   const { t: tc } = useTranslation(undefined, { keyPrefix: "common" });
 
-  const applications = MOCK_APPLICATIONS;
+  const { applications } = useApplicationsStore();
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+      <div className="flex flex-col items-center py-8 px-4">
+        <div className="w-full max-w-3xl p-4 sm:p-8">
+          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
             <ArrowLeft size={16} /> Home
           </Link>
-          <div className="flex items-center justify-between mb-8">
+          <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md flex items-center justify-between mb-8">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{t("pageTitle", "Track Applications")}</h1>
               <p className="text-sm text-gray-500 mt-1">

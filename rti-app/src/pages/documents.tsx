@@ -23,13 +23,13 @@ export default function DocumentsPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+      <div className="flex flex-col items-center py-8 px-4">
+        <div className="w-full max-w-3xl p-4 sm:p-8">
+          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
             <ArrowLeft size={16} /> Home
           </Link>
           
-          <div className="mb-8">
+          <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md mb-8">
             <div className="flex items-center gap-3 mb-2">
               <FcDataBackup size={32} />
               <h1 className="text-2xl font-bold text-gray-900">Document Locker</h1>
