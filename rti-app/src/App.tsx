@@ -3,6 +3,7 @@ import { Suspense, lazy, useState } from 'react';
 import { PostHogProvider } from '@/components/PostHogProvider';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { BootSequence } from '@/components/BootSequence';
+import { PageTransitionLoader } from '@/components/PageTransitionLoader';
 
 // Lazy load pages for performance
 const LoginPage = lazy(() => import('@/pages/login'));
@@ -37,6 +38,7 @@ export default function App() {
   return (
     <PostHogProvider>
       <div className="min-h-screen flex flex-col bg-gray-50">
+        <PageTransitionLoader />
         {location.pathname !== '/home' && <LanguageSwitcher />}
         <main className="flex-1 flex flex-col">
           <Suspense fallback={

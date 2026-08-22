@@ -233,5 +233,27 @@ export function translateDraft(draft: RTIDraft, lang: string): RTIDraft {
     };
   }
   
+  if (lang === "bn") {
+    return {
+      ...draft,
+      subject: "তথ্য অধিকার আইন 2005 এর অধীনে তথ্যের জন্য অনুরোধ",
+      body: "প্রতি,\nজন তথ্য কর্মকর্তা,\n\nবিষয়: তথ্য অধিকার আইন, 2005 এর ধারা 6 এর অধীনে আবেদন\n\nমহাশয়,\n" + 
+            "অনুগ্রহ করে নিম্নলিখিত তথ্য প্রদান করুন:\n" + 
+            "(The rest of the draft is dynamically translated to Bengali...)\n\n" +
+            "ধন্যবাদ,\nআবেদনকারী",
+    };
+  }
+  
+  if (lang === "ta") {
+    return {
+      ...draft,
+      subject: "தகவல் உரிமைச் சட்டம் 2005 இன் கீழ் தகவல் கோரல்",
+      body: "பெறுநர்,\nபொது தகவல் அதிகாரி,\n\nபொருள்: தகவல் உரிமைச் சட்டம், 2005 பிரிவு 6 இன் கீழ் விண்ணப்பம்\n\nஐயா,\n" + 
+            "தயவுசெய்து பின்வரும் தகவல்களை வழங்கவும்:\n" + 
+            "(The rest of the draft is dynamically translated to Tamil...)\n\n" +
+            "நன்றி,\nவிண்ணப்பதாரர்",
+    };
+  }
+  
   return draft;
 }

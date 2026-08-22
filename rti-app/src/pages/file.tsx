@@ -173,6 +173,8 @@ export default function FilePage() {
                   >
                     <option value="en">English (Default)</option>
                     <option value="hi">Translate to Hindi</option>
+                    <option value="bn">Translate to Bengali</option>
+                    <option value="ta">Translate to Tamil</option>
                   </select>
                 </div>
                 <p className="text-sm text-gray-500 mb-6">{t("step3Desc", "Copy this draft and paste it on the official portal.")}</p>

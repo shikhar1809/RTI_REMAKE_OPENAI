@@ -10,7 +10,7 @@ const newTranslations = {
       whatWouldYouLike: "What would you like to do today?",
       fileNewReq: "FILE NEW REQUEST",
       viewTrack: "VIEW / TRACK EXISTING REPORTS",
-      docConnect: "DOCUMENT CONNECT",
+      docConnect: "DOCUMENT VAULT",
       knowRules: "KNOW RTI RULES",
       rtiToolkit: "RTI TOOLKIT",
       signOut: "Sign out securely",

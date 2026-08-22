@@ -22,11 +22,19 @@ export interface AuthState {
   // Selected state (from onboarding)
   selectedStateId: string;
 
+  // Notifications
+  notificationsEnabled: boolean;
+  contactVerified: boolean;
+  whatsappNumber: string | null;
+  notificationEmail: string | null;
+
   // Actions
   login: (email: string, password: string) => { success: boolean; error?: string };
   logout: () => void;
   completeLocationStep: (stateId: string) => void;
   completeRightsStep: () => void;
+  setNotificationsEnabled: (enabled: boolean) => void;
+  verifyContact: (wa: string, email: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -38,6 +46,11 @@ export const useAuthStore = create<AuthState>()(
       hasSelectedLocation: false,
       hasSeenRights: false,
       selectedStateId: "",
+      
+      notificationsEnabled: false,
+      contactVerified: false,
+      whatsappNumber: null,
+      notificationEmail: null,
 
       login: (email, password) => {
         const match = VALID_CREDENTIALS.find(
@@ -62,6 +75,11 @@ export const useAuthStore = create<AuthState>()(
         set({ hasSelectedLocation: true, selectedStateId: stateId }),
 
       completeRightsStep: () => set({ hasSeenRights: true }),
+      
+      setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),
+      
+      verifyContact: (wa, email) => 
+        set({ contactVerified: true, whatsappNumber: wa, notificationEmail: email, notificationsEnabled: true }),
     }),
     {
       name: "rti-auth",
