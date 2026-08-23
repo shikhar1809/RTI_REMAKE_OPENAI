@@ -5,6 +5,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { BootSequence } from '@/components/BootSequence';
 import { PageTransitionLoader } from '@/components/PageTransitionLoader';
 import { GlobalAIAssistant } from '@/components/GlobalAIAssistant';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 // Lazy load pages for performance
 const LoginPage = lazy(() => import('@/pages/login'));
@@ -51,6 +52,7 @@ export default function App() {
               <div className="w-10 h-10 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
             </div>
           }>
+            <ErrorBoundary>
             <Routes>
               {/* Redirect root to login */}
               <Route path="/" element={<Navigate to="/login" replace />} />
@@ -71,6 +73,7 @@ export default function App() {
 
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
+            </ErrorBoundary>
           </Suspense>
         </main>
       </div>
