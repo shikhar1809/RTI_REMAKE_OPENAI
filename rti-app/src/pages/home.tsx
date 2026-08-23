@@ -140,7 +140,7 @@ export default function HomePage() {
 
             <Link
               to="/manage"
-              className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 flex justify-center items-center gap-2 relative"
+              className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md flex justify-center items-center gap-2 relative"
             >
               MANAGE REPORTS
               {newRepliesCount > 0 && (
