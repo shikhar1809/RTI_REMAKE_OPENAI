@@ -1,14 +1,55 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>RTI Easy — File Your Right to Information Request</title>
+    <meta name="screen-orientation" content="portrait">
+    <meta name="orientation" content="portrait">
+    <title>RTI Easy - File Your Right to Information Request</title>
+    <link rel="manifest" href="/manifest.json" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      #landscape-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background-color: #ffffff;
+        z-index: 999999;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        font-family: 'Inter', sans-serif;
+      }
+      .rotate-icon {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 1rem;
+        fill: #3b82f6;
+        animation: rotatePhone 2s ease-in-out infinite;
+      }
+      @keyframes rotatePhone {
+        0% { transform: rotate(-90deg); }
+        50% { transform: rotate(0deg); }
+        100% { transform: rotate(-90deg); }
+      }
+      @media (pointer: coarse) and (max-height: 500px) and (orientation: landscape) {
+        #root { display: none !important; }
+        #landscape-overlay { display: flex !important; }
+      }
+    </style>
   </head>
   <body>
+    <div id="landscape-overlay">
+      <svg class="rotate-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 1H8C6.34315 1 5 2.34315 5 4V20C5 21.6569 6.34315 23 8 23H16C17.6569 23 19 21.6569 19 20V4C19 2.34315 17.6569 1 16 1ZM17 20C17 20.5523 16.5523 21 16 21H8C7.44772 21 7 20.5523 7 20V4C7 3.44772 7.44772 3 8 3H16C16.5523 3 17 3.44772 17 4V20ZM12 19C12.5523 19 13 18.5523 13 18C13 17.4477 12.5523 17 12 17C11.4477 17 11 17.4477 11 18C11 18.5523 11.4477 19 12 19Z"/>
+      </svg>
+      <h2 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Please rotate your device</h2>
+      <p style="font-size: 1rem; color: #64748b;">This app is designed to be used in portrait mode.</p>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
