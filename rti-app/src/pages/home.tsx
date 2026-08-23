@@ -64,13 +64,13 @@ export default function HomePage() {
           <div className="flex flex-col items-center gap-3 mb-8">
             {/* Row 1: Area Selector */}
             {stateInfo && (
-              <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-4 py-1.5 flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+              <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-6 py-2.5 flex items-center gap-3">
+                <span className="text-base font-medium text-gray-700 flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-blue-500"></span>
                   <select
                     value={selectedStateId}
                     onChange={(e) => useAuthStore.getState().completeLocationStep(e.target.value)}
-                    className="bg-transparent font-semibold text-gray-800 outline-none cursor-pointer hover:text-gray-900 appearance-none"
+                    className="bg-transparent font-bold text-gray-800 outline-none cursor-pointer hover:text-gray-900 appearance-none"
                   >
                     {Object.values(STATES).map((state) => (
                       <option key={state.id} value={state.id}>
@@ -79,20 +79,20 @@ export default function HomePage() {
                     ))}
                   </select>
                 </span>
-                <div className="w-px h-3 bg-gray-300"></div>
-                <span className="text-xs text-gray-500 font-bold">₹{stateInfo.fee}</span>
+                <div className="w-px h-5 bg-gray-300"></div>
+                <span className="text-sm text-gray-500 font-bold">₹{stateInfo.fee}</span>
               </div>
             )}
             
             {/* Row 2: Language Selector + Alerts */}
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-4">
               {/* Language Selector */}
-              <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-3 py-1.5 flex items-center gap-1.5">
-                <FcGlobe size={16} />
+              <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-5 py-2 flex items-center gap-2">
+                <FcGlobe size={20} />
                 <select 
                   value={i18n.language}
                   onChange={(e) => i18n.changeLanguage(e.target.value)}
-                  className="bg-transparent text-sm font-bold text-gray-700 outline-none cursor-pointer hover:text-gray-900"
+                  className="bg-transparent text-base font-bold text-gray-700 outline-none cursor-pointer hover:text-gray-900"
                 >
                   <option value="en">English</option>
                   <option value="hi">हिंदी</option>
@@ -104,13 +104,13 @@ export default function HomePage() {
               {/* Alerts Button */}
               <button 
                 onClick={handleToggle}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold transition-all border-2 shadow-sm ${
+                className={`flex items-center gap-2 px-5 py-2 rounded-full text-base font-bold transition-all border-2 shadow-sm ${
                   notificationsEnabled 
                     ? "bg-green-50/95 border-green-400 text-green-700 hover:bg-green-100" 
                     : "bg-white/95 border-gray-300 text-gray-600 hover:bg-gray-50"
                 }`}
               >
-                {notificationsEnabled ? <Bell size={14} /> : <BellOff size={14} />}
+                {notificationsEnabled ? <Bell size={18} /> : <BellOff size={18} />}
                 {notificationsEnabled ? "Alerts On" : "Alerts Off"}
               </button>
             </div>
