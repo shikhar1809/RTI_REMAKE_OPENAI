@@ -220,7 +220,7 @@ export default function FilePage() {
             onClick={handleTopBack} 
             className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md"
           >
-            <ArrowLeft size={16} /> {currentStep === 1 || currentStep === 6 ? "Home" : "Back"}
+            <ArrowLeft size={16} /> {currentStep === 1 || currentStep === 6 ? tc("home", "Home") : tc("back", "Back")}
           </button>
           {lastSynced && (
             <div className="mb-8 bg-white/95 border-2 border-gray-300 rounded-2xl p-4 shadow-md">
@@ -244,12 +244,12 @@ export default function FilePage() {
                 <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <ShieldCheck size={40} className="text-amber-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">Identity Verification Required</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">{t("verifyTitle", "Identity Verification Required")}</h2>
                 <p className="text-gray-500 mb-8 max-w-md mx-auto">
-                  To legally file a Right to Information (RTI) request, you must first sync your official documents (like Aadhaar/PAN) to verify your identity.
+                  {t("verifyDesc", "To legally file a Right to Information (RTI) request, you must first sync your official documents (like Aadhaar/PAN) to verify your identity.")}
                 </p>
                 <Link to="/documents" className="btn-primary inline-flex">
-                  Go to Document Vault <ArrowRight size={16} className="ml-2" />
+                  {t("goVault", "Go to Document Vault")} <ArrowRight size={16} className="ml-2" />
                 </Link>
               </div>
             ) : currentStep === 1 ? (
@@ -257,22 +257,22 @@ export default function FilePage() {
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <label className="block text-sm font-semibold text-gray-700">
-                      Your Details
+                      {t("detailsTitle", "Your Details")}
                     </label>
                     {savedFullName && (
                       <button onClick={handleImport} className="text-xs text-blue-600 font-semibold hover:underline">
-                        Auto-fill from saved profile
+                        {t("autoFill", "Auto-fill from saved profile")}
                       </button>
                     )}
                   </div>
                   <p className="text-sm text-gray-500 mb-3">
-                    This information is required by the RTI Act and will be automatically added to your draft.
+                    {t("detailsDesc", "This information is required by the RTI Act and will be automatically added to your draft.")}
                   </p>
                   
                   <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-5 flex items-start gap-2">
                     <ShieldCheck size={16} className="text-green-600 mt-0.5 shrink-0" />
                     <p className="text-xs text-green-800 font-medium leading-tight">
-                      <strong>100% Private & Secure:</strong> Your details are stored strictly locally on your device. We do not track, collect, or upload your personal information to any server.
+                      <strong>{t("privateTitle", "100% Private & Secure:")}</strong> {t("privateDesc", "Your details are stored strictly locally on your device. We do not track, collect, or upload your personal information to any server.")}
                     </p>
                   </div>
                   
@@ -282,7 +282,7 @@ export default function FilePage() {
                         type="text" 
                         value={name} 
                         onChange={(e) => setName(e.target.value)} 
-                        placeholder="Full Name" 
+                        placeholder={t("fullName", "Full Name")} 
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none" 
                       />
                     </div>
@@ -290,7 +290,7 @@ export default function FilePage() {
                       <textarea 
                         value={address} 
                         onChange={(e) => setAddress(e.target.value)} 
-                        placeholder="Complete Postal Address" 
+                        placeholder={t("address", "Complete Postal Address")} 
                         className="w-full h-24 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none resize-none" 
                       />
                     </div>
@@ -299,7 +299,7 @@ export default function FilePage() {
                         type="tel" 
                         value={mobile} 
                         onChange={(e) => setMobile(e.target.value)} 
-                        placeholder="Mobile Number" 
+                        placeholder={t("mobile", "Mobile Number")} 
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none" 
                       />
                     </div>
@@ -307,7 +307,7 @@ export default function FilePage() {
                   
                   {name && address && mobile && (
                     <button onClick={handleSaveProfile} className="mt-4 text-xs font-semibold text-green-600 hover:underline">
-                      Save details for next time
+                      {t("saveDetails", "Save details for next time")}
                     </button>
                   )}
                 </div>
@@ -324,12 +324,11 @@ export default function FilePage() {
             ) : currentStep === 2 ? (
               <>
                 <div className="mb-2">
-                  <h2 className="text-sm font-semibold text-gray-700 mb-1">Attach Supporting Documents</h2>
+                  <h2 className="text-sm font-semibold text-gray-700 mb-1">{t("attachTitle", "Attach Supporting Documents")}</h2>
                   <p className="text-sm text-gray-500 mb-4">
-                    Please upload your documents <strong>one by one</strong> (photos, screenshots, receipts, or PDFs). <span className="font-medium text-gray-700">This step is optional.</span>
+                    {t("attachDesc1", "Please upload your documents")} <strong>{t("attachDesc2", "one by one")}</strong> {t("attachDesc3", "(photos, screenshots, receipts, or PDFs).")} <span className="font-medium text-gray-700">{t("attachDesc4", "This step is optional.")}</span>
                   </p>
 
-                  {/* Upload area */}
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -344,11 +343,10 @@ export default function FilePage() {
                     <div className="w-12 h-12 bg-gray-100 group-hover:bg-green-100 rounded-full flex items-center justify-center transition-colors">
                       <Upload size={22} className="text-gray-400 group-hover:text-green-600 transition-colors" />
                     </div>
-                    <p className="text-sm font-semibold text-gray-600 group-hover:text-green-700">Click to upload a file</p>
-                    <p className="text-xs text-gray-400">Images, PDFs, Word documents</p>
+                    <p className="text-sm font-semibold text-gray-600 group-hover:text-green-700">{t("clickUpload", "Click to upload a file")}</p>
+                    <p className="text-xs text-gray-400">{t("uploadTypes", "Images, PDFs, Word documents")}</p>
                   </button>
                   
-                  {/* Error Message */}
                   {fileError && (
                     <div className="mt-3 bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
                       <AlertOctagon size={16} className="text-red-600 mt-0.5 shrink-0" />
@@ -359,7 +357,6 @@ export default function FilePage() {
                   )}
                 </div>
 
-                {/* Attached files list */}
                 {attachments.length > 0 && (
                   <div className="mt-4 space-y-2">
                     {attachments.map((file, i) => (
@@ -390,7 +387,7 @@ export default function FilePage() {
                     <ArrowLeft size={16} /> {tc("back", "Back")}
                   </button>
                   <button onClick={goNext} className="btn-primary flex-1">
-                    {attachments.length > 0 ? `Continue with ${attachments.length} file${attachments.length > 1 ? "s" : ""}` : "Skip for now"}
+                    {attachments.length > 0 ? `${t("continueWith", "Continue with")} ${attachments.length} ${attachments.length > 1 ? t("filesWord", "files") : t("fileWord", "file")}` : t("skipForNow", "Skip for now")}
                     <ArrowRight size={16} />
                   </button>
                 </div>
@@ -434,7 +431,7 @@ export default function FilePage() {
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 flex items-start gap-2">
                     <AlertOctagon size={16} className="text-amber-600 mt-0.5 shrink-0" />
                     <p className="text-xs text-amber-800 font-medium leading-tight">
-                      <strong>Wait!</strong> This request might not be valid under the RTI Act. RTIs can only ask for existing records, not opinions, future plans, or direct action. Please review the <Link to="/about" className="underline font-bold text-blue-600 hover:text-blue-800">KNOW YOUR RTI</Link> rules first.
+                      <strong>{t("wait", "Wait!")}</strong> {t("waitDesc1", "This request might not be valid under the RTI Act. RTIs can only ask for existing records, not opinions, future plans, or direct action. Please review the")} <Link to="/about" className="underline font-bold text-blue-600 hover:text-blue-800">{t("knowRti", "KNOW YOUR RTI")}</Link> {t("waitDesc2", "rules first.")}
                     </p>
                   </div>
                 )}
@@ -461,7 +458,7 @@ export default function FilePage() {
                     <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
                     <div className="absolute inset-0 border-4 border-green-500 rounded-full border-t-transparent animate-spin"></div>
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">Please wait</h2>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">{t("pleaseWait", "Please wait")}</h2>
                   <p className="text-sm font-medium text-green-600 animate-pulse">{loadingText}</p>
                 </div>
               ) : (
@@ -503,10 +500,10 @@ export default function FilePage() {
                     onChange={(e) => setDraft(translateDraft(draft, e.target.value))}
                     className="text-xs bg-white border border-gray-200 rounded-md px-2 py-1 text-gray-600 shadow-sm focus:ring-1 focus:ring-green-500"
                   >
-                    <option value="en">English (Default)</option>
-                    <option value="hi">Translate to Hindi</option>
-                    <option value="bn">Translate to Bengali</option>
-                    <option value="ta">Translate to Tamil</option>
+                    <option value="en">{t("englishDef", "English (Default)")}</option>
+                    <option value="hi">{t("transHi", "Translate to Hindi")}</option>
+                    <option value="bn">{t("transBn", "Translate to Bengali")}</option>
+                    <option value="ta">{t("transTa", "Translate to Tamil")}</option>
                   </select>
                 </div>
                 <p className="text-sm text-gray-500 mb-6">{t("step3Desc", "Copy this draft and paste it on the official portal.")}</p>
@@ -535,7 +532,7 @@ export default function FilePage() {
                     {tc("back", "Back")}
                   </button>
                   <button onClick={() => window.print()} className="btn-secondary flex-1">
-                    Print PDF
+                    {t("printPdf", "Print PDF")}
                   </button>
                   <button onClick={copyDraft} className="btn-primary flex-1">
                     <Copy size={16} />
@@ -544,15 +541,14 @@ export default function FilePage() {
                 </div>
                 
                 <div className="mt-6 border-t border-gray-200 pt-6">
-                  {/* Public Archive Toggle */}
                   <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl mb-4">
                     <div className="flex flex-col pr-4">
                       <h3 className="font-bold text-gray-900 flex items-center gap-2">
                         {isPublicApp ? <Eye size={18} className="text-green-600" /> : <EyeOff size={18} className="text-gray-400" />}
-                        Publish to Public Archive
+                        {t("publishTitle", "Publish to Public Archive")}
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">
-                        Make this RTI publicly accessible to help others facing similar issues.
+                        {t("publishDesc", "Make this RTI publicly accessible to help others facing similar issues.")}
                       </p>
                     </div>
                     <button
@@ -567,7 +563,7 @@ export default function FilePage() {
 
                   <div className="flex justify-center">
                     <button onClick={handleSubmitRTI} className="btn-primary w-full flex justify-center items-center gap-2 mt-2">
-                      Submit RTI <CheckCircle2 size={18} />
+                      {t("submitRti", "Submit RTI")} <CheckCircle2 size={18} />
                     </button>
                   </div>
                 </div>
@@ -577,9 +573,9 @@ export default function FilePage() {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle2 size={32} className="text-green-600" />
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">Filing Complete!</h1>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">{t("completeTitle", "Filing Complete!")}</h1>
                 <p className="text-gray-500 mb-8 max-w-md mx-auto">
-                  How was your experience using our platform to draft and file your RTI?
+                  {t("expDesc", "How was your experience using our platform to draft and file your RTI?")}
                 </p>
                 
                 <div className="max-w-xs mx-auto mb-6">
@@ -597,15 +593,15 @@ export default function FilePage() {
                     ))}
                   </div>
                   <textarea 
-                    placeholder="Short description of your experience..." 
+                    placeholder={t("expPlaceholder", "Short description of your experience...")} 
                     className="w-full h-24 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none resize-none mb-4"
                   />
                   <div className="bg-blue-50 text-blue-800 text-xs p-3 rounded-lg text-left mb-6 font-medium">
-                    <strong className="block mb-1">Tip: Public Archive</strong>
-                    You can toggle your RTI public or private at any time from your tracking dashboard to help others.
+                    <strong className="block mb-1">{t("tipTitle", "Tip: Public Archive")}</strong>
+                    {t("tipDesc", "You can toggle your RTI public or private at any time from your tracking dashboard to help others.")}
                   </div>
                   <Link to="/home" onClick={() => resetWizard()} className="btn-primary w-full">
-                    Submit Survey & Go Home
+                    {t("submitHome", "Submit Survey & Go Home")}
                   </Link>
                 </div>
               </div>
@@ -618,7 +614,7 @@ export default function FilePage() {
       {showToast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5">
           <CheckCircle2 size={20} className="text-green-400" />
-          <span className="text-sm font-medium">Details saved for later!</span>
+          <span className="text-sm font-medium">{t("savedLater", "Details saved for later!")}</span>
         </div>
       )}
 
