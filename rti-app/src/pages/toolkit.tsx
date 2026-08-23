@@ -96,7 +96,7 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, isTyping]);
 
-  const handleSend = (text: string = inputValue, answerKey?: string) => {
+  const handleSend = (text: string = inputValue, answerKey?: string, directResponse?: string) => {
     if (!text.trim()) return;
     setHasStarted(true);
     setChatMessages(prev => [...prev, { role: 'user', content: text }]);
@@ -105,7 +105,7 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
 
     // 3 seconds delay as requested before generating text
     setTimeout(() => {
-      const response = answerKey ? MOCK_ANSWERS[answerKey] : t("defaultAns");
+      const response = directResponse ? directResponse : (answerKey && MOCK_ANSWERS[answerKey] ? MOCK_ANSWERS[answerKey] : t("defaultAns"));
       setIsTyping(false); // AI finishes reading, goes back to idle state
       setChatMessages(prev => [...prev, { role: 'ai', content: response, isTypingEffect: true }]);
     }, 3000);
@@ -223,11 +223,11 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
             {/* Bottom toolbar row */}
             <div className="flex items-center justify-between px-4 pb-3 pt-1">
               <div className="flex items-center gap-3 text-gray-400">
-                <button className="hover:text-white transition-colors"><Paperclip size={18} /></button>
-                <button className="hover:text-white transition-colors"><Globe size={18} /></button>
-                <button className="hover:text-white transition-colors"><Smile size={18} /></button>
+                <button onClick={() => handleSend("[Attached: File.pdf]", undefined, "I've received your document. I can use this to extract details or append it as an annexure to your RTI application.")} className="hover:text-white transition-colors" title="Attach Document"><Paperclip size={18} /></button>
+                <button onClick={() => handleSend("Search for latest RTI rules", undefined, "Searching the web... According to the latest DoPT guidelines, the RTI application fee remains ₹10, but some states like Maharashtra charge ₹20 online.")} className="hover:text-white transition-colors" title="Web Search"><Globe size={18} /></button>
+                <button onClick={() => handleSend("👍", undefined, "I'm glad I could help! Let me know if you need anything else.")} className="hover:text-white transition-colors" title="Emoji"><Smile size={18} /></button>
                 <span className="w-px h-4 bg-gray-600" />
-                <button className="hover:text-white transition-colors"><FolderOpen size={18} /></button>
+                <button onClick={() => handleSend("Import from DigiLocker", undefined, "Successfully connected to DigiLocker! I found your BPL Certificate. I will automatically attach it to waive your ₹10 RTI fee.")} className="hover:text-white transition-colors" title="Import DigiLocker"><FolderOpen size={18} /></button>
               </div>
 
               {/* Mic / Send button */}
