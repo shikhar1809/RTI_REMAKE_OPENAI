@@ -296,13 +296,13 @@ export default function StatsPage() {
             {viewMode === "map" && (
               <div className="p-4 sm:p-6 bg-white min-h-[500px] flex flex-col relative z-0">
                 <h3 className="font-bold text-gray-900 text-xl mb-4">{t("heatmap")}</h3>
-                <div className="flex-1 w-full rounded-2xl overflow-hidden border-2 border-gray-200 shadow-inner relative" style={{ height: "450px" }}>
+                <div className="w-full rounded-2xl overflow-hidden border-2 border-gray-200 shadow-inner relative" style={{ height: "450px" }}>
                   <MapContainer 
                     center={[22.5937, 78.9629]} 
                     zoom={4} 
                     scrollWheelZoom={false}
-                    className="w-full h-full z-0"
-                    style={{ background: '#f8fafc' }}
+                    className="absolute inset-0 z-0"
+                    style={{ background: '#f8fafc', height: "100%", width: "100%" }}
                   >
                     <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
