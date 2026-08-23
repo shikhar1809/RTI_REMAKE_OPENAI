@@ -29,6 +29,7 @@ export default function HomePage() {
   const [otpStep, setOtpStep] = useState(false);
   const [otp, setOtp] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleToggle = () => {
     if (notificationsEnabled) {
@@ -53,8 +54,52 @@ export default function HomePage() {
   return (
     <ProtectedRoute>
       <div className="flex flex-col items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
-        <div className="w-full max-w-xl p-4 sm:p-8">
-          <div className="text-center mb-6">
+        <div className="w-full max-w-xl p-4 sm:p-8 relative">
+          
+          {/* Notification Center */}
+          <div className="absolute top-4 right-4 sm:top-8 sm:right-8 z-50">
+            <button 
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2 bg-white/95 rounded-full border-2 border-gray-300 shadow-md hover:border-green-500 hover:text-green-600 transition-colors"
+            >
+              <Bell size={20} className="text-gray-700" />
+              <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-white rounded-full animate-pulse"></span>
+            </button>
+            
+            {showNotifications && (
+              <div className="absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden animate-in slide-in-from-top-2">
+                <div className="p-3 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                  <h3 className="font-bold text-gray-900">Notifications</h3>
+                  <span className="text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">3 New</span>
+                </div>
+                <div className="divide-y divide-gray-100 max-h-80 overflow-y-auto">
+                  <div className="p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                      Deadline Approaching
+                    </p>
+                    <p className="text-xs text-gray-600 mt-1">Kerala Municipal Corporation has 2 days left to reply to your RTI on Road Repair.</p>
+                  </div>
+                  <div className="p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                      Community Impact
+                    </p>
+                    <p className="text-xs text-gray-600 mt-1">12 people viewed the RTI you published to the Public Archive!</p>
+                  </div>
+                  <div className="p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                      Reply Received
+                    </p>
+                    <p className="text-xs text-gray-600 mt-1">Your RTI on Land Mutation has been resolved. Tap to view.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="text-center mb-6 mt-4">
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 drop-shadow-md">{t("welcome", "Welcome")}, {userName}</h1>
             <p className="text-gray-600 font-medium text-sm drop-shadow">{t("whatWouldYouLike", "What would you like to do today?")}</p>
           </div>

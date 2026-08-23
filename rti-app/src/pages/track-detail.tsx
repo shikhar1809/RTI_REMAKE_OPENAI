@@ -2,14 +2,21 @@ import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useApplicationsStore } from "@/store/applicationsStore";
 import { getDaysRemaining } from "@/data/mockRTIs";
-import { ArrowLeft, Clock, CheckCircle2, AlertCircle, FileText, Download, Eye, EyeOff, Timer } from "lucide-react";
+import { ArrowLeft, Clock, CheckCircle2, AlertCircle, FileText, Download, Eye, EyeOff, Timer, Gavel, FileSignature } from "lucide-react";
 import { useState } from "react";
 import { PublicConsentModal } from "@/components/PublicConsentModal";
 
 export default function TrackDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { applications, togglePublic } = useApplicationsStore();
+  const { applications, togglePublic, updateApplicationStatus } = useApplicationsStore();
   const [showConsent, setShowConsent] = useState(false);
+  
+  // Appeal Workflow State
+  const [isAppealing, setIsAppealing] = useState(false);
+  const [appealReason, setAppealReason] = useState("");
+  const [isDrafting, setIsDrafting] = useState(false);
+  const [appealDraft, setAppealDraft] = useState("");
+  const [appealSuccess, setAppealSuccess] = useState(false);
   
   const app = applications.find(a => a.id === id);
   
@@ -19,12 +26,29 @@ export default function TrackDetailPage() {
 
   const handleToggleClick = () => {
     if (app.isPublic) {
-      // If currently public, just turn it off directly
       togglePublic(app.id);
     } else {
-      // If currently private, show consent form before turning on
       setShowConsent(true);
     }
+  };
+
+  const handleDraftAppeal = () => {
+    setIsDrafting(true);
+    setTimeout(() => {
+      setAppealDraft(`To,\nThe First Appellate Authority,\n${app.authority}\n\nSub: First Appeal under Section 19(1) of RTI Act 2005\nRef: RTI Application ID ${app.id} dated ${new Date(app.filedDate).toLocaleDateString()}\n\nSir/Madam,\nI am filing this appeal because: ${appealReason}\n\nI request you to direct the PIO to provide the complete information immediately.\n\nYours faithfully,\n[Your Name]`);
+      setIsDrafting(false);
+    }, 1500);
+  };
+
+  const handleSubmitAppeal = () => {
+    updateApplicationStatus(app.id, "appealed");
+    setAppealSuccess(true);
+    setTimeout(() => {
+      setIsAppealing(false);
+      setAppealSuccess(false);
+      setAppealReason("");
+      setAppealDraft("");
+    }, 3000);
   };
 
   const daysRemaining = getDaysRemaining(app.deadlineDate);
@@ -156,6 +180,90 @@ export default function TrackDetailPage() {
                   Download PDF
                 </button>
               </div>
+
+              {/* Appeal Action */}
+              {(isOverdue || app.status === "replied") && app.status !== "appealed" && !isAppealing && (
+                <div className="mt-4 pt-4 border-t border-gray-100 flex justify-center">
+                  <button onClick={() => setIsAppealing(true)} className="btn-secondary text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 w-full flex justify-center gap-2 py-3">
+                    <Gavel size={18} />
+                    Not Satisfied? File First Appeal
+                  </button>
+                </div>
+              )}
+
+              {/* Appeal Wizard */}
+              {isAppealing && (
+                <div className="mt-6 p-5 bg-red-50 border border-red-100 rounded-xl animate-in slide-in-from-top-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-bold text-red-800 flex items-center gap-2">
+                      <Gavel size={18} /> File First Appeal
+                    </h3>
+                    <button onClick={() => setIsAppealing(false)} className="text-red-400 hover:text-red-700">Cancel</button>
+                  </div>
+                  
+                  {appealSuccess ? (
+                    <div className="text-center py-6">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <CheckCircle2 size={24} className="text-green-600" />
+                      </div>
+                      <h4 className="font-bold text-gray-900 mb-1">Appeal Submitted Successfully!</h4>
+                      <p className="text-sm text-gray-500">Your First Appeal has been filed with the Appellate Authority.</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Appeal</label>
+                        <select 
+                          value={appealReason}
+                          onChange={(e) => setAppealReason(e.target.value)}
+                          className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
+                        >
+                          <option value="">Select a reason...</option>
+                          <option value="No response received within 30 days">No response received within 30 days</option>
+                          <option value="Information provided is incomplete">Information provided is incomplete</option>
+                          <option value="Information provided is misleading/false">Information provided is misleading/false</option>
+                          <option value="Unreasonable fees demanded">Unreasonable fees demanded</option>
+                        </select>
+                      </div>
+
+                      {!appealDraft ? (
+                        <button 
+                          onClick={handleDraftAppeal} 
+                          disabled={!appealReason || isDrafting}
+                          className="w-full bg-red-600 text-white font-bold rounded-lg py-3 flex justify-center items-center gap-2 hover:bg-red-700 disabled:opacity-50 transition-colors"
+                        >
+                          {isDrafting ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              Drafting Legal Appeal...
+                            </>
+                          ) : (
+                            <>
+                              <FileSignature size={18} />
+                              Auto-Draft First Appeal
+                            </>
+                          )}
+                        </button>
+                      ) : (
+                        <div className="animate-in fade-in">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Appeal Draft (Ready to submit)</label>
+                          <textarea 
+                            value={appealDraft}
+                            readOnly
+                            className="w-full h-40 bg-white border border-gray-300 rounded-lg p-3 text-sm text-gray-700 mb-4 focus:outline-none resize-none"
+                          />
+                          <button 
+                            onClick={handleSubmitAppeal}
+                            className="w-full bg-red-600 text-white font-bold rounded-lg py-3 flex justify-center items-center gap-2 hover:bg-red-700 transition-colors"
+                          >
+                            <Gavel size={18} /> Submit Appeal to FAA
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

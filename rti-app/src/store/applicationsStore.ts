@@ -6,6 +6,7 @@ interface ApplicationsState {
   applications: RTIApplication[];
   addApplication: (app: RTIApplication) => void;
   togglePublic: (id: string) => void;
+  updateApplicationStatus: (id: string, status: RTIApplication["status"]) => void;
 }
 
 export const useApplicationsStore = create<ApplicationsState>()(
@@ -20,6 +21,11 @@ export const useApplicationsStore = create<ApplicationsState>()(
           app.id === id ? { ...app, isPublic: !app.isPublic } : app
         )
       })),
+      updateApplicationStatus: (id, status) => set((state) => ({
+        applications: state.applications.map(app =>
+          app.id === id ? { ...app, status } : app
+        )
+      }))
     }),
     {
       name: "rti-applications",
