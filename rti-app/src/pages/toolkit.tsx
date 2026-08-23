@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ArrowLeft, Send, Mic, Paperclip, Globe, Smile, FolderOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,7 @@ interface ChatMessage {
   role: 'user' | 'ai';
   content: string;
   isTypingEffect?: boolean;
+  screenshot?: string;
 }
 
 
@@ -67,11 +68,27 @@ export default function ToolkitPage() {
     "faq6": t("ans6")
   };
 
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  
+  const location = useLocation();
+  const sourcePage = location.state?.sourcePage;
+  const screenshot = location.state?.screenshot;
+const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
+    if (sourcePage) {
+      return [{ 
+        role: 'ai', 
+        content: `I see you were looking at the **${sourcePage}** page. I have analyzed its context. How may I help you with it?`,
+        isTypingEffect: true,
+        screenshot: screenshot
+      }];
+    }
+    return [];
+  });
+  
+  const [hasStarted, setHasStarted] = useState(!!sourcePage);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
+  
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import html2canvas from "html2canvas";
 import { NyayaAvatar } from "./NyayaAvatar";
 
 const EXCLUDE_PAGES = ['/login', '/onboarding/location', '/onboarding/rights', '/toolkit', '/home'];
+
+const getPageName = (pathname: string) => {
+  if (pathname.includes('/file')) return 'RTI Filing';
+  if (pathname.includes('/track')) return 'Application Tracking';
+  if (pathname.includes('/manage')) return 'Management';
+  if (pathname.includes('/check-reply')) return 'Check Replies';
+  if (pathname.includes('/documents')) return 'Document Vault';
+  if (pathname.includes('/stats')) return 'Statistics';
+  if (pathname.includes('/about')) return 'About';
+  return 'Dashboard';
+};
 
 export const GlobalAIAssistant = () => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -25,20 +37,41 @@ export const GlobalAIAssistant = () => {
   // Don't render anything on excluded pages — AFTER all hooks
   if (isExcluded) return null;
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setIsTransitioning(true);
     setShowTooltip(false);
+    
+    let screenshotData = null;
+    try {
+      // Snapshot the page behind the scenes (exclude the loader if it exists)
+      const canvas = await html2canvas(document.body, { 
+        ignoreElements: (el) => el.id === 'ai-widget-overlay',
+        scale: 0.5 // lower resolution for speed
+      });
+      screenshotData = canvas.toDataURL('image/jpeg', 0.5);
+    } catch (e) {
+      console.warn("Failed to capture snapshot:", e);
+    }
+
+    const pageName = getPageName(location.pathname);
+
+    // Give it at least 2.5 seconds total for the transition effect
     setTimeout(() => {
       setIsTransitioning(false);
-      navigate('/toolkit');
-    }, 3000);
+      navigate('/toolkit', { 
+        state: { 
+          sourcePage: pageName,
+          screenshot: screenshotData 
+        } 
+      });
+    }, 2500);
   };
 
   return (
     <>
       {/* Full Screen Loading Transition */}
       {isTransitioning && (
-        <div className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-300">
+        <div id="ai-widget-overlay" className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-300">
           <NyayaAvatar size={120} state="typing" />
           <h2 className="mt-8 text-2xl font-bold text-gray-900 animate-pulse tracking-tight">Analyzing context...</h2>
           <p className="text-gray-500 mt-2 font-medium">Preparing Nyaya AI</p>
