@@ -99,8 +99,12 @@ export default function DocumentsPage() {
             </div>
           </div>
           
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800 mb-3">
             <span className="font-semibold">Privacy Note:</span> We do not store your documents on our servers. They are securely transmitted directly to the RTI filing authority when you submit an application.
+          </div>
+          
+          <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-sm text-green-800 font-medium text-center">
+            Note: Other than the above, NO extra document is required to file an RTI.
           </div>
         </div>
       </div>

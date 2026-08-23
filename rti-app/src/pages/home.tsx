@@ -5,6 +5,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { STATES } from "@/data/states";
 import { useApplicationsStore } from "@/store/applicationsStore";
 import { useRTIStore } from "@/store/rtiStore";
+import { useDocumentStore } from "@/store/documentStore";
 import { useTranslation } from "react-i18next";
 import { FcGlobe, FcSmartphoneTablet } from "react-icons/fc";
 import { Bell, BellOff, X, CheckCircle2 } from "lucide-react";
@@ -32,6 +33,17 @@ export default function HomePage() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [isLoadingLang, setIsLoadingLang] = useState(false);
   const [langToast, setLangToast] = useState(false);
+
+  const { lastSynced, syncBPL } = useDocumentStore();
+  const [showSyncModal, setShowSyncModal] = useState(!lastSynced);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await syncBPL();
+    setIsSyncing(false);
+    setShowSyncModal(false);
+  };
 
   const handleToggle = () => {
     if (notificationsEnabled) {
@@ -369,6 +381,38 @@ export default function HomePage() {
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5">
           <CheckCircle2 size={20} className="text-green-400" />
           <span className="text-sm font-medium">Notifications enabled successfully!</span>
+        </div>
+      )}
+
+      {/* Sync Modal */}
+      {showSyncModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FcGlobe size={32} />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">SYNC REQUIRED</h2>
+              <p className="text-sm text-gray-500 mb-6">
+                Your DigiLocker document vault is out of sync. Please sync to securely file RTI applications.
+              </p>
+              
+              <button
+                onClick={handleSync}
+                disabled={isSyncing}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isSyncing ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Syncing Vault...</span>
+                  </>
+                ) : (
+                  <span>Sync Now</span>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </ProtectedRoute>
