@@ -39,6 +39,28 @@ export default function StatsPage() {
   const [exportEndDate, setExportEndDate] = useState("");
   const [isExporting, setIsExporting] = useState(false);
 
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<{role: 'user'|'ai', content: string}[]>([
+    { role: 'ai', content: 'Hello! I am the Public Archive AI. You can ask me anything about historical RTIs filed across India, and I will find relevant precedents for you.' }
+  ]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const userMsg = chatInput;
+    setChatMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+    setChatInput("");
+    setIsTyping(true);
+
+    setTimeout(() => {
+      setIsTyping(false);
+      setChatMessages(prev => [...prev, { role: 'ai', content: `Based on the public archive, I found 3 similar RTIs filed recently regarding "${userMsg}". Most of them were successfully resolved within 28 days by the Municipal Corporation. Would you like me to draft a similar application for you?` }]);
+    }, 1500);
+  };
+
   const handleExport = () => {
     setIsExporting(true);
     let dataToExport = allPublicRTIs;
@@ -205,14 +227,15 @@ export default function StatsPage() {
                   </button>
                 </div>
 
-                <div className="relative">
+                <div className="relative cursor-pointer" onClick={() => setIsChatOpen(true)}>
                   <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input 
                     type="text" 
+                    readOnly
                     placeholder={t("searchPlaceholder")}
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="pl-9 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                    className="pl-9 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all cursor-pointer pointer-events-none"
                   />
                 </div>
                 
@@ -576,6 +599,74 @@ export default function StatsPage() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+      {/* AI RAG Chat Interface Overlay */}
+      {isChatOpen && (
+        <div className="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-green-600 px-6 py-4 flex items-center justify-between text-white">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Search size={20} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg leading-tight">Archive AI Assistant</h3>
+                  <p className="text-white/80 text-xs">Search topics & precedents</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsChatOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col gap-4">
+              {chatMessages.map((msg, idx) => (
+                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] rounded-2xl px-5 py-3 ${
+                    msg.role === 'user' 
+                      ? 'bg-blue-600 text-white rounded-tr-sm' 
+                      : 'bg-white border border-gray-200 text-gray-800 shadow-sm rounded-tl-sm'
+                  }`}>
+                    <p className="text-sm leading-relaxed">{msg.content}</p>
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white border border-gray-200 text-gray-500 shadow-sm rounded-2xl rounded-tl-sm px-5 py-3 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Input Area */}
+            <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-gray-200 flex items-center gap-3">
+              <input 
+                type="text" 
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask about historical RTIs..."
+                className="flex-1 bg-gray-100 border-none px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                autoFocus
+              />
+              <button 
+                type="submit"
+                disabled={!chatInput.trim() || isTyping}
+                className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-5 py-3 rounded-xl font-bold text-sm transition-colors"
+              >
+                Send
+              </button>
+            </form>
           </div>
         </div>
       )}
