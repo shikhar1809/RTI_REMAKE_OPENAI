@@ -62,6 +62,8 @@ export default function FilePage() {
   }
 
   const [fileError, setFileError] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [loadingText, setLoadingText] = useState("fetching basic details...");
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     setFileError("");
@@ -109,11 +111,29 @@ export default function FilePage() {
     if (currentStep === 4 && !selectedStateId) return;
 
     if (currentStep === 4) {
-      const isBpl = useDocumentStore.getState().isBPLVerified();
-      const profile = { name, address, mobile };
-      const newDraft = generateMockDraft(problemDescription, selectedStateId, isBpl, profile);
-      setDraft(newDraft);
-      trackDraftGenerated(selectedStateId, "General");
+      setIsGenerating(true);
+      setLoadingText("fetching basic details...");
+      
+      setTimeout(() => setLoadingText("loading optimal template..."), 1500);
+      setTimeout(() => setLoadingText("preparing final draft..."), 3000);
+      
+      setTimeout(() => {
+        const isBpl = useDocumentStore.getState().isBPLVerified();
+        const profile = { 
+          name: name || savedFullName || "[Your Name]", 
+          address: address || savedAddress || "[Your Address]", 
+          mobile: mobile || savedMobile || "[Your Mobile Number]" 
+        };
+        const newDraft = generateMockDraft(problemDescription, selectedStateId, isBpl, profile);
+        setDraft(newDraft);
+        trackDraftGenerated(selectedStateId, "General");
+        
+        setIsGenerating(false);
+        const next = currentStep + 1;
+        setCurrentStep(next);
+        trackWizardStep(next);
+      }, 5000);
+      return; // Do not proceed to next step immediately
     }
 
     const next = currentStep + 1;
@@ -385,35 +405,46 @@ export default function FilePage() {
                 </div>
               </>
             ) : currentStep === 4 ? (
-              <>
-                <h1 className="text-xl font-bold text-gray-900 mb-2">{t("step2Title", "Select the Authority")}</h1>
-                <p className="text-sm text-gray-500 mb-6">{t("step2Desc", "Which state government or central authority?")}</p>
-                <div className="space-y-2 mb-6">
-                  {STATE_OPTIONS.map((state) => (
-                    <button
-                      key={state.id}
-                      onClick={() => setSelectedStateId(state.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                        selectedStateId === state.id
-                          ? "border-green-500 bg-green-50 text-green-800"
-                          : "border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50"
-                      }`}
-                    >
-                      {state.label}
+              isGenerating ? (
+                <div className="flex flex-col items-center justify-center py-12 px-4 text-center min-h-[300px]">
+                  <div className="relative w-16 h-16 mb-6">
+                    <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-green-500 rounded-full border-t-transparent animate-spin"></div>
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">Please wait</h2>
+                  <p className="text-sm font-medium text-green-600 animate-pulse">{loadingText}</p>
+                </div>
+              ) : (
+                <>
+                  <h1 className="text-xl font-bold text-gray-900 mb-2">{t("step2Title", "Select the Authority")}</h1>
+                  <p className="text-sm text-gray-500 mb-6">{t("step2Desc", "Which state government or central authority?")}</p>
+                  <div className="space-y-2 mb-6">
+                    {STATE_OPTIONS.map((state) => (
+                      <button
+                        key={state.id}
+                        onClick={() => setSelectedStateId(state.id)}
+                        className={`w-full text-left px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                          selectedStateId === state.id
+                            ? "border-green-500 bg-green-50 text-green-800"
+                            : "border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        {state.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex gap-3">
+                    <button onClick={goBack} className="btn-secondary flex-1">
+                      <ArrowLeft size={16} />
+                      {tc("back", "Back")}
                     </button>
-                  ))}
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={goBack} className="btn-secondary flex-1">
-                    <ArrowLeft size={16} />
-                    {tc("back", "Back")}
-                  </button>
-                  <button onClick={goNext} disabled={!selectedStateId} className="btn-primary flex-1">
-                    {tc("next", "Next")}
-                    <ArrowRight size={16} />
-                  </button>
-                </div>
-              </>
+                    <button onClick={goNext} disabled={!selectedStateId} className="btn-primary flex-1">
+                      {tc("next", "Next")}
+                      <ArrowRight size={16} />
+                    </button>
+                  </div>
+                </>
+              )
             ) : currentStep === 5 && draft ? (
               <>
                 <div className="flex items-start justify-between mb-2">
