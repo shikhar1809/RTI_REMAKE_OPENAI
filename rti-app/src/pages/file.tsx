@@ -1,4 +1,4 @@
-import { Paperclip, X, ImageIcon, FileText, Upload, CheckCircle2, ShieldCheck, AlertOctagon, Eye, EyeOff, Search, FileSignature, Wallet, Check, CreditCard, Landmark, Globe } from "lucide-react";
+import { Paperclip, X, ImageIcon, FileText, Upload, CheckCircle2, ShieldCheck, AlertOctagon, Eye, EyeOff, Search, FileSignature, Wallet, Check, CreditCard, Landmark, Globe, Bot } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ArrowLeft, Copy, ExternalLink } from "lucide-react";
@@ -40,7 +40,7 @@ export default function FilePage() {
 
   const { lastSynced, isBPLVerified } = useDocumentStore();
   const { savedFullName, savedAddress, savedMobile, saveProfileDetails } = useAuthStore();
-  const { addApplication } = useApplicationsStore();
+  const { addApplication, applications } = useApplicationsStore();
 
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -245,7 +245,10 @@ export default function FilePage() {
   };
 
   const handleSubmitRTI = () => {
-    const newId = `rti-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+    const year = new Date().getFullYear().toString().slice(-2);
+    const randomNum = Math.floor(Math.random() * 90000) + 10000;
+    const statePrefix = selectedStateId ? selectedStateId.substring(0, 3).toUpperCase() : "DOP";
+    const newId = `${statePrefix}/R/E/${year}/${randomNum}`;
     const authorityName = STATES[selectedStateId]?.name || "Government Authority";
     
     addApplication({
@@ -529,7 +532,12 @@ export default function FilePage() {
                   <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-left mb-6">
                     <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Target Authority</p>
                     <p className="text-md font-bold text-gray-900">{STATES[selectedStateId]?.name || "Government Authority"}</p>
-                    <p className="text-sm text-gray-600 mt-2 border-t pt-2 border-gray-200">Based on your query regarding "{problemDescription.substring(0, 20)}...", we have routed this to the most appropriate Public Information Officer.</p>
+                    <div className="bg-blue-50/50 p-3 rounded-lg border border-blue-100 mt-3">
+                      <p className="text-xs font-semibold text-blue-900 mb-1 flex items-center gap-1">
+                        <Bot size={12} /> AI Routing Reason
+                      </p>
+                      <p className="text-sm text-blue-800">Based on your query mentioning "{problemDescription.substring(0, 30)}...", we have mapped this keyword to the {STATES[selectedStateId]?.name || "relevant department"} under Section 6(3) of the RTI Act.</p>
+                    </div>
                   </div>
                   
                   <div className="flex gap-3">
@@ -665,12 +673,16 @@ export default function FilePage() {
                 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3 mb-3">
-                    <span className="text-sm text-gray-600">RTI Application Fee</span>
-                    <span className="font-bold text-gray-900">₹10.00</span>
+                    <span className="text-sm text-gray-600">RTI Application Fee ({STATES[selectedStateId]?.name || "Central"})</span>
+                    <span className="font-bold text-gray-900">{selectedStateId === 'maharashtra' ? '₹20.00' : '₹10.00'}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Total Amount</span>
-                    <span className="text-xl font-bold text-green-600">₹10.00</span>
+                    <span className="text-xl font-bold text-green-600">{selectedStateId === 'maharashtra' ? '₹20.00' : '₹10.00'}</span>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-500 flex gap-2">
+                    <AlertOctagon size={14} className="shrink-0 text-amber-500" />
+                    <span>State rules apply: While Central RTI is ₹10, states like Maharashtra charge ₹20. Tamil Nadu requires court fee stamps (handled via our offline dispatch service).</span>
                   </div>
                 </div>
 
@@ -714,22 +726,22 @@ export default function FilePage() {
             ) : currentStep === 9 ? (
               // Step 9: Final Submission & Archive
               <div className="py-4">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">Final Review & Submit</h1>
-                <p className="text-sm text-gray-500 mb-6">You are about to legally submit this RTI application.</p>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">Route to Government Portal</h1>
+                <p className="text-sm text-gray-500 mb-6">We will now draft this application and forward it to the official state/central RTI portal on your behalf.</p>
                 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
                   <div className="flex items-start gap-4 mb-4">
                     <FileSignature size={24} className="text-gray-400 shrink-0" />
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">Application Ready</p>
-                      <p className="text-xs text-gray-500">Your draft and {attachments.length} attachments are packaged.</p>
+                      <p className="text-sm font-semibold text-gray-900">Application Ready for Routing</p>
+                      <p className="text-xs text-gray-500">Your draft and {attachments.length} attachments are packaged for the government portal.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
                     <CheckCircle2 size={24} className="text-green-500 shrink-0" />
                     <div>
                       <p className="text-sm font-semibold text-gray-900">Fee {isBpl ? 'Waived (BPL)' : 'Paid'}</p>
-                      <p className="text-xs text-gray-500">All required payments are settled.</p>
+                      <p className="text-xs text-gray-500">Online payment verified.</p>
                     </div>
                   </div>
                 </div>
@@ -753,7 +765,7 @@ export default function FilePage() {
                 <div className="flex gap-3">
                   <button onClick={goBack} className="btn-secondary flex-1"><ArrowLeft size={16} /> {tc("back", "Back")}</button>
                   <button onClick={handleSubmitRTI} className="btn-primary flex-1 flex justify-center items-center gap-2">
-                    {t("submitRti", "Submit RTI")} <CheckCircle2 size={18} />
+                    Draft & Route to Portal <CheckCircle2 size={18} />
                   </button>
                 </div>
               </div>
@@ -763,9 +775,15 @@ export default function FilePage() {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle2 size={32} className="text-green-600" />
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">{t("completeTitle", "Filing Complete!")}</h1>
-                <p className="text-gray-500 mb-8 max-w-md mx-auto">{t("expDesc", "How was your experience using our platform to draft and file your RTI?")}</p>
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">Routed to State Portal!</h1>
+                <p className="text-gray-500 mb-4 max-w-md mx-auto">Your application was successfully drafted and forwarded to the government portal. Keep your Registration ID safe.</p>
                 
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6 mx-auto max-w-sm inline-block">
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Registration Number</p>
+                  <p className="text-lg font-mono font-bold text-gray-900">{applications[0]?.id || "Processing..."}</p>
+                </div>
+                
+                <p className="text-sm font-semibold text-gray-700 mb-2">Please rate your experience:</p>
                 <div className="max-w-xs mx-auto mb-6">
                   <div className="flex justify-center gap-2 mb-4">
                     {[1, 2, 3, 4, 5].map((star) => (

@@ -1,7 +1,7 @@
 // Mock RTI Applications for the tracking dashboard
 // Simulates what saved applications look like after filing
 
-export type RTIStatus = "pending" | "replied" | "appealed" | "resolved";
+export type RTIStatus = "pending" | "replied" | "appealed" | "second_appeal" | "resolved";
 
 export interface RTIApplication {
   id: string;

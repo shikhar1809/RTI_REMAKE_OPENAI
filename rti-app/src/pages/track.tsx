@@ -82,6 +82,9 @@ function RTICard({ app }: { app: RTIApplication }) {
   } else if (app.status === "appealed") {
     statusColor = "bg-purple-100 text-purple-700";
     StatusIcon = AlertCircle;
+  } else if (app.status === "second_appeal") {
+    statusColor = "bg-indigo-100 text-indigo-700";
+    StatusIcon = AlertCircle;
   } else if (isOverdue) {
     statusColor = "bg-red-100 text-red-700";
     StatusIcon = Timer;

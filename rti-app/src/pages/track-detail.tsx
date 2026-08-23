@@ -2,7 +2,7 @@ import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useApplicationsStore } from "@/store/applicationsStore";
 import { getDaysRemaining } from "@/data/mockRTIs";
-import { ArrowLeft, Clock, CheckCircle2, AlertCircle, FileText, Download, Eye, EyeOff, Timer, Gavel, FileSignature } from "lucide-react";
+import { ArrowLeft, Clock, CheckCircle2, AlertCircle, FileText, Download, Eye, EyeOff, Timer, Gavel, FileSignature, Bot } from "lucide-react";
 import { useState } from "react";
 import { PublicConsentModal } from "@/components/PublicConsentModal";
 
@@ -13,10 +13,12 @@ export default function TrackDetailPage() {
   
   // Appeal Workflow State
   const [isAppealing, setIsAppealing] = useState(false);
+  const [isSecondAppealing, setIsSecondAppealing] = useState(false);
   const [appealReason, setAppealReason] = useState("");
   const [isDrafting, setIsDrafting] = useState(false);
   const [appealDraft, setAppealDraft] = useState("");
   const [appealSuccess, setAppealSuccess] = useState(false);
+  const [secondAppealSuccess, setSecondAppealSuccess] = useState(false);
   
   const app = applications.find(a => a.id === id);
   
@@ -40,12 +42,31 @@ export default function TrackDetailPage() {
     }, 1500);
   };
 
+  const handleDraftSecondAppeal = () => {
+    setIsDrafting(true);
+    setTimeout(() => {
+      setAppealDraft(`To,\nThe Central/State Information Commission,\n\nSub: Second Appeal under Section 19(3) of RTI Act 2005\nRef: RTI Application ID ${app.id} dated ${new Date(app.filedDate).toLocaleDateString()}\n\nSir/Madam,\nI am filing this second appeal as the First Appellate Authority has failed to provide a satisfactory resolution regarding my RTI request.\n\nReason: ${appealReason}\n\nI request the Hon'ble Commission to direct the PIO to furnish the information and impose a penalty under Section 20(1).\n\nYours faithfully,\n[Your Name]`);
+      setIsDrafting(false);
+    }, 1500);
+  };
+
   const handleSubmitAppeal = () => {
     updateApplicationStatus(app.id, "appealed");
     setAppealSuccess(true);
     setTimeout(() => {
       setIsAppealing(false);
       setAppealSuccess(false);
+      setAppealReason("");
+      setAppealDraft("");
+    }, 3000);
+  };
+
+  const handleSubmitSecondAppeal = () => {
+    updateApplicationStatus(app.id, "second_appeal");
+    setSecondAppealSuccess(true);
+    setTimeout(() => {
+      setIsSecondAppealing(false);
+      setSecondAppealSuccess(false);
       setAppealReason("");
       setAppealDraft("");
     }, 3000);
@@ -257,6 +278,87 @@ export default function TrackDetailPage() {
                             className="w-full bg-red-600 text-white font-bold rounded-lg py-3 flex justify-center items-center gap-2 hover:bg-red-700 transition-colors"
                           >
                             <Gavel size={18} /> Submit Appeal to FAA
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+              {/* Second Appeal Action */}
+              {(isOverdue || app.status === "appealed") && app.status === "appealed" && !isSecondAppealing && (
+                <div className="mt-4 pt-4 border-t border-gray-100 flex justify-center">
+                  <button onClick={() => setIsSecondAppealing(true)} className="btn-secondary text-indigo-600 border-indigo-200 hover:bg-indigo-50 hover:border-indigo-300 w-full flex justify-center gap-2 py-3">
+                    <Gavel size={18} />
+                    Escalate: File Second Appeal (Information Commission)
+                  </button>
+                </div>
+              )}
+
+              {/* Second Appeal Wizard */}
+              {isSecondAppealing && (
+                <div className="mt-6 p-5 bg-indigo-50 border border-indigo-100 rounded-xl animate-in slide-in-from-top-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-bold text-indigo-800 flex items-center gap-2">
+                      <Gavel size={18} /> File Second Appeal
+                    </h3>
+                    <button onClick={() => setIsSecondAppealing(false)} className="text-indigo-400 hover:text-indigo-700">Cancel</button>
+                  </div>
+                  
+                  {secondAppealSuccess ? (
+                    <div className="text-center py-6">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <CheckCircle2 size={24} className="text-green-600" />
+                      </div>
+                      <h4 className="font-bold text-gray-900 mb-1">Second Appeal Submitted!</h4>
+                      <p className="text-sm text-gray-500">Your Second Appeal has been forwarded to the Information Commission.</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Second Appeal</label>
+                        <select 
+                          value={appealReason}
+                          onChange={(e) => setAppealReason(e.target.value)}
+                          className="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                          <option value="">Select reason...</option>
+                          <option value="First Appellate Authority did not pass an order within 45 days">FAA did not pass an order within 45 days</option>
+                          <option value="Unsatisfied with First Appellate Authority's order">Unsatisfied with FAA's order</option>
+                          <option value="Information was destroyed or concealed">Information was destroyed or concealed</option>
+                        </select>
+                      </div>
+
+                      {!appealDraft ? (
+                        <button 
+                          onClick={handleDraftSecondAppeal} 
+                          disabled={!appealReason || isDrafting}
+                          className="w-full bg-indigo-600 text-white font-bold rounded-lg py-3 flex justify-center items-center gap-2 hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                        >
+                          {isDrafting ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              Drafting Commission Appeal...
+                            </>
+                          ) : (
+                            <>
+                              <Bot size={18} /> Auto-Draft Second Appeal
+                            </>
+                          )}
+                        </button>
+                      ) : (
+                        <div className="animate-in fade-in">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Appeal Draft (Ready to submit)</label>
+                          <textarea 
+                            value={appealDraft}
+                            readOnly
+                            className="w-full h-40 bg-white border border-gray-300 rounded-lg p-3 text-sm text-gray-700 mb-4 focus:outline-none resize-none"
+                          />
+                          <button 
+                            onClick={handleSubmitSecondAppeal}
+                            className="w-full bg-indigo-600 text-white font-bold rounded-lg py-3 flex justify-center items-center gap-2 hover:bg-indigo-700 transition-colors"
+                          >
+                            <Gavel size={18} /> Submit to Information Commission
                           </button>
                         </div>
                       )}
