@@ -116,7 +116,7 @@ export default function HomePage() {
 
           <div className="flex flex-col gap-3 max-w-sm mx-auto w-full">
             
-            {currentStep > 1 && currentStep < 5 && (
+            {currentStep > 1 && currentStep < 6 && (
               <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 shadow-sm flex flex-col gap-3 mb-1 animate-in fade-in slide-in-from-bottom-2">
                 <div className="flex items-start gap-2">
                   <span className="text-amber-600 mt-0.5">⚠️</span>
