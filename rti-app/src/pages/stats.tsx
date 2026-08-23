@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter, Eye, X, FileText, Image as ImageIcon, CheckCircle2, Download, PieChart as PieChartIcon, List } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter, Eye, X, FileText, Image as ImageIcon, CheckCircle2, Download, PieChart as PieChartIcon, List, Sparkles, Bot, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MOCK_PUBLIC_RTIS, RTIApplication } from "@/data/mockRTIs";
@@ -199,8 +199,8 @@ export default function StatsPage() {
           {/* Public Archive Section */}
           <div className="bg-white/95 rounded-2xl shadow-md border-2 border-gray-300 overflow-hidden flex flex-col">
             <div className="px-5 py-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">{t("searchTitle")}</h2>
+              <div className="shrink-0">
+                <h2 className="text-lg font-bold text-gray-900 whitespace-nowrap">{t("searchTitle")}</h2>
                 <p className="text-xs text-gray-500">{t("searchDesc")}</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -605,66 +605,79 @@ export default function StatsPage() {
       {/* AI RAG Chat Interface Overlay */}
       {isChatOpen && (
         <div className="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200 border border-gray-100">
             {/* Header */}
-            <div className="bg-green-600 px-6 py-4 flex items-center justify-between text-white">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <Search size={20} className="text-white" />
+            <div className="bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-4 flex items-center justify-between text-white shadow-sm z-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 shadow-inner">
+                  <Sparkles size={24} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg leading-tight">Archive AI Assistant</h3>
-                  <p className="text-white/80 text-xs">Search topics & precedents</p>
+                  <h3 className="font-extrabold text-xl leading-tight tracking-tight">Archive AI</h3>
+                  <p className="text-emerald-100 text-xs font-medium">Search topics & precedents</p>
                 </div>
               </div>
               <button 
                 onClick={() => setIsChatOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition-all hover:rotate-90 duration-200"
               >
-                <X size={20} />
+                <X size={22} />
               </button>
             </div>
             
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col gap-4">
+            <div className="flex-1 overflow-y-auto p-6 bg-slate-50 flex flex-col gap-6" style={{ backgroundImage: 'radial-gradient(#e2e8f0 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
               {chatMessages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] rounded-2xl px-5 py-3 ${
-                    msg.role === 'user' 
-                      ? 'bg-blue-600 text-white rounded-tr-sm' 
-                      : 'bg-white border border-gray-200 text-gray-800 shadow-sm rounded-tl-sm'
+                <div key={idx} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                  
+                  {/* Avatar */}
+                  <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-sm mt-auto ${
+                    msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-emerald-600 text-white'
                   }`}>
-                    <p className="text-sm leading-relaxed">{msg.content}</p>
+                    {msg.role === 'user' ? <div className="font-bold text-xs">U</div> : <Bot size={16} />}
+                  </div>
+
+                  {/* Bubble */}
+                  <div className={`max-w-[75%] rounded-2xl px-5 py-3.5 shadow-sm ${
+                    msg.role === 'user' 
+                      ? 'bg-blue-600 text-white rounded-br-sm' 
+                      : 'bg-white border border-gray-100 text-gray-800 rounded-bl-sm'
+                  }`}>
+                    <p className="text-[15px] leading-relaxed">{msg.content}</p>
                   </div>
                 </div>
               ))}
+              
               {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-white border border-gray-200 text-gray-500 shadow-sm rounded-2xl rounded-tl-sm px-5 py-3 flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                <div className="flex gap-3 flex-row">
+                  <div className="shrink-0 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-sm mt-auto">
+                    <Bot size={16} />
+                  </div>
+                  <div className="bg-white border border-gray-100 text-gray-500 shadow-sm rounded-2xl rounded-bl-sm px-5 py-4 flex items-center gap-2 max-w-[75%]">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Input Area */}
-            <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-gray-200 flex items-center gap-3">
+            <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-gray-100 flex items-center gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
               <input 
                 type="text" 
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 placeholder="Ask about historical RTIs..."
-                className="flex-1 bg-gray-100 border-none px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="flex-1 bg-slate-100 border border-transparent px-5 py-3.5 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 focus:bg-white transition-all shadow-inner"
                 autoFocus
               />
               <button 
                 type="submit"
                 disabled={!chatInput.trim() || isTyping}
-                className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-5 py-3 rounded-xl font-bold text-sm transition-colors"
+                className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:hover:bg-emerald-600 text-white px-5 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95"
               >
-                Send
+                Send <Send size={16} className="ml-1" />
               </button>
             </form>
           </div>
