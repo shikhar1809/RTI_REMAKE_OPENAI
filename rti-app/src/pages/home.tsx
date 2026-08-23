@@ -93,7 +93,7 @@ export default function HomePage() {
           
           <div className="text-center mb-6 mt-4">
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 drop-shadow-md">{t("welcome", "Welcome")}, {userName}</h1>
-            <p className="text-gray-600 font-medium text-sm drop-shadow">{t("whatWouldYouLike", "What would you like to do today?")}</p>
+            <p className="text-gray-600 font-medium text-sm drop-shadow">{t("whatWouldYouLike", "WHAT DO YOU WANT TO KNOW TODAY ?")}</p>
           </div>
 
           <div className="flex flex-col items-center gap-3 mb-8">
