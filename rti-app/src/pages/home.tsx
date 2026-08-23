@@ -152,21 +152,21 @@ export default function HomePage() {
 
             <Link
               to="/documents"
-              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
+              className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
               {t("docConnect", "DOCUMENT CONNECT")}
             </Link>
 
             <Link
               to="/about"
-              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
+              className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
               {t("knowRules", "KNOW YOUR RTI")}
             </Link>
 
             <Link
               to="/stats"
-              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
+              className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
               {t("rtiStats", "CHECK RTI STATS")}
             </Link>
