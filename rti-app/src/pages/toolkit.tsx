@@ -14,7 +14,154 @@ interface ChatMessage {
 }
 
 
-// Typewriter component for AI responses
+// ── Lightweight Markdown Renderer ─────────────────────────────────────────
+const MarkdownMessage = ({ text }: { text: string }) => {
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  let i = 0;
+
+  const renderInline = (str: string, key: string | number): React.ReactNode => {
+    // Process inline: **bold**, *italic*, `code`
+    const parts = str.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g);
+    return (
+      <span key={key}>
+        {parts.map((part, pi) => {
+          if (part.startsWith('**') && part.endsWith('**'))
+            return <strong key={pi} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>;
+          if (part.startsWith('*') && part.endsWith('*'))
+            return <em key={pi}>{part.slice(1, -1)}</em>;
+          if (part.startsWith('`') && part.endsWith('`'))
+            return <code key={pi} className="bg-gray-100 text-green-700 text-xs px-1.5 py-0.5 rounded font-mono">{part.slice(1, -1)}</code>;
+          return part;
+        })}
+      </span>
+    );
+  };
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Skip empty lines (add small gap)
+    if (line.trim() === '') {
+      elements.push(<div key={`gap-${i}`} className="h-1.5" />);
+      i++;
+      continue;
+    }
+
+    // Horizontal rule
+    if (/^---+$/.test(line.trim())) {
+      elements.push(<hr key={i} className="border-gray-200 my-2" />);
+      i++;
+      continue;
+    }
+
+    // Table detection — starts with |
+    if (line.trim().startsWith('|')) {
+      const tableLines: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        tableLines.push(lines[i]);
+        i++;
+      }
+      // Filter out separator rows (|---|---|)
+      const dataRows = tableLines.filter(l => !/^\s*\|[\s\-|]+\|\s*$/.test(l));
+      if (dataRows.length > 0) {
+        const parseRow = (row: string) =>
+          row.split('|').map(c => c.trim()).filter(c => c !== '');
+        const headers = parseRow(dataRows[0]);
+        const bodyRows = dataRows.slice(1);
+        elements.push(
+          <div key={`table-${i}`} className="my-2 overflow-x-auto rounded-lg border border-gray-200">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-gray-50">
+                  {headers.map((h, hi) => (
+                    <th key={hi} className="px-3 py-2 text-left font-semibold text-gray-700 border-b border-gray-200 whitespace-nowrap">
+                      {renderInline(h, hi)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {bodyRows.map((row, ri) => (
+                  <tr key={ri} className={ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
+                    {parseRow(row).map((cell, ci) => (
+                      <td key={ci} className="px-3 py-2 text-gray-700 border-b border-gray-100 align-top">
+                        {renderInline(cell, ci)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      continue;
+    }
+
+    // Heading: **Title** alone on a line
+    if (/^\*\*[^*]+\*\*$/.test(line.trim()) || /^#{1,3}\s/.test(line.trim())) {
+      const text = line.trim().replace(/^\*\*|\*\*$/g, '').replace(/^#+\s/, '');
+      elements.push(
+        <p key={i} className="font-bold text-gray-900 text-sm mt-2 mb-1">{text}</p>
+      );
+      i++;
+      continue;
+    }
+
+    // Bullet list: starts with → or - or • or *
+    if (/^(→|-|•|\*)\s/.test(line.trim())) {
+      const items: string[] = [];
+      while (i < lines.length && /^(→|-|•|\*)\s/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^(→|-|•|\*)\s/, ''));
+        i++;
+      }
+      elements.push(
+        <ul key={`ul-${i}`} className="my-1.5 space-y-1">
+          {items.map((item, ii) => (
+            <li key={ii} className="flex items-start gap-2 text-sm text-gray-700">
+              <span className="text-green-500 mt-0.5 shrink-0">→</span>
+              <span>{renderInline(item, ii)}</span>
+            </li>
+          ))}
+        </ul>
+      );
+      continue;
+    }
+
+    // Numbered list: starts with 1. 2. etc.
+    if (/^\d+\.\s/.test(line.trim())) {
+      const items: string[] = [];
+      while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^\d+\.\s/, ''));
+        i++;
+      }
+      elements.push(
+        <ol key={`ol-${i}`} className="my-1.5 space-y-1 list-none">
+          {items.map((item, ii) => (
+            <li key={ii} className="flex items-start gap-2 text-sm text-gray-700">
+              <span className="text-green-600 font-bold shrink-0 w-4">{ii + 1}.</span>
+              <span>{renderInline(item, ii)}</span>
+            </li>
+          ))}
+        </ol>
+      );
+      continue;
+    }
+
+    // Normal paragraph
+    elements.push(
+      <p key={i} className="text-sm text-gray-700 leading-relaxed">
+        {renderInline(line, i)}
+      </p>
+    );
+    i++;
+  }
+
+  return <div className="flex flex-col gap-0.5">{elements}</div>;
+};
+
+// ── Typewriter with Markdown ───────────────────────────────────────────────
 const TypewriterText = ({ text, onUpdate }: { text: string, onUpdate?: () => void }) => {
   const [displayed, setDisplayed] = useState("");
   const [isComplete, setIsComplete] = useState(false);
@@ -23,30 +170,28 @@ const TypewriterText = ({ text, onUpdate }: { text: string, onUpdate?: () => voi
     let i = 0;
     setDisplayed("");
     setIsComplete(false);
-    
-    // Type 1 character every 15ms (approx 60 chars per second)
     const timer = setInterval(() => {
       if (i < text.length) {
         setDisplayed(text.substring(0, i + 1));
         i++;
-        if (i % 4 === 0 && onUpdate) onUpdate(); // Throttle scroll updates
+        if (i % 8 === 0 && onUpdate) onUpdate();
       } else {
         setIsComplete(true);
         clearInterval(timer);
         if (onUpdate) onUpdate();
       }
-    }, 15);
-
+    }, 10);
     return () => clearInterval(timer);
   }, [text]); // eslint-disable-line
 
   return (
-    <span>
-      {displayed}
-      {!isComplete && <span className="inline-block w-1.5 h-3.5 ml-0.5 align-middle bg-gray-500 animate-pulse" />}
-    </span>
+    <div>
+      <MarkdownMessage text={displayed} />
+      {!isComplete && <span className="inline-block w-1.5 h-3.5 ml-0.5 align-middle bg-gray-400 animate-pulse rounded-sm" />}
+    </div>
   );
 };
+
 
 export default function ToolkitPage() {
   const { t } = useTranslation(undefined, { keyPrefix: 'ai' });
@@ -198,6 +343,8 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
                       text={msg.content} 
                       onUpdate={() => endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' })} 
                     />
+                  ) : msg.role === 'ai' ? (
+                    <MarkdownMessage text={msg.content} />
                   ) : (
                     msg.content
                   )}
