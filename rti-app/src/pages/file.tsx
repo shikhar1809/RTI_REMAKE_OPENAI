@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { Paperclip, X, ImageIcon, FileText, Upload } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2, ShieldCheck, AlertOctagon } from "lucide-react";
 import { useRTIStore } from "@/store/rtiStore";
@@ -10,7 +11,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 export default function FilePage() {
   const { t } = useTranslation(undefined, { keyPrefix: "file" });
@@ -38,10 +39,12 @@ export default function FilePage() {
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [rating, setRating] = useState(0);
+  const [attachments, setAttachments] = useState<{ name: string; size: string; type: string; url: string }[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // If the user navigates back to this page and it was left on step 5, reset it
-    if (currentStep === 5) {
+    // If the user navigates back to this page and it was left on step 6, reset it
+    if (currentStep === 6) {
       resetWizard();
     }
   }, []);
@@ -58,12 +61,29 @@ export default function FilePage() {
     setTimeout(() => setShowToast(false), 3000);
   }
 
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    const newAttachments = files.map(f => ({
+      name: f.name,
+      size: f.size > 1024 * 1024 ? `${(f.size / (1024 * 1024)).toFixed(1)} MB` : `${(f.size / 1024).toFixed(0)} KB`,
+      type: f.type.startsWith("image/") ? "image" : "document",
+      url: URL.createObjectURL(f),
+    }));
+    setAttachments(prev => [...prev, ...newAttachments]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function removeAttachment(index: number) {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  }
+
   function goNext() {
     if (currentStep === 1 && (!name || !address || !mobile)) return;
-    if (currentStep === 2 && problemDescription.length < 10) return;
-    if (currentStep === 3 && !selectedStateId) return;
+    // Step 2 is attachments — always optional, can skip
+    if (currentStep === 3 && problemDescription.length < 10) return;
+    if (currentStep === 4 && !selectedStateId) return;
 
-    if (currentStep === 3) {
+    if (currentStep === 4) {
       const isBpl = useDocumentStore.getState().isBPLVerified();
       const profile = { name, address, mobile };
       const newDraft = generateMockDraft(problemDescription, selectedStateId, isBpl, profile);
@@ -208,6 +228,71 @@ export default function FilePage() {
               </>
             ) : currentStep === 2 ? (
               <>
+                <div className="mb-2">
+                  <h2 className="text-sm font-semibold text-gray-700 mb-1">Attach Supporting Documents</h2>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Upload photos, screenshots, receipts, or any documents that support your RTI request. <span className="font-medium text-gray-700">This step is optional.</span>
+                  </p>
+
+                  {/* Upload area */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept="image/*,.pdf,.doc,.docx"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center gap-2 hover:border-green-400 hover:bg-green-50/50 transition-colors group cursor-pointer"
+                  >
+                    <div className="w-12 h-12 bg-gray-100 group-hover:bg-green-100 rounded-full flex items-center justify-center transition-colors">
+                      <Upload size={22} className="text-gray-400 group-hover:text-green-600 transition-colors" />
+                    </div>
+                    <p className="text-sm font-semibold text-gray-600 group-hover:text-green-700">Click to upload files</p>
+                    <p className="text-xs text-gray-400">Images, PDFs, Word documents</p>
+                  </button>
+                </div>
+
+                {/* Attached files list */}
+                {attachments.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    {attachments.map((file, i) => (
+                      <div key={i} className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
+                        <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${file.type === "image" ? "bg-blue-100" : "bg-orange-100"}`}>
+                          {file.type === "image"
+                            ? <ImageIcon size={16} className="text-blue-600" />
+                            : <FileText size={16} className="text-orange-600" />
+                          }
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-800 truncate">{file.name}</p>
+                          <p className="text-xs text-gray-500">{file.size}</p>
+                        </div>
+                        {file.type === "image" && (
+                          <img src={file.url} alt={file.name} className="w-10 h-10 object-cover rounded-lg border border-gray-200" />
+                        )}
+                        <button onClick={() => removeAttachment(i)} className="text-gray-400 hover:text-red-500 transition-colors shrink-0">
+                          <X size={16} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex gap-3 mt-6">
+                  <button onClick={goBack} className="btn-secondary flex-1">
+                    <ArrowLeft size={16} /> {tc("back", "Back")}
+                  </button>
+                  <button onClick={goNext} className="btn-primary flex-1">
+                    {attachments.length > 0 ? `Continue with ${attachments.length} file${attachments.length > 1 ? "s" : ""}` : "Skip for now"}
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
+              </>
+            ) : currentStep === 3 ? (
+              <>
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   {t("step1Title", "What is your problem?")}
@@ -295,7 +380,7 @@ export default function FilePage() {
                   </button>
                 </div>
               </>
-            ) : currentStep === 4 && draft ? (
+            ) : currentStep === 5 && draft ? (
               <>
                 <div className="flex items-start justify-between mb-2">
                   <h1 className="text-xl font-bold text-gray-900">{t("step3Title", "Your RTI Draft is Ready")}</h1>
@@ -316,6 +401,17 @@ export default function FilePage() {
                   </div>
                   <p className="font-semibold text-gray-900 mb-4">{draft.subject}</p>
                   <p className="text-sm text-gray-700 whitespace-pre-wrap">{draft.body}</p>
+                  
+                  {attachments.length > 0 && (
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <p className="font-semibold text-gray-900 mb-2">Enclosures ({attachments.length}):</p>
+                      <ul className="list-disc pl-5 text-sm text-gray-700">
+                        {attachments.map((file, i) => (
+                          <li key={i}>{file.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
                 
                 {selectedStateId !== "other" && STATES[selectedStateId] ? (
@@ -359,12 +455,12 @@ export default function FilePage() {
                 </div>
                 
                 <div className="mt-6 flex justify-center">
-                  <button onClick={() => setCurrentStep(5)} className="btn-primary w-full flex justify-center items-center gap-2 mt-4">
+                  <button onClick={() => setCurrentStep(6)} className="btn-primary w-full flex justify-center items-center gap-2 mt-4">
                     Submit RTI <CheckCircle2 size={18} />
                   </button>
                 </div>
               </>
-            ) : currentStep === 5 ? (
+            ) : currentStep === 6 ? (
               <div className="text-center py-6 px-4">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle2 size={32} className="text-green-600" />
