@@ -49,7 +49,7 @@ export default function AboutPage() {
             <div className="mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 flex flex-col items-center">
               <div className="flex items-center gap-3 mb-4 opacity-80">
                 <Scale size={24} />
-                <span className="text-base font-semibold">Right to Information Act, 2005</span>
+                <span className="text-base font-semibold">{t("introTitle", "Right to Information Act, 2005")}</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
                 {t("heroTitle", "Know Your RTI Rules")}

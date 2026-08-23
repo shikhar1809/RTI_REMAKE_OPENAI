@@ -231,7 +231,9 @@
     "cannot3Title": "Personal Information:",
     "cannot3Desc": " Details of other citizens that have no relationship to any public activity or interest (invasion of privacy).",
     "cannot4Title": "Future Plans:",
-    "cannot4Desc": " You cannot ask questions like \"When will the road be built?\". You can only ask for records of decisions already made."
+    "cannot4Desc": " You cannot ask questions like \"When will the road be built?\". You can only ask for records of decisions already made.",
+    "heroTitle": "Know Your RTI Rules",
+    "heroSubtitle": "Empowering citizens to seek answers, simply and effectively."
   },
   "dashboard": {
     "welcome": "Welcome",
