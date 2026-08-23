@@ -30,6 +30,8 @@ export default function HomePage() {
   const [otp, setOtp] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isLoadingLang, setIsLoadingLang] = useState(false);
+  const [langToast, setLangToast] = useState(false);
 
   const handleToggle = () => {
     if (notificationsEnabled) {
@@ -51,8 +53,39 @@ export default function HomePage() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLang = e.target.value;
+    setIsLoadingLang(true);
+    // Simulate loading for 1 second to show the loader, then swap language
+    setTimeout(() => {
+      i18n.changeLanguage(newLang);
+      setIsLoadingLang(false);
+      setLangToast(true);
+      setTimeout(() => setLangToast(false), 3000);
+    }, 1000);
+  };
+
   return (
     <ProtectedRoute>
+      {/* Full Screen Language Loader */}
+      {isLoadingLang && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gray-900/40 backdrop-blur-md">
+          <div className="bg-white p-6 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full mx-4 animate-in zoom-in-95 duration-200">
+            <FcGlobe size={48} className="animate-spin-slow mb-4" />
+            <h3 className="font-bold text-gray-900 text-lg mb-1">Applying Language...</h3>
+            <p className="text-gray-500 text-sm text-center">Syncing translations across the platform.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Language Change Success Toast */}
+      {langToast && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 z-50 animate-in slide-in-from-bottom-5">
+          <CheckCircle2 className="text-green-400" size={20} />
+          <span className="font-medium text-sm">Language synced successfully!</span>
+        </div>
+      )}
+
       <div className="flex flex-col items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <div className="w-full max-w-xl p-4 sm:p-8 relative">
           
@@ -91,7 +124,7 @@ export default function HomePage() {
                 <FcGlobe size={20} />
                 <select 
                   value={i18n.language}
-                  onChange={(e) => i18n.changeLanguage(e.target.value)}
+                  onChange={handleLanguageChange}
                   className="bg-transparent text-base font-bold text-gray-700 outline-none cursor-pointer hover:text-gray-900"
                 >
                   <option value="en">English</option>
