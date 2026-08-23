@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 interface ChatMessage {
   role: 'user' | 'ai';
   content: string;
+  isTypingEffect?: boolean;
 }
 
 // Smiley-orbit animated icon with advanced states
@@ -84,6 +85,41 @@ const NyayaAvatar = ({ size = 48, state = 'idle' }: { size?: number, state?: 'id
     </span>
   );
 };
+
+// Typewriter component for AI responses
+const TypewriterText = ({ text, onUpdate }: { text: string, onUpdate?: () => void }) => {
+  const [displayed, setDisplayed] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    setDisplayed("");
+    setIsComplete(false);
+    
+    // Type 1 character every 15ms (approx 60 chars per second)
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed(text.substring(0, i + 1));
+        i++;
+        if (i % 4 === 0 && onUpdate) onUpdate(); // Throttle scroll updates
+      } else {
+        setIsComplete(true);
+        clearInterval(timer);
+        if (onUpdate) onUpdate();
+      }
+    }, 15);
+
+    return () => clearInterval(timer);
+  }, [text]); // eslint-disable-line
+
+  return (
+    <span>
+      {displayed}
+      {!isComplete && <span className="inline-block w-1.5 h-3.5 ml-0.5 align-middle bg-gray-500 animate-pulse" />}
+    </span>
+  );
+};
+
 export default function ToolkitPage() {
   const { t } = useTranslation(undefined, { keyPrefix: 'ai' });
   
@@ -121,13 +157,14 @@ export default function ToolkitPage() {
     setHasStarted(true);
     setChatMessages(prev => [...prev, { role: 'user', content: text }]);
     setInputValue("");
-    setIsTyping(true);
+    setIsTyping(true); // AI enters reading/searching state
 
+    // 3 seconds delay as requested before generating text
     setTimeout(() => {
       const response = answerKey ? MOCK_ANSWERS[answerKey] : t("defaultAns");
-      setChatMessages(prev => [...prev, { role: 'ai', content: response }]);
-      setIsTyping(false);
-    }, 1800);
+      setIsTyping(false); // AI finishes reading, goes back to idle state
+      setChatMessages(prev => [...prev, { role: 'ai', content: response, isTypingEffect: true }]);
+    }, 3000);
   };
 
   const agentState = isListening ? 'listening' : isTyping ? 'typing' : 'idle';
@@ -197,7 +234,14 @@ export default function ToolkitPage() {
                     ? 'bg-gray-900 text-white rounded-3xl rounded-br-sm'
                     : 'bg-white/90 backdrop-blur-sm text-gray-800 rounded-3xl rounded-bl-sm border border-green-100'
                 }`}>
-                  {msg.content}
+                  {msg.role === 'ai' && msg.isTypingEffect ? (
+                    <TypewriterText 
+                      text={msg.content} 
+                      onUpdate={() => endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' })} 
+                    />
+                  ) : (
+                    msg.content
+                  )}
                 </div>
               </div>
             ))}
