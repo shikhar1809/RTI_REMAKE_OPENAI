@@ -34,17 +34,17 @@ export default function ManagePage() {
           <div className="flex flex-col gap-6">
             <Link
               to="/file"
-              className="bg-white/95 hover:bg-white text-gray-800 p-6 rounded-3xl font-bold text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border-2 border-gray-300 hover:border-gray-400 flex flex-col items-center justify-center gap-3 h-48"
+              className="bg-white/95 hover:bg-green-50 text-gray-800 hover:text-green-700 p-6 rounded-3xl font-bold text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border-2 border-gray-300 hover:border-green-500 flex flex-col items-center justify-center gap-3 h-48"
             >
-              <FileText size={48} className="text-gray-600 drop-shadow-sm mb-1" />
+              <FileText size={48} className="drop-shadow-sm mb-1 transition-colors" />
               <span className="text-xl tracking-wide">FILE A NEW RTI</span>
             </Link>
 
             <Link
               to="/track"
-              className="bg-white/95 hover:bg-white text-gray-800 p-6 rounded-3xl font-bold text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border-2 border-gray-300 hover:border-gray-400 flex flex-col items-center justify-center gap-3 h-48 relative"
+              className="bg-white/95 hover:bg-green-50 text-gray-800 hover:text-green-700 p-6 rounded-3xl font-bold text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border-2 border-gray-300 hover:border-green-500 flex flex-col items-center justify-center gap-3 h-48 relative"
             >
-              <Activity size={48} className="text-gray-600 drop-shadow-sm mb-1" />
+              <Activity size={48} className="drop-shadow-sm mb-1 transition-colors" />
               <span className="text-xl tracking-wide">VIEW/TRACK EXISTING REPORTS</span>
               {newRepliesCount > 0 && (
                 <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-black w-8 h-8 flex items-center justify-center rounded-full shadow-md border-2 border-white">
