@@ -287,9 +287,9 @@ export default function HomePage() {
 
             <Link
               to="/toolkit"
-              className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
+              className="bg-gradient-to-r from-purple-700 to-indigo-800 text-white border-2 border-purple-600 hover:border-purple-400 hover:shadow-lg py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md flex items-center justify-center gap-2"
             >
-              {t("rtiToolkit", "RTI TOOLKIT")}
+              <span className="text-xl">✨</span> {t("rtiToolkit", "RTI AI AGENT")}
             </Link>
 
           </div>

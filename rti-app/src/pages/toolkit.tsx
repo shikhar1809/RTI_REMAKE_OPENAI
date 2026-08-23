@@ -1,154 +1,180 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { ArrowLeft, ChevronRight, CheckCircle2 } from "lucide-react";
-import { FcHighPriority, FcIdea, FcFeedback } from "react-icons/fc";
-import { useState } from "react";
+import { ArrowLeft, Bot, Send, Sparkles, Mic, FileText, Activity, HelpCircle, FileSearch } from "lucide-react";
+
+interface ChatMessage {
+  role: 'user' | 'ai';
+  content: string;
+}
 
 export default function ToolkitPage() {
-  const [showFeatureModal, setShowFeatureModal] = useState(false);
-  const [featureRequest, setFeatureRequest] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    { role: 'ai', content: "Hello! I am your RTI AI Agent. I have full knowledge of the RTI Act 2005, recent rulings, and the public archive. How can I assist you today?" }
+  ]);
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  
+  const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = () => {
-    if (!featureRequest.trim()) return;
-    setIsSubmitting(true);
+  useEffect(() => {
+    endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages, isTyping]);
+
+  const handleSend = (text: string = inputValue) => {
+    if (!text.trim()) return;
+    
+    // Add user message
+    setChatMessages(prev => [...prev, { role: 'user', content: text }]);
+    setInputValue("");
+    setIsTyping(true);
+
+    // Mock AI response delay
     setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setTimeout(() => {
-        setShowFeatureModal(false);
-        setIsSubmitted(false);
-        setFeatureRequest("");
-      }, 2000);
-    }, 1000);
+      let aiResponse = "I'm checking the RTI Act and recent public archives... Based on the guidelines, you have the right to request this information. Let me know if you want me to draft the exact application for you.";
+      
+      const lowerText = text.toLowerCase();
+      if (lowerText.includes("appeal")) {
+        aiResponse = "I can help you draft a First Appeal. I will need the original RTI you filed and the incomplete reply you received from the PIO. I will identify the legal gaps and write a strong appeal for the First Appellate Authority. Would you like to proceed?";
+      } else if (lowerText.includes("analyse") || lowerText.includes("analyze") || lowerText.includes("reply")) {
+        aiResponse = "Sure! Paste the official government reply you received, and I'll run an AI analysis to see if they dodged your question, cited an incorrect exemption clause, or provided complete information.";
+      } else if (lowerText.includes("bpl") || lowerText.includes("fee")) {
+        aiResponse = "Citizens holding a Below Poverty Line (BPL) card are fully exempt from the ₹10 RTI application fee, as well as any document copying charges. Our platform automatically verifies your BPL status via DigiLocker.";
+      }
+
+      setChatMessages(prev => [...prev, { role: 'ai', content: aiResponse }]);
+      setIsTyping(false);
+    }, 1500);
+  };
+
+  const QUICK_ACTIONS = [
+    { label: "Draft an Appeal", icon: FileText, query: "I want to draft a First Appeal against a rejected RTI." },
+    { label: "Analyze Govt Reply", icon: Activity, query: "Can you analyze a government reply I received?" },
+    { label: "Check BPL Rules", icon: HelpCircle, query: "What are the BPL fee exemption rules for RTI?" },
+    { label: "Search Archives", icon: FileSearch, query: "Search the public archive for road repair RTIs." }
+  ];
+
+  const handleMicClick = () => {
+    setIsListening(true);
+    setTimeout(() => {
+      setIsListening(false);
+      setInputValue("How many days does the government have to reply?");
+    }, 2000);
   };
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col items-center py-8 px-4 min-h-[calc(100vh-4rem)]">
-        <div className="w-full max-w-3xl p-4 sm:p-8">
-          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
-            <ArrowLeft size={16} /> Back to Home
-          </Link>
+      <div className="flex flex-col items-center py-4 px-4 h-[calc(100vh-4rem)]">
+        <div className="w-full max-w-3xl flex flex-col h-full bg-white/95 border-2 border-gray-300 rounded-2xl shadow-xl overflow-hidden">
           
-          <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">RTI Toolkit</h1>
-            <p className="text-gray-500">Advanced tools to help you manage your RTI applications.</p>
+          {/* Header */}
+          <div className="bg-gradient-to-r from-purple-700 to-indigo-800 px-6 py-4 flex items-center justify-between text-white shadow-sm z-10 shrink-0">
+            <div className="flex items-center gap-4">
+              <Link to="/home" className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition-all duration-200">
+                <ArrowLeft size={22} />
+              </Link>
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 shadow-inner">
+                <Bot size={24} className="text-white" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-xl leading-tight tracking-tight">RTI AI Agent</h3>
+                <p className="text-purple-100 text-xs font-medium">Voice + Chat • Legal Assistant</p>
+              </div>
+            </div>
           </div>
 
-          <div className="grid gap-4">
-            <Link
-              to="/check-reply"
-              className="card flex items-center justify-between p-5 md:p-6 hover:border-amber-300 transition-all group"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-                  <FcHighPriority size={32} />
-                </div>
-                <div>
-                  <div className="font-bold text-gray-900 text-lg">Analyze Government Reply</div>
-                  <div className="text-sm text-gray-500 mt-1">Use AI to grade response strength & draft appeals</div>
-                </div>
+          {/* Chat Area */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 flex flex-col gap-6" style={{ backgroundImage: 'radial-gradient(#e2e8f0 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+            {chatMessages.length === 1 && (
+              <div className="grid grid-cols-2 gap-3 mb-4 mt-2">
+                {QUICK_ACTIONS.map((action, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSend(action.query)}
+                    className="flex flex-col items-center justify-center gap-2 bg-white border border-gray-200 hover:border-purple-300 hover:bg-purple-50 p-4 rounded-xl transition-all shadow-sm group"
+                  >
+                    <action.icon size={24} className="text-purple-600 group-hover:scale-110 transition-transform" />
+                    <span className="text-xs font-bold text-gray-700 text-center">{action.label}</span>
+                  </button>
+                ))}
               </div>
-              <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-amber-50 group-hover:text-amber-600 transition-colors">
-                <ChevronRight size={20} />
-              </div>
-            </Link>
-            
-            <Link
-              to="/about"
-              className="card flex items-center justify-between p-5 md:p-6 hover:border-blue-300 transition-all group"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                  <FcIdea size={32} />
-                </div>
-                <div>
-                  <div className="font-bold text-gray-900 text-lg">RTI Guide & Tips</div>
-                  <div className="text-sm text-gray-500 mt-1">Learn how to write better RTIs</div>
-                </div>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                <ChevronRight size={20} />
-              </div>
-            </Link>
+            )}
 
-            <button
-              onClick={() => setShowFeatureModal(true)}
-              className="card flex items-center justify-between p-5 md:p-6 hover:border-purple-300 transition-all group text-left"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
-                  <FcFeedback size={32} />
+            {chatMessages.map((msg, idx) => (
+              <div key={idx} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-sm mt-auto ${
+                  msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-purple-600 text-white'
+                }`}>
+                  {msg.role === 'user' ? <div className="font-bold text-xs">U</div> : <Bot size={16} />}
                 </div>
-                <div>
-                  <div className="font-bold text-gray-900 text-lg">Request a New Feature</div>
-                  <div className="text-sm text-gray-500 mt-1">Tell us what tools we should build next</div>
+
+                <div className={`px-4 py-3 max-w-[85%] sm:max-w-[75%] shadow-sm ${
+                  msg.role === 'user' 
+                    ? 'bg-blue-600 text-white rounded-2xl rounded-br-sm' 
+                    : 'bg-white text-gray-800 rounded-2xl rounded-bl-sm border border-gray-100'
+                }`}>
+                  <p className="text-sm leading-relaxed">{msg.content}</p>
                 </div>
               </div>
-              <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors">
-                <ChevronRight size={20} />
+            ))}
+
+            {isTyping && (
+              <div className="flex gap-3 flex-row">
+                <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-sm mt-auto bg-purple-600 text-white">
+                  <Sparkles size={14} />
+                </div>
+                <div className="px-5 py-4 bg-white border border-gray-100 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-1.5 w-16">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                </div>
               </div>
-            </button>
+            )}
+            <div ref={endOfMessagesRef} />
           </div>
+
+          {/* Input Area */}
+          <div className="p-4 bg-white border-t border-gray-200 shrink-0">
+            <div className="flex items-center gap-2 max-w-4xl mx-auto">
+              <button 
+                onClick={handleMicClick}
+                className={`w-12 h-12 flex items-center justify-center rounded-full transition-all shrink-0 shadow-sm ${
+                  isListening 
+                    ? 'bg-red-500 text-white animate-pulse shadow-red-200 ring-4 ring-red-100' 
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-purple-600'
+                }`}
+              >
+                <Mic size={20} className={isListening ? "animate-bounce" : ""} />
+              </button>
+              
+              <div className="flex-1 relative">
+                <input 
+                  type="text" 
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder={isListening ? "Listening..." : "Ask the RTI AI Agent..."}
+                  disabled={isListening}
+                  className="w-full pl-5 pr-12 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-full text-sm focus:outline-none focus:border-purple-400 focus:bg-white transition-all disabled:opacity-70"
+                />
+                <button 
+                  onClick={() => handleSend()}
+                  disabled={!inputValue.trim() || isListening}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 disabled:text-gray-500 text-white rounded-full flex items-center justify-center transition-all shadow-sm"
+                >
+                  <Send size={16} className="ml-[-2px] mt-[2px]" />
+                </button>
+              </div>
+            </div>
+            <div className="text-center mt-2">
+              <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">AI can make mistakes. Verify legal deadlines.</p>
+            </div>
+          </div>
+          
         </div>
       </div>
-
-      {showFeatureModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95">
-            <div className="p-5 border-b border-gray-100 bg-gray-50">
-              <h3 className="font-bold text-gray-900 flex items-center gap-2 text-lg">
-                <FcFeedback size={24} /> Feature Request
-              </h3>
-            </div>
-            
-            <div className="p-6">
-              {isSubmitted ? (
-                <div className="text-center py-4">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 size={32} className="text-green-600" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-lg mb-2">Request Submitted!</h4>
-                  <p className="text-gray-500">Thank you for your feedback. We're constantly working to improve this platform.</p>
-                </div>
-              ) : (
-                <>
-                  <p className="text-gray-600 mb-4 text-sm">
-                    What feature would make filing and tracking RTIs easier for you?
-                  </p>
-                  <textarea 
-                    value={featureRequest}
-                    onChange={(e) => setFeatureRequest(e.target.value)}
-                    placeholder="E.g., I would love to see an integration with WhatsApp for status updates..."
-                    className="w-full h-32 px-4 py-3 bg-white border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none mb-6"
-                  />
-                  <div className="flex gap-3">
-                    <button 
-                      onClick={() => setShowFeatureModal(false)}
-                      className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button 
-                      onClick={handleSubmit}
-                      disabled={!featureRequest.trim() || isSubmitting}
-                      className="flex-1 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white font-bold rounded-xl transition-colors flex justify-center items-center"
-                    >
-                      {isSubmitting ? (
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      ) : (
-                        "Submit Request"
-                      )}
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </ProtectedRoute>
   );
 }
