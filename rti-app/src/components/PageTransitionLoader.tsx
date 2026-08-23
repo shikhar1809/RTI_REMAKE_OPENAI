@@ -91,7 +91,7 @@ export function PageTransitionLoader() {
       </div>
       
       {/* Dynamic Tooltip / Hint */}
-      <div className="absolute top-12 left-0 w-full px-6 flex flex-col items-center animate-in fade-in slide-in-from-top-4 duration-700 delay-300 fill-mode-both">
+      <div className="mt-16 px-6 flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both">
         <span className="text-[10px] font-bold tracking-widest text-gray-400 mb-2 uppercase">
           {t("loaderTipTitle", "DID YOU KNOW?")}
         </span>
