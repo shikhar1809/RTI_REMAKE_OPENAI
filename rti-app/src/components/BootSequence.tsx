@@ -54,7 +54,7 @@ export function BootSequence({ onComplete }: { onComplete: () => void }) {
             muted 
             loop 
             playsInline
-            className="w-48 sm:w-56 h-auto mix-blend-multiply"
+            className="w-64 sm:w-80 h-auto"
           />
         </div>
 
