@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 
-import { Loader2 } from "lucide-react";
+import { Loader2, FileText, ShieldCheck, Check } from "lucide-react";
 
 export function BootSequence({ onComplete }: { onComplete: () => void }) {
   const [stage, setStage] = useState(0);
@@ -47,15 +47,58 @@ export function BootSequence({ onComplete }: { onComplete: () => void }) {
     <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-sm mx-auto text-center">
         {/* Visual Area */}
-        <div className="flex items-center justify-center mb-8 relative">
-          <video 
-            src="/boot-video.mp4" 
-            autoPlay 
-            muted 
-            loop 
-            playsInline
-            className="w-64 sm:w-80 h-auto"
-          />
+        <div className="flex items-center justify-center mb-8 relative h-48 sm:h-56 w-full max-w-[16rem] mx-auto">
+          <style>{`
+            @keyframes float {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-10px); }
+            }
+            @keyframes scan {
+              0% { top: 5%; opacity: 0; }
+              10% { opacity: 1; }
+              90% { opacity: 1; }
+              100% { top: 95%; opacity: 0; }
+            }
+            @keyframes spin-slow {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
+
+          {/* Stage 0: Loading - Floating Document with Scanner */}
+          <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-700 ${stage === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}>
+            <div className="relative bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-6 z-10" style={{ animation: 'float 3s ease-in-out infinite' }}>
+              <FileText size={56} className="text-blue-600" strokeWidth={1.5} />
+              {/* Scanner Line */}
+              <div className="absolute left-3 right-3 h-[3px] bg-blue-500 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.9)] z-20" style={{ animation: 'scan 2s linear infinite' }} />
+            </div>
+            {/* Orbiting particles */}
+            <div className="absolute inset-0 flex items-center justify-center" style={{ animation: 'spin-slow 8s linear infinite' }}>
+              <div className="w-36 h-36 border-2 border-dashed border-blue-100 rounded-full" />
+              <div className="absolute top-2 w-3 h-3 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
+              <div className="absolute bottom-6 right-6 w-2 h-2 bg-blue-300 rounded-full shadow-[0_0_8px_rgba(147,197,253,0.8)]" />
+            </div>
+          </div>
+
+          {/* Stage 1: Checking - Shield & Verification */}
+          <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-700 ${stage === 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}>
+            <div className="relative z-10" style={{ animation: 'float 2.5s ease-in-out infinite' }}>
+              <div className="absolute inset-0 bg-blue-100 rounded-full animate-ping opacity-60" style={{ animationDuration: '2s' }} />
+              <div className="relative bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-6">
+                <ShieldCheck size={56} className="text-blue-600" strokeWidth={1.5} />
+              </div>
+            </div>
+          </div>
+
+          {/* Stage 2: Ready - Success Check */}
+          <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-700 ${stage === 2 ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
+            <div className="relative bg-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-4 border-green-500 p-5 z-10">
+              <Check size={56} className="text-green-500" strokeWidth={3} />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-32 h-32 border-4 border-green-200 rounded-full animate-ping opacity-40" />
+            </div>
+          </div>
         </div>
 
         {/* Text Area */}
