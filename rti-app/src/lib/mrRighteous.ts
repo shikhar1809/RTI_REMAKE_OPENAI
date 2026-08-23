@@ -1,5 +1,5 @@
 /**
- * MR RIGHTEOUS — Full RTI Knowledge Engine
+ * MR.RIGHTEOUS — Full RTI Knowledge Engine
  * Comprehensive mock data pool for all RTI queries with conversational memory.
  */
 
@@ -25,7 +25,7 @@ const KB: { patterns: RegExp[]; response: (ctx: ConversationContext) => string }
   {
     patterns: [/^(hello|hi|hey|namaste|helo|good\s*morning|good\s*evening|good\s*afternoon|greetings|howdy|sup)\b/i],
     response: () =>
-      `Namaste! 🙏 I'm **MR RIGHTEOUS**, your personal RTI Legal Assistant.\n\nI'm powered by a comprehensive database of RTI Act 2005 rules, DoPT guidelines, state-specific laws, and real precedents from the Central Information Commission.\n\nHere's what I can help you with:\n\n📋 **Draft** a complete RTI application in seconds\n⚖️ **Explain** your rights under the RTI Act\n🗂️ **Find** the right government authority to file with\n📅 **Track** your 30-day response deadline\n🚨 **File Appeals** if you're ignored or refused\n\nWhat's on your mind today?`,
+      `Namaste! 🙏 I'm **MR.RIGHTEOUS**, your personal RTI Legal Assistant.\n\nI'm powered by a comprehensive database of RTI Act 2005 rules, DoPT guidelines, state-specific laws, and real precedents from the Central Information Commission.\n\nHere's what I can help you with:\n\n📋 **Draft** a complete RTI application in seconds\n⚖️ **Explain** your rights under the RTI Act\n🗂️ **Find** the right government authority to file with\n📅 **Track** your 30-day response deadline\n🚨 **File Appeals** if you're ignored or refused\n\nWhat's on your mind today?`,
   },
 
   // ── FAQ CHIP 1: RTI DEADLINE ──────────────────────────────────────────────

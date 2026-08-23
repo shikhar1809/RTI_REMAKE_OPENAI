@@ -309,7 +309,7 @@ export default function HomePage() {
                 </svg>
                 <style>{`@keyframes orbit-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
               </span>
-              {t("rtiToolkit", "GET HELP FROM MR RIGHTEOUS")}
+              {t("rtiToolkit", "GET HELP FROM MR.RIGHTEOUS")}
             </Link>
 
           </div>

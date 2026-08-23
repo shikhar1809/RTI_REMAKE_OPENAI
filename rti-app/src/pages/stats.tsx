@@ -246,7 +246,7 @@ export default function StatsPage() {
                   </button>
                 </div>
 
-                {/* Search Topics → opens MR Righteous */}
+                {/* Search Topics → opens MR.RIGHTEOUS */}
                 <button
                   onClick={handleOpenArchiveAI}
                   className="flex items-center gap-2 pl-3 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600 hover:border-green-500 hover:text-green-700 hover:shadow-md transition-all w-full sm:w-48 font-medium"
