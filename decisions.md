@@ -278,6 +278,42 @@ Other states: "Contact your state RTI helpline" fallback + postal filing instruc
 
 ---
 
+## D-027 — Map View Integration (Leaflet)
+
+**Date:** 2026-08-23
+**Status:** ✅ Approved
+**Decision:** Integrated `react-leaflet` with custom CSS to replace placeholder maps on the dashboard. Used `absolute inset-0` and explicit 100% height/width sizing to resolve Leaflet's known 0px rendering bugs in flex containers.
+**Rationale:** The user explicitly requested an actual Leaflet map to match the aesthetic of the website.
+
+---
+
+## D-028 — Public Archive Export Stats (PDF Generation)
+
+**Date:** 2026-08-23
+**Status:** ✅ Approved
+**Decision:** Integrated `jspdf` and `jspdf-autotable` to generate data dumps of public RTIs. Created an "Export Stats" modal allowing users to filter by State and Date Range.
+**Rationale:** User requested an export stats button in the public archive to download data in PDF format. Client-side PDF generation avoids backend dependencies and keeps the demo fast.
+
+---
+
+## D-029 — Deep UI Localization & Transition Translation
+
+**Date:** 2026-08-23
+**Status:** ✅ Approved
+**Decision:** Executed a massive localization sweep using `react-i18next`. Translated the Page Transition Loader, Home Page (notifications, state selector, buttons), Manage Reports page, Tracking Dashboard, Consent Modal, and all 6 steps of the RTI Filing Wizard into Hindi, Bengali, and Tamil. Fixed an issue where the loading screen text wasn't syncing instantly with the language change.
+**Rationale:** User requested that absolutely every text element, including the splash screens between page transitions, accurately reflect the selected language immediately.
+
+---
+
+## D-030 — Mobile Viewport Strict Scaling
+
+**Date:** 2026-08-23
+**Status:** ✅ Approved
+**Decision:** Added `maximum-scale=1.0, user-scalable=no` to the `index.html` meta viewport tag.
+**Rationale:** User requested to "make sure that the whole website is mobile optimized". This prevents iOS Safari from auto-zooming into inputs and breaking the layout of the app.
+
+---
+
 ## Pending Decisions
 
 | # | Topic | Status |
