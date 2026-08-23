@@ -6,10 +6,13 @@ import { useTranslation } from "react-i18next";
 export function PageTransitionLoader() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const [activeTip, setActiveTip] = useState(1);
   const location = useLocation();
   const { t } = useTranslation(undefined, { keyPrefix: "common" });
 
   useEffect(() => {
+    // Randomize tip between 1 and 3
+    setActiveTip(Math.floor(Math.random() * 3) + 1);
     // Every time the location changes, show the loader
     setIsLoading(true);
     setActiveStep(0);
@@ -85,6 +88,18 @@ export function PageTransitionLoader() {
             </div>
           );
         })}
+      </div>
+      
+      {/* Dynamic Tooltip / Hint */}
+      <div className="absolute bottom-10 left-0 w-full px-6 flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both">
+        <span className="text-[10px] font-bold tracking-widest text-gray-400 mb-2 uppercase">
+          {t("loaderTipTitle", "DID YOU KNOW?")}
+        </span>
+        <div className="bg-gray-50 border border-gray-200 px-5 py-3 rounded-2xl max-w-[300px] text-center shadow-sm">
+          <p className="text-xs font-semibold text-green-700 leading-relaxed">
+            {t(`loaderTip${activeTip}`, "YOU CAN EVEN FILE A RTI THROUGH WHATSAPP")}
+          </p>
+        </div>
       </div>
     </div>
   );

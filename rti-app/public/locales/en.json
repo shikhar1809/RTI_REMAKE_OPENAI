@@ -22,7 +22,11 @@
     "loaderStep2": "Document Scanning",
     "loaderStep3": "RTI Filed",
     "loaderStep4": "Got Reply",
-    "home": "Home"
+    "home": "Home",
+    "loaderTipTitle": "DID YOU KNOW?",
+    "loaderTip1": "YOU CAN EVEN FILE A RTI THROUGH WHATSAPP",
+    "loaderTip2": "CHECK PUBLIC ARCHIVE TO KNOW SIMILAR RTI",
+    "loaderTip3": "YOU CAN COLLECTIVE FILE A COMMUNITY RTI NOW"
   },
   "landing": {
     "heroTitle": "Know Your Rights.",
