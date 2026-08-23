@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Clock, AlertCircle, CheckCircle2, MessageSquare, Plus, Timer, ArrowLeft } from "lucide-react";
+import { Clock, AlertCircle, CheckCircle2, MessageSquare, Plus, Timer, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useApplicationsStore } from "@/store/applicationsStore";
 import { getDaysRemaining, type RTIApplication } from "@/data/mockRTIs";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useState } from "react";
+import { PublicConsentModal } from "@/components/PublicConsentModal";
 
 export default function TrackPage() {
   const { t } = useTranslation(undefined, { keyPrefix: "track" });
@@ -57,9 +59,19 @@ export default function TrackPage() {
 
 function RTICard({ app }: { app: RTIApplication }) {
   const { t } = useTranslation(undefined, { keyPrefix: "track" });
+  const { togglePublic } = useApplicationsStore();
+  const [showConsent, setShowConsent] = useState(false);
   const daysRemaining = getDaysRemaining(app.deadlineDate);
   const isOverdue = daysRemaining < 0;
   const isUrgent = daysRemaining >= 0 && daysRemaining <= 5;
+  
+  const handleToggleClick = () => {
+    if (app.isPublic) {
+      togglePublic(app.id);
+    } else {
+      setShowConsent(true);
+    }
+  };
   
   let statusColor = "bg-gray-100 text-gray-700";
   let StatusIcon = Clock;
@@ -93,7 +105,7 @@ function RTICard({ app }: { app: RTIApplication }) {
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs">
           <div className="flex items-center gap-1.5 text-gray-500">
             <span className="font-medium text-gray-700">Filed:</span>
-            {app.filedDate}
+            {new Date(app.filedDate).toISOString()}
           </div>
           {app.status === "pending" && (
             <div className={`flex items-center gap-1.5 font-medium ${isOverdue ? "text-red-600" : isUrgent ? "text-amber-600" : "text-green-600"}`}>
@@ -101,12 +113,25 @@ function RTICard({ app }: { app: RTIApplication }) {
               {isOverdue ? `${Math.abs(daysRemaining)} days overdue` : `${daysRemaining} days remaining`}
             </div>
           )}
+          
+          <div className="flex items-center gap-2 border-l border-gray-200 pl-4 ml-2">
+            <span className="font-medium text-gray-700 flex items-center gap-1">
+              {app.isPublic ? <Eye size={14} className="text-green-600" /> : <EyeOff size={14} className="text-gray-400" />}
+              Public
+            </span>
+            <button
+              onClick={handleToggleClick}
+              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${app.isPublic ? 'bg-green-600' : 'bg-gray-300'}`}
+            >
+              <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${app.isPublic ? 'translate-x-5' : 'translate-x-1'}`} />
+            </button>
+          </div>
         </div>
       </div>
       
       <div className="flex sm:flex-col justify-end gap-2 border-t sm:border-t-0 sm:border-l border-gray-100 pt-3 sm:pt-0 sm:pl-5">
         <Link to={`/track/${app.id}`} className="btn-secondary w-full sm:w-auto flex-1">
-          {t("viewDetails", "Details")}
+          {t("viewDetails", "View details")}
         </Link>
         {app.status === "replied" && (
           <Link to={`/check-reply`} className="btn-primary w-full sm:w-auto flex-1">
@@ -114,6 +139,12 @@ function RTICard({ app }: { app: RTIApplication }) {
           </Link>
         )}
       </div>
+
+      <PublicConsentModal 
+        isOpen={showConsent} 
+        onClose={() => setShowConsent(false)} 
+        onConfirm={() => togglePublic(app.id)} 
+      />
     </div>
   );
 }
