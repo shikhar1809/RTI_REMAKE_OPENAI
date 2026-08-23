@@ -339,6 +339,22 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "exportPdf": "Export PDF",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "mock_pub-001_subject": "Details of Expenditure on City Beautification (G20 Summit)",
+    "mock_pub-001_authority": "Municipal Corporation, Delhi",
+    "mock_pub-001_desc": "Seeking breakdown of funds spent on painting walls and installing statues during the summit.",
+    "mock_pub-002_subject": "Environmental Clearance for Coastal Road Project",
+    "mock_pub-002_authority": "Ministry of Environment, Forest and Climate Change, Maharashtra",
+    "mock_pub-002_desc": "Seeking copy of the latest environmental clearance report and public consultation minutes.",
+    "mock_pub-003_subject": "Pothole Repair Contracts - Ward 15",
+    "mock_pub-003_authority": "Bruhat Bengaluru Mahanagara Palike (BBMP), Karnataka",
+    "mock_pub-003_desc": "Requesting copies of work orders and contractor names for road repair in Ward 15.",
+    "mock_pub-004_subject": "Water Supply Contamination Reports",
+    "mock_pub-004_authority": "Water Supply and Sewerage Board, Punjab",
+    "mock_pub-004_desc": "Seeking lab testing results for water samples collected from Sector 42 over the last 3 months.",
+    "status_pending": "PENDING",
+    "status_replied": "REPLIED",
+    "status_resolved": "RESOLVED",
+    "status_appealed": "APPEALED"
   }
 }

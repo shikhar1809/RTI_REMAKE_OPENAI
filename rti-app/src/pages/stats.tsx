@@ -256,21 +256,21 @@ export default function StatsPage() {
                     return (
                       <div key={idx} className="border border-gray-200 rounded-xl p-4 hover:border-green-300 hover:shadow-md transition-all bg-white flex flex-col gap-3">
                         <div className="flex justify-between items-start gap-4">
-                          <h3 className="font-bold text-gray-900 leading-tight">{app.subject}</h3>
+                          <h3 className="font-bold text-gray-900 leading-tight">{t(`mock_${app.id}_subject`, app.subject)}</h3>
                           <span className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${
                             app.status === 'resolved' ? 'bg-green-100 text-green-700' :
                             app.status === 'replied' ? 'bg-blue-100 text-blue-700' :
                             'bg-amber-100 text-amber-700'
                           }`}>
-                            {app.status.toUpperCase()}
+                            {t(`status_${app.status}`, app.status.toUpperCase())}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 line-clamp-2">{app.problemSummary}</p>
+                        <p className="text-sm text-gray-600 line-clamp-2">{t(`mock_${app.id}_desc`, app.problemSummary)}</p>
                         
                         <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
                           <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-500">
                             <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
-                              <MapPin size={12} /> {app.authority}
+                              <MapPin size={12} /> {t(`mock_${app.id}_authority`, app.authority)}
                             </span>
                             <span>{t("filed")} {new Date(app.filedDate).toLocaleDateString()}</span>
                             <span className="flex items-center gap-1 text-gray-500">
