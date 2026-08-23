@@ -81,39 +81,39 @@ export default function AboutPage() {
             <div className="bg-white/95 border-2 border-blue-300 shadow-md rounded-2xl p-8 mb-8">
               <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2 justify-center">
                 <BellRing className="text-blue-600" />
-                Recent Changes & Updates on Rules
+                {t("recentChangesTitle", "Recent Changes & Updates on Rules")}
               </h2>
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm text-center shrink-0 h-min">
-                    <span className="block text-xs font-bold text-blue-400 uppercase">Aug</span>
-                    <span className="block text-lg font-black text-blue-900">2026</span>
+                    <span className="block text-xs font-bold text-blue-400 uppercase">{t("aug", "Aug")}</span>
+                    <span className="block text-lg font-black text-blue-900">{t("augYear", "2026")}</span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-blue-900 mb-1">Online Appeal System Upgraded</h3>
-                    <p className="text-blue-800 text-sm">The central portal has integrated a new seamless appeal process for requests that have crossed the 30-day limit without a response.</p>
+                    <h3 className="font-bold text-blue-900 mb-1">{t("update1Title", "Online Appeal System Upgraded")}</h3>
+                    <p className="text-blue-800 text-sm">{t("update1Desc", "The central portal has integrated a new seamless appeal process for requests that have crossed the 30-day limit without a response.")}</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
                   <div className="bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm text-center shrink-0 h-min">
-                    <span className="block text-xs font-bold text-blue-400 uppercase">Jun</span>
-                    <span className="block text-lg font-black text-blue-900">2026</span>
+                    <span className="block text-xs font-bold text-blue-400 uppercase">{t("jun", "Jun")}</span>
+                    <span className="block text-lg font-black text-blue-900">{t("junYear", "2026")}</span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-blue-900 mb-1">BPL Exemption Automation</h3>
-                    <p className="text-blue-800 text-sm">Citizens with verified BPL (Below Poverty Line) status can now bypass the fee payment gateway automatically via their synced documents.</p>
+                    <h3 className="font-bold text-blue-900 mb-1">{t("update2Title", "BPL Exemption Automation")}</h3>
+                    <p className="text-blue-800 text-sm">{t("update2Desc", "Citizens with verified BPL (Below Poverty Line) status can now bypass the fee payment gateway automatically via their synced documents.")}</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
                   <div className="bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm text-center shrink-0 h-min">
-                    <span className="block text-xs font-bold text-blue-400 uppercase">Mar</span>
-                    <span className="block text-lg font-black text-blue-900">2026</span>
+                    <span className="block text-xs font-bold text-blue-400 uppercase">{t("mar", "Mar")}</span>
+                    <span className="block text-lg font-black text-blue-900">{t("marYear", "2026")}</span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-blue-900 mb-1">State-specific Language Support</h3>
-                    <p className="text-blue-800 text-sm">You can now draft your RTI in English and translate it automatically to regional languages like Hindi, Bengali, or Tamil directly in the final step.</p>
+                    <h3 className="font-bold text-blue-900 mb-1">{t("update3Title", "State-specific Language Support")}</h3>
+                    <p className="text-blue-800 text-sm">{t("update3Desc", "You can now draft your RTI in English and translate it automatically to regional languages like Hindi, Bengali, or Tamil directly in the final step.")}</p>
                   </div>
                 </div>
               </div>
@@ -123,23 +123,23 @@ export default function AboutPage() {
             <div className="bg-white/95 border-2 border-green-300 shadow-md rounded-2xl p-8 mb-8">
               <h2 className="text-2xl font-bold text-green-700 mb-4 flex items-center gap-2 justify-center">
                 <CheckCircle className="text-green-600" />
-                Clear Rules & Examples
+                {t("clearRulesTitle", "Clear Rules & Examples")}
               </h2>
               <p className="text-green-800 text-center mb-6">
-                When filing an RTI, keep your questions specific and related to existing records.
+                {t("clearRulesDesc", "When filing an RTI, keep your questions specific and related to existing records.")}
               </p>
               <ul className="space-y-4 text-green-900">
                 <li className="flex gap-3">
-                  <span className="font-bold shrink-0">Rule 1:</span>
-                  <span>Ask for records, not opinions. <br/><span className="text-sm opacity-80">Example: "Provide a copy of the road repair budget" (Good) vs "Why is the road so bad?" (Bad)</span></span>
+                  <span className="font-bold shrink-0">{t("rule1", "Rule 1:")}</span>
+                  <span>{t("rule1Desc", "Ask for records, not opinions.")} <br/><span className="text-sm opacity-80">{t("rule1Ex", "Example: \"Provide a copy of the road repair budget\" (Good) vs \"Why is the road so bad?\" (Bad)")}</span></span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="font-bold shrink-0">Rule 2:</span>
-                  <span>Be specific with dates and details. <br/><span className="text-sm opacity-80">Example: "Ration card applications received in Jan 2024" (Good) vs "All ration card applications" (Bad)</span></span>
+                  <span className="font-bold shrink-0">{t("rule2", "Rule 2:")}</span>
+                  <span>{t("rule2Desc", "Be specific with dates and details.")} <br/><span className="text-sm opacity-80">{t("rule2Ex", "Example: \"Ration card applications received in Jan 2024\" (Good) vs \"All ration card applications\" (Bad)")}</span></span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="font-bold shrink-0">Rule 3:</span>
-                  <span>Use simple language. <br/><span className="text-sm opacity-80">Keep it straightforward. You don't need complex legal jargon.</span></span>
+                  <span className="font-bold shrink-0">{t("rule3", "Rule 3:")}</span>
+                  <span>{t("rule3Desc", "Use simple language.")} <br/><span className="text-sm opacity-80">{t("rule3Ex", "Keep it straightforward. You don't need complex legal jargon.")}</span></span>
                 </li>
               </ul>
             </div>
@@ -148,27 +148,27 @@ export default function AboutPage() {
             <div className="bg-white/95 border-2 border-red-300 shadow-md rounded-2xl p-8">
               <h2 className="text-2xl font-bold text-red-700 mb-4 flex items-center gap-2 justify-center">
                 <AlertOctagon className="text-red-600" />
-                When an RTI CANNOT be filed
+                {t("cannotFileTitle", "When an RTI CANNOT be filed")}
               </h2>
               <p className="text-red-800 text-center mb-6">
-                The RTI Act exempts certain types of information from being disclosed.
+                {t("cannotFileDesc", "The RTI Act exempts certain types of information from being disclosed.")}
               </p>
               <ul className="space-y-4 text-red-900">
                 <li className="flex gap-3 items-start">
                   <span className="shrink-0 w-2 h-2 mt-2 rounded-full bg-red-500"></span>
-                  <span><strong>Private Companies:</strong> You cannot file an RTI against private bodies like private schools, hospitals, or corporate companies (unless they are substantially funded by the government).</span>
+                  <span><strong>{t("cannot1Title", "Private Companies:")}</strong>{t("cannot1Desc", " You cannot file an RTI against private bodies like private schools, hospitals, or corporate companies (unless they are substantially funded by the government).")}</span>
                 </li>
                 <li className="flex gap-3 items-start">
                   <span className="shrink-0 w-2 h-2 mt-2 rounded-full bg-red-500"></span>
-                  <span><strong>National Security:</strong> Information that would affect the sovereignty, integrity, or security of India.</span>
+                  <span><strong>{t("cannot2Title", "National Security:")}</strong>{t("cannot2Desc", " Information that would affect the sovereignty, integrity, or security of India.")}</span>
                 </li>
                 <li className="flex gap-3 items-start">
                   <span className="shrink-0 w-2 h-2 mt-2 rounded-full bg-red-500"></span>
-                  <span><strong>Personal Information:</strong> Details of other citizens that have no relationship to any public activity or interest (invasion of privacy).</span>
+                  <span><strong>{t("cannot3Title", "Personal Information:")}</strong>{t("cannot3Desc", " Details of other citizens that have no relationship to any public activity or interest (invasion of privacy).")}</span>
                 </li>
                 <li className="flex gap-3 items-start">
                   <span className="shrink-0 w-2 h-2 mt-2 rounded-full bg-red-500"></span>
-                  <span><strong>Future Plans:</strong> You cannot ask questions like "When will the road be built?". You can only ask for records of decisions already made.</span>
+                  <span><strong>{t("cannot4Title", "Future Plans:")}</strong>{t("cannot4Desc", " You cannot ask questions like \"When will the road be built?\". You can only ask for records of decisions already made.")}</span>
                 </li>
               </ul>
             </div>
