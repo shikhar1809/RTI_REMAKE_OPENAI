@@ -6,6 +6,21 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MOCK_PUBLIC_RTIS, RTIApplication } from "@/data/mockRTIs";
 import { useApplicationsStore } from "@/store/applicationsStore";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
+import { MapContainer, TileLayer, CircleMarker, Tooltip as LeafletTooltip } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+
+const STATE_COORDINATES: Record<string, [number, number]> = {
+  Delhi: [28.7041, 77.1025],
+  Maharashtra: [19.7515, 75.7139],
+  Karnataka: [15.3173, 75.7139],
+  Punjab: [31.1471, 75.3412],
+  "Uttar Pradesh": [26.8467, 80.9462],
+  Kerala: [10.8505, 76.2711],
+  TamilNadu: [11.1271, 78.6569],
+  Gujarat: [22.2587, 71.1924],
+  Rajasthan: [27.0238, 74.2179],
+  Bengal: [22.9868, 87.8550]
+};
 
 export default function StatsPage() {
   const { t } = useTranslation(undefined, { keyPrefix: "stats" });
@@ -279,27 +294,46 @@ export default function StatsPage() {
             )}
 
             {viewMode === "map" && (
-              <div className="p-4 sm:p-6 bg-white min-h-[400px] flex flex-col items-center justify-center text-center">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
-                  <MapPin size={48} />
-                </div>
-                <h3 className="font-bold text-gray-900 text-xl mb-2">Interactive Map View</h3>
-                <p className="text-gray-500 max-w-sm mb-6">
-                  Geographic distribution of public RTIs across India. This visualization requires the official production Map SDK to render.
-                </p>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => setViewMode("chart")} 
-                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors text-sm"
+              <div className="p-4 sm:p-6 bg-white min-h-[500px] flex flex-col relative z-0">
+                <h3 className="font-bold text-gray-900 text-xl mb-4">Geographic Heatmap</h3>
+                <div className="flex-1 w-full rounded-2xl overflow-hidden border-2 border-gray-200 shadow-inner relative" style={{ height: "450px" }}>
+                  <MapContainer 
+                    center={[22.5937, 78.9629]} 
+                    zoom={4} 
+                    scrollWheelZoom={false}
+                    className="w-full h-full z-0"
+                    style={{ background: '#f8fafc' }}
                   >
-                    View Charts
-                  </button>
-                  <button 
-                    onClick={() => setViewMode("list")} 
-                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors text-sm"
-                  >
-                    View List
-                  </button>
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                      url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                    />
+                    {stateData.map((state) => {
+                      // Fallback coordinate if not in mapping, roughly central India
+                      const coords = STATE_COORDINATES[state.name] || [22.5, 78.9];
+                      // Scale radius by volume
+                      const radius = Math.max(10, Math.min(30, state.count * 3));
+                      return (
+                        <CircleMarker
+                          key={state.name}
+                          center={coords}
+                          radius={radius}
+                          fillColor="#16a34a"
+                          color="#15803d"
+                          weight={2}
+                          opacity={0.8}
+                          fillOpacity={0.6}
+                        >
+                          <LeafletTooltip direction="top" offset={[0, -10]} opacity={1}>
+                            <div className="text-center font-sans">
+                              <p className="font-bold text-gray-900 m-0">{state.name}</p>
+                              <p className="text-gray-600 text-xs m-0">{state.count} RTIs Filed</p>
+                            </div>
+                          </LeafletTooltip>
+                        </CircleMarker>
+                      );
+                    })}
+                  </MapContainer>
                 </div>
               </div>
             )}
