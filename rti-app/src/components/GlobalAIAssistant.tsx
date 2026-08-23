@@ -8,8 +8,8 @@ export const GlobalAIAssistant = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Exclude some pages, notably the toolkit page itself, from showing the floating button
-  const excludePages = ['/login', '/onboarding/location', '/onboarding/rights', '/toolkit'];
+  // Exclude some pages, notably the toolkit page itself and the home page
+  const excludePages = ['/login', '/onboarding/location', '/onboarding/rights', '/toolkit', '/home'];
   if (excludePages.includes(location.pathname)) return null;
 
   useEffect(() => {
