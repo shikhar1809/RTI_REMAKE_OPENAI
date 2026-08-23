@@ -165,7 +165,10 @@
     "docConnect": "DOCUMENT VAULT",
     "knowRules": "KNOW RTI RULES",
     "rtiToolkit": "RTI TOOLKIT",
-    "fee": "Fee"
+    "fee": "Fee",
+    "applyingLang": "Applying Language...",
+    "syncingLang": "Syncing translations across the platform.",
+    "langSuccess": "Language synced successfully!"
   },
   "stats": {
     "pageTitle": "Public RTI Archive",

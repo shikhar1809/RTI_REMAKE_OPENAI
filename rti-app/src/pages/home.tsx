@@ -56,9 +56,11 @@ export default function HomePage() {
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLang = e.target.value;
     setIsLoadingLang(true);
-    // Simulate loading for 1 second to show the loader, then swap language
+    // Change language immediately so the loader displays in the target language
+    i18n.changeLanguage(newLang);
+    
+    // Keep loader on screen for 1 second for visual feedback
     setTimeout(() => {
-      i18n.changeLanguage(newLang);
       setIsLoadingLang(false);
       setLangToast(true);
       setTimeout(() => setLangToast(false), 3000);
@@ -72,8 +74,8 @@ export default function HomePage() {
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gray-900/40 backdrop-blur-md">
           <div className="bg-white p-6 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full mx-4 animate-in zoom-in-95 duration-200">
             <FcGlobe size={48} className="animate-spin-slow mb-4" />
-            <h3 className="font-bold text-gray-900 text-lg mb-1">Applying Language...</h3>
-            <p className="text-gray-500 text-sm text-center">Syncing translations across the platform.</p>
+            <h3 className="font-bold text-gray-900 text-lg mb-1">{t("applyingLang")}</h3>
+            <p className="text-gray-500 text-sm text-center">{t("syncingLang")}</p>
           </div>
         </div>
       )}
@@ -82,7 +84,7 @@ export default function HomePage() {
       {langToast && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 z-50 animate-in slide-in-from-bottom-5">
           <CheckCircle2 className="text-green-400" size={20} />
-          <span className="font-medium text-sm">Language synced successfully!</span>
+          <span className="font-medium text-sm">{t("langSuccess")}</span>
         </div>
       )}
 
