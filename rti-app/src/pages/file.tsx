@@ -480,7 +480,7 @@ export default function FilePage() {
                     <button
                       key={state.id}
                       onClick={() => setSelectedStateId(state.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                      className={`w-full text-left px-4 py-3 rounded-lg border-2 text-sm font-medium break-words whitespace-normal transition-all ${
                         selectedStateId === state.id
                           ? "border-green-500 bg-green-50 text-green-800"
                           : "border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -672,11 +672,11 @@ export default function FilePage() {
                 </div>
                 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
-                  <div className="flex justify-between items-center border-b border-gray-200 pb-3 mb-3">
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-gray-200 pb-3 mb-3">
                     <span className="text-sm text-gray-600">RTI Application Fee ({STATES[selectedStateId]?.name || "Central"})</span>
                     <span className="font-bold text-gray-900">{selectedStateId === 'maharashtra' ? '₹20.00' : '₹10.00'}</span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-1">
                     <span className="text-sm text-gray-600">Total Amount</span>
                     <span className="text-xl font-bold text-green-600">{selectedStateId === 'maharashtra' ? '₹20.00' : '₹10.00'}</span>
                   </div>
