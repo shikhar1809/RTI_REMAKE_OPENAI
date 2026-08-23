@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { NyayaAvatar } from "./NyayaAvatar";
+import { useTranslation } from "react-i18next";
 
 const EXCLUDE_PAGES = ['/login', '/onboarding/location', '/onboarding/rights', '/toolkit', '/home'];
 
@@ -21,6 +22,9 @@ export const GlobalAIAssistant = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation(undefined, { keyPrefix: 'ai' });
+  const [tipIndex, setTipIndex] = useState(1);
+  const [isTipVisible, setIsTipVisible] = useState(false);
   
   const isExcluded = EXCLUDE_PAGES.includes(location.pathname);
 
@@ -28,10 +32,25 @@ export const GlobalAIAssistant = () => {
   useEffect(() => {
     if (isExcluded) return;
     setShowTooltip(false);
-    const timer = setTimeout(() => {
+    // Initial delay before first tooltip
+    const initialTimer = setTimeout(() => {
       setShowTooltip(true);
-    }, Math.random() * 5000 + 3000);
-    return () => clearTimeout(timer);
+      setIsTipVisible(true);
+    }, 3000);
+
+    // Cycle through tooltips every 5 seconds
+    const interval = setInterval(() => {
+      setIsTipVisible(false); // trigger fade out
+      setTimeout(() => {
+        setTipIndex(prev => (prev % 4) + 1);
+        setIsTipVisible(true); // trigger fade in
+      }, 300);
+    }, 5000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
   }, [location.pathname, isExcluded]);
 
   // Don't render anything on excluded pages — AFTER all hooks
@@ -83,8 +102,8 @@ export const GlobalAIAssistant = () => {
         <div className="w-full max-w-md flex justify-end px-4 sm:px-6">
           <div className="pointer-events-auto flex items-center gap-3">
             {showTooltip && !isTransitioning && (
-              <div className="bg-gray-900 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg relative animate-in fade-in slide-in-from-right-4">
-                Need help?
+              <div className={`bg-gray-900 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg relative transition-all duration-300 ${isTipVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"}`}>
+                {t(`tooltip${tipIndex}`, "Need help?")}
                 <div className="absolute top-1/2 -right-1.5 w-3 h-3 bg-gray-900 rotate-45 -translate-y-1/2" />
               </div>
             )}

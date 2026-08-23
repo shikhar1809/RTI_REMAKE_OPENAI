@@ -401,6 +401,10 @@
     "ans5": "Silence is deemed a **refusal** under the RTI Act. You can immediately file a First Appeal citing non-response, and even escalate to the Central Information Commission (CIC) for a Second Appeal.",
     "ans6": "Our AI routing engine analyzes your problem and identifies the exact **Ministry and Public Information Officer (PIO)**. Just describe your issue and hit 'File RTI' — we'll figure out the right desk.",
     "defaultAns": "I'm cross-referencing the RTI Act and public archives... Based on established guidelines, you have strong grounds here. Want me to draft the exact application for you?",
-    "micQuery": "What happens if the PIO doesn't reply in 30 days?"
+    "micQuery": "What happens if the PIO doesn't reply in 30 days?",
+    "tooltip1": "Need help?",
+    "tooltip2": "Have an RTI question?",
+    "tooltip3": "Stuck somewhere?",
+    "tooltip4": "Ask Nyaya AI!"
   }
 }
