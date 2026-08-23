@@ -8,7 +8,7 @@ import { useRTIStore } from "@/store/rtiStore";
 import { useDocumentStore } from "@/store/documentStore";
 import { useTranslation } from "react-i18next";
 import { FcGlobe, FcSmartphoneTablet } from "react-icons/fc";
-import { Bell, BellOff, X, CheckCircle2 } from "lucide-react";
+import { Bell, BellOff, X, CheckCircle2, FileSearch, Bot } from "lucide-react";
 
 export default function HomePage() {
   const { 
@@ -287,9 +287,9 @@ export default function HomePage() {
 
             <Link
               to="/toolkit"
-              className="bg-gradient-to-r from-purple-700 to-indigo-800 text-white border-2 border-purple-600 hover:border-purple-400 hover:shadow-lg py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md flex items-center justify-center gap-2"
+              className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md flex items-center justify-center gap-2"
             >
-              <span className="text-xl">✨</span> {t("rtiToolkit", "RTI AI AGENT")}
+              <span className="text-lg">🤖📄</span> {t("rtiToolkit", "RTI AI AGENT")}
             </Link>
 
           </div>
