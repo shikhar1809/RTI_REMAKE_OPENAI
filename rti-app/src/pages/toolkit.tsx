@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ArrowLeft, Send, Mic, Paperclip, Globe, Smile, FolderOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { NyayaAvatar } from "@/components/NyayaAvatar";
+import { RighteousAvatar } from "@/components/RighteousAvatar";
 
 interface ChatMessage {
   role: 'user' | 'ai';
@@ -138,7 +138,7 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
           <div className="flex flex-col items-center justify-center flex-1 px-4 pb-48 gap-8 w-full">
             {/* Avatar + name */}
             <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-              <NyayaAvatar size={96} state={agentState} />
+              <RighteousAvatar size={96} state={agentState} />
               <div className="text-center">
                 <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">{t("title")}</h1>
                 <p className="text-sm text-gray-500 mt-1">{t("subtitle")}</p>
@@ -171,7 +171,7 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
                       <span className="text-white text-xs font-bold">U</span>
                     </div>
                   ) : (
-                    <NyayaAvatar size={32} state="idle" />
+                    <RighteousAvatar size={32} state="idle" />
                   )}
                 </div>
                 <div className={`px-5 py-3.5 max-w-[80%] text-sm leading-relaxed shadow-sm ${
@@ -193,7 +193,7 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
 
             {isTyping && (
               <div className="flex gap-3 flex-row animate-in fade-in duration-300">
-                <NyayaAvatar size={32} state="typing" />
+                <RighteousAvatar size={32} state="typing" />
                 <div className="px-5 py-4 bg-white/90 backdrop-blur-sm border border-green-100 rounded-3xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.15s]" />

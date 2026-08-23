@@ -1,4 +1,4 @@
-export const NyayaAvatar = ({ size = 48, state = 'idle' }: { size?: number, state?: 'idle' | 'typing' | 'listening' }) => {
+export const RighteousAvatar = ({ size = 48, state = 'idle' }: { size?: number, state?: 'idle' | 'typing' | 'listening' }) => {
   const orbitAnim = state === 'listening' ? 'orbit-pulse 1s ease-in-out infinite' : 'orbit-spin 3s linear infinite';
   const faceAnim = state === 'idle' ? 'look-around 6s ease-in-out infinite' :
                    state === 'typing' ? 'reading 1.5s ease-in-out infinite' : 'none';

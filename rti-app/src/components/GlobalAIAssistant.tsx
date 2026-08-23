@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
-import { NyayaAvatar } from "./NyayaAvatar";
+import { RighteousAvatar } from "./RighteousAvatar";
 import { useTranslation } from "react-i18next";
 
 const EXCLUDE_PAGES = ['/login', '/onboarding/location', '/onboarding/rights', '/toolkit', '/home'];
@@ -116,9 +116,9 @@ export const GlobalAIAssistant = () => {
       {/* Full Screen Loading Transition */}
       {isTransitioning && (
         <div id="ai-widget-overlay" className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-300">
-          <NyayaAvatar size={120} state="typing" />
+          <RighteousAvatar size={120} state="typing" />
           <h2 className="mt-8 text-2xl font-bold text-gray-900 animate-pulse tracking-tight">Analyzing context...</h2>
-          <p className="text-gray-500 mt-2 font-medium">Preparing Nyaya AI</p>
+          <p className="text-gray-500 mt-2 font-medium">Preparing RIGHTEOUS AI</p>
         </div>
       )}
 
@@ -137,7 +137,7 @@ export const GlobalAIAssistant = () => {
               className="w-16 h-16 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.15)] flex items-center justify-center border-2 border-green-400 hover:scale-110 active:scale-90 transition-all duration-200"
               style={{ WebkitTapHighlightColor: 'transparent' }}
             >
-              <NyayaAvatar size={54} state="idle" />
+              <RighteousAvatar size={54} state="idle" />
             </button>
           </div>
         </div>
