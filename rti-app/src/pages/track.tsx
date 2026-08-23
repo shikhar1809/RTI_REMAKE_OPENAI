@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+﻿import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Clock, AlertCircle, CheckCircle2, MessageSquare, Plus, Timer, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useApplicationsStore } from "@/store/applicationsStore";
@@ -23,7 +23,7 @@ export default function TrackPage() {
           <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md flex items-center justify-between mb-8">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{t("pageTitle", "Track Applications")}</h1>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-600 mt-1">
                 {t("pageDesc", "Monitor the status and 30-day deadlines of your RTI requests.")}
               </p>
             </div>
@@ -39,7 +39,7 @@ export default function TrackPage() {
                 <MessageSquare size={28} className="text-gray-400" />
               </div>
               <h2 className="font-semibold text-gray-900 mb-2">{t("emptyTitle", "No applications yet")}</h2>
-              <p className="text-gray-500 text-sm mb-6">{t("emptyDesc", "File your first RTI to start tracking.")}</p>
+              <p className="text-gray-600 text-sm mb-6">{t("emptyDesc", "File your first RTI to start tracking.")}</p>
               <Link to="/file" className="btn-primary inline-flex">
                 {t("fileFirst", "File First RTI")}
               </Link>
@@ -103,10 +103,10 @@ function RTICard({ app }: { app: RTIApplication }) {
             {t(`status.${app.status}`, app.status)}
           </span>
         </div>
-        <p className="text-sm text-gray-500 mb-4">{app.authority}</p>
+        <p className="text-sm text-gray-600 mb-4">{app.authority}</p>
         
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs">
-          <div className="flex items-center gap-1.5 text-gray-500">
+          <div className="flex items-center gap-1.5 text-gray-600">
             <span className="font-medium text-gray-700">{t("filed", "Filed:")}</span>
             {new Date(app.filedDate).toISOString()}
           </div>

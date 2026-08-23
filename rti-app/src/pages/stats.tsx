@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+﻿import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter, Eye, X, FileText, Image as ImageIcon, CheckCircle2, Download, PieChart as PieChartIcon, List, Sparkles, Bot, Send } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -177,7 +177,7 @@ export default function StatsPage() {
         <div className="w-full max-w-4xl space-y-6">
           
           <div className="bg-white/95 rounded-2xl shadow-md border-2 border-gray-300 sticky top-4 z-10 px-4 py-3 flex items-center">
-            <Link to="/home" className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+            <Link to="/home" className="inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               <ArrowLeft size={16} /> {t("backHome")}
             </Link>
             <h1 className="text-xl font-bold text-gray-900 ml-auto">{t("pageTitle")}</h1>
@@ -190,28 +190,28 @@ export default function StatsPage() {
                 <TrendingUp size={16} />
               </div>
               <p className="text-xl font-bold text-gray-900">{stats.totalFiled.toLocaleString()}</p>
-              <p className="text-[10px] text-gray-500 font-medium uppercase">{t("totalRtis")}</p>
+              <p className="text-[10px] text-gray-600 font-medium uppercase">{t("totalRtis")}</p>
             </div>
             <div className="card !p-3 flex flex-col items-center text-center">
               <div className="w-8 h-8 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mb-1.5">
                 <Clock size={16} />
               </div>
               <p className="text-xl font-bold text-gray-900">{stats.pending.toLocaleString()}</p>
-              <p className="text-[10px] text-gray-500 font-medium uppercase">{t("pending")}</p>
+              <p className="text-[10px] text-gray-600 font-medium uppercase">{t("pending")}</p>
             </div>
             <div className="card !p-3 flex flex-col items-center text-center">
               <div className="w-8 h-8 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-1.5">
                 <MapPin size={16} />
               </div>
               <p className="text-xl font-bold text-gray-900">{stats.resolved.toLocaleString()}</p>
-              <p className="text-[10px] text-gray-500 font-medium uppercase">{t("resolved")}</p>
+              <p className="text-[10px] text-gray-600 font-medium uppercase">{t("resolved")}</p>
             </div>
             <div className="card !p-3 flex flex-col items-center text-center">
               <div className="w-8 h-8 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mb-1.5">
                 <Star size={16} />
               </div>
               <p className="text-xl font-bold text-gray-900">{stats.averageRating}/5</p>
-              <p className="text-[10px] text-gray-500 font-medium uppercase">{t("avgRating")}</p>
+              <p className="text-[10px] text-gray-600 font-medium uppercase">{t("avgRating")}</p>
             </div>
           </div>
 
@@ -220,7 +220,7 @@ export default function StatsPage() {
             <div className="px-5 py-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="shrink-0">
                 <h2 className="text-lg font-bold text-gray-900 whitespace-nowrap">{t("searchTitle")}</h2>
-                <p className="text-xs text-gray-500">{t("searchDesc")}</p>
+                <p className="text-xs text-gray-600">{t("searchDesc")}</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 
@@ -228,19 +228,19 @@ export default function StatsPage() {
                 <div className="flex bg-gray-200 p-1 rounded-lg">
                   <button 
                     onClick={() => setViewMode("list")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "list" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "list" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
                   >
                     <List size={14} /> {t("list")}
                   </button>
                   <button 
                     onClick={() => setViewMode("chart")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "chart" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "chart" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
                   >
                     <PieChartIcon size={14} /> {t("charts")}
                   </button>
                   <button 
                     onClick={() => setViewMode("map")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "map" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "map" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
                   >
                     <MapPin size={14} /> {t("map")}
                   </button>
@@ -249,7 +249,7 @@ export default function StatsPage() {
                 {/* Search Topics → opens MR. RIGHTEOUS */}
                 <button
                   onClick={handleOpenArchiveAI}
-                  className="flex items-center gap-2 pl-3 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-500 hover:border-green-500 hover:text-green-700 hover:shadow-md transition-all w-full sm:w-48 font-medium"
+                  className="flex items-center gap-2 pl-3 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600 hover:border-green-500 hover:text-green-700 hover:shadow-md transition-all w-full sm:w-48 font-medium"
                 >
                   <Search size={16} className="text-gray-400 shrink-0" />
                   <span>{t("searchPlaceholder")}</span>
@@ -297,7 +297,7 @@ export default function StatsPage() {
             {viewMode === "list" && (
               <div className="p-2 sm:p-4 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
                 {filteredArchive.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-gray-600">
                     <p>{t("noResults")}</p>
                   </div>
                 ) : (
@@ -320,12 +320,12 @@ export default function StatsPage() {
                         <p className="text-sm text-gray-600 line-clamp-2">{t(`mock_${app.id}_desc`, app.problemSummary)}</p>
                         
                         <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
-                          <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-500">
+                          <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-600">
                             <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
                               <MapPin size={12} /> {t(`mock_${app.id}_authority`, app.authority)}
                             </span>
                             <span>{t("filed")} {new Date(app.filedDate).toLocaleDateString()}</span>
-                            <span className="flex items-center gap-1 text-gray-500">
+                            <span className="flex items-center gap-1 text-gray-600">
                               <Eye size={12} /> {views.toLocaleString()} {t("views")}
                             </span>
                           </div>
@@ -468,7 +468,7 @@ export default function StatsPage() {
               </div>
               <button 
                 onClick={() => setSelectedApp(null)}
-                className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1.5 text-gray-600 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <X size={20} />
               </button>
@@ -487,12 +487,12 @@ export default function StatsPage() {
                     {selectedApp.status.toUpperCase()}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-500">
+                <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-600">
                   <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
                     <MapPin size={12} /> {selectedApp.authority}
                   </span>
                   <span>{t("filed")} {new Date(selectedApp.filedDate).toLocaleDateString()}</span>
-                  <span className="flex items-center gap-1 text-gray-500">
+                  <span className="flex items-center gap-1 text-gray-600">
                     <Eye size={12} /> {selectedApp.views?.toLocaleString()} {t("views")}
                   </span>
                 </div>
@@ -515,7 +515,7 @@ export default function StatsPage() {
                     </div>
                     <div className="overflow-hidden">
                       <p className="text-sm font-medium text-gray-900 truncate">site_photos_proof.jpg</p>
-                      <p className="text-xs text-gray-500">2.4 MB</p>
+                      <p className="text-xs text-gray-600">2.4 MB</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
@@ -524,7 +524,7 @@ export default function StatsPage() {
                     </div>
                     <div className="overflow-hidden">
                       <p className="text-sm font-medium text-gray-900 truncate">previous_complaints.pdf</p>
-                      <p className="text-xs text-gray-500">1.1 MB</p>
+                      <p className="text-xs text-gray-600">1.1 MB</p>
                     </div>
                   </div>
                 </div>
@@ -566,7 +566,7 @@ export default function StatsPage() {
               </div>
               <button 
                 onClick={() => setShowExportModal(false)}
-                className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1.5 text-gray-600 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <X size={20} />
               </button>
@@ -682,7 +682,7 @@ export default function StatsPage() {
                   <div className="shrink-0 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-sm mt-auto">
                     <Bot size={16} />
                   </div>
-                  <div className="bg-white border border-gray-100 text-gray-500 shadow-sm rounded-2xl rounded-bl-sm px-5 py-4 flex items-center gap-2 max-w-[75%]">
+                  <div className="bg-white border border-gray-100 text-gray-600 shadow-sm rounded-2xl rounded-bl-sm px-5 py-4 flex items-center gap-2 max-w-[75%]">
                     <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce"></div>
                     <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>

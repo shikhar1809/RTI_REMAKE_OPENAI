@@ -1,4 +1,4 @@
-import { Paperclip, X, ImageIcon, FileText, Upload, CheckCircle2, ShieldCheck, AlertOctagon, Eye, EyeOff, Search, FileSignature, Wallet, Check, CreditCard, Landmark, Globe, Bot } from "lucide-react";
+﻿import { Paperclip, X, ImageIcon, FileText, Upload, CheckCircle2, ShieldCheck, AlertOctagon, Eye, EyeOff, Search, FileSignature, Wallet, Check, CreditCard, Landmark, Globe, Bot } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, ArrowLeft, Copy, ExternalLink } from "lucide-react";
@@ -319,7 +319,7 @@ export default function FilePage() {
                   <ShieldCheck size={40} className="text-amber-600" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-3">{t("verifyTitle", "Identity Verification Required")}</h2>
-                <p className="text-gray-500 mb-8 max-w-md mx-auto">
+                <p className="text-gray-600 mb-8 max-w-md mx-auto">
                   {t("verifyDesc", "To legally file a Right to Information (RTI) request, you must first sync your official documents (like Aadhaar/PAN) to verify your identity.")}
                 </p>
                 <Link to="/documents" className="btn-primary inline-flex">
@@ -340,7 +340,7 @@ export default function FilePage() {
                       </button>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 mb-3">
+                  <p className="text-sm text-gray-600 mb-3">
                     {t("detailsDesc", "This information is required by the RTI Act and will be automatically added to your draft.")}
                   </p>
                   
@@ -427,7 +427,7 @@ export default function FilePage() {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     {t("step1Title", "What is your problem?")}
                   </label>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-sm text-gray-600 mb-4">
                     {t("step1Desc", "Describe the issue in your own words. We will handle the legal language.")}
                   </p>
                   
@@ -473,7 +473,7 @@ export default function FilePage() {
               // Step 4: Authority Level
               <>
                 <h1 className="text-xl font-bold text-gray-900 mb-2">{t("step2Title", "Select the Authority Level")}</h1>
-                <p className="text-sm text-gray-500 mb-6">Does your query relate to a State Government or the Central Government?</p>
+                <p className="text-sm text-gray-600 mb-6">Does your query relate to a State Government or the Central Government?</p>
                 
                 <div className="space-y-2 mb-6">
                   {STATE_OPTIONS.map((state) => (
@@ -508,7 +508,7 @@ export default function FilePage() {
                     <AlertOctagon size={32} />
                   </div>
                   <h1 className="text-xl font-bold text-gray-900 mb-2">Routing Failed</h1>
-                  <p className="text-sm text-gray-500 mb-6">We couldn't identify the exact authority. Please try again.</p>
+                  <p className="text-sm text-gray-600 mb-6">We couldn't identify the exact authority. Please try again.</p>
                   <div className="flex gap-3">
                     <button onClick={goBack} className="btn-secondary flex-1"><ArrowLeft size={16} /> Back</button>
                     <button onClick={() => { setRoutingError(false); goNext(); }} className="btn-primary flex-1">Retry <ArrowRight size={16} /></button>
@@ -530,7 +530,7 @@ export default function FilePage() {
                   </div>
                   <h1 className="text-xl font-bold text-gray-900 mb-4">Public Authority Identified</h1>
                   <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-left mb-6">
-                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Target Authority</p>
+                    <p className="text-xs text-gray-600 uppercase font-bold tracking-wider mb-1">Target Authority</p>
                     <p className="text-md font-bold text-gray-900">{STATES[selectedStateId]?.name || "Government Authority"}</p>
                     <div className="bg-blue-50/50 p-3 rounded-lg border border-blue-100 mt-3">
                       <p className="text-xs font-semibold text-blue-900 mb-1 flex items-center gap-1">
@@ -555,7 +555,7 @@ export default function FilePage() {
               <>
                 <div className="mb-2">
                   <h2 className="text-sm font-semibold text-gray-700 mb-1">{t("attachTitle", "Attach Supporting Documents")}</h2>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-sm text-gray-600 mb-4">
                     {t("attachDesc1", "Please upload your documents")} <strong>{t("attachDesc2", "one by one")}</strong> {t("attachDesc3", "(photos, screenshots, receipts, or PDFs).")} <span className="font-medium text-gray-700">{t("attachDesc4", "This step is optional.")}</span>
                   </p>
 
@@ -586,7 +586,7 @@ export default function FilePage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-800 truncate">{file.name}</p>
-                          <p className="text-xs text-gray-500">{file.size}</p>
+                          <p className="text-xs text-gray-600">{file.size}</p>
                         </div>
                         {file.type === "image" && <img src={file.url} alt={file.name} className="w-10 h-10 object-cover rounded-lg border border-gray-200" />}
                         <button onClick={() => removeAttachment(i)} className="text-gray-400 hover:text-red-500 transition-colors shrink-0"><X size={16} /></button>
@@ -610,7 +610,7 @@ export default function FilePage() {
                     <AlertOctagon size={32} />
                   </div>
                   <h1 className="text-xl font-bold text-gray-900 mb-2">Draft Generation Failed</h1>
-                  <p className="text-sm text-gray-500 mb-6">The AI couldn't draft your application. Please try again.</p>
+                  <p className="text-sm text-gray-600 mb-6">The AI couldn't draft your application. Please try again.</p>
                   <div className="flex gap-3">
                     <button onClick={goBack} className="btn-secondary flex-1"><ArrowLeft size={16} /> Back</button>
                     <button onClick={() => { setGeneratingError(false); goNext(); }} className="btn-primary flex-1">Retry <ArrowRight size={16} /></button>
@@ -639,7 +639,7 @@ export default function FilePage() {
                       <option value="ta">Translate to Tamil</option>
                     </select>
                   </div>
-                  <p className="text-sm text-gray-500 mb-6">Review the legally compliant draft generated for you.</p>
+                  <p className="text-sm text-gray-600 mb-6">Review the legally compliant draft generated for you.</p>
                   
                   <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
                     <p className="font-semibold text-gray-900 mb-4">{draft?.subject}</p>
@@ -668,7 +668,7 @@ export default function FilePage() {
                     <Wallet size={32} />
                   </div>
                   <h1 className="text-2xl font-bold text-gray-900 mb-2">Payment Gateway</h1>
-                  <p className="text-sm text-gray-500">Please pay the mandatory RTI fee to proceed.</p>
+                  <p className="text-sm text-gray-600">Please pay the mandatory RTI fee to proceed.</p>
                 </div>
                 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
@@ -680,7 +680,7 @@ export default function FilePage() {
                     <span className="text-sm text-gray-600">Total Amount</span>
                     <span className="text-xl font-bold text-green-600">{selectedStateId === 'maharashtra' ? '₹20.00' : '₹10.00'}</span>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-500 flex gap-2">
+                  <div className="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-600 flex gap-2">
                     <AlertOctagon size={14} className="shrink-0 text-amber-500" />
                     <span>State rules apply: While Central RTI is ₹10, states like Maharashtra charge ₹20. Tamil Nadu requires court fee stamps (handled via our offline dispatch service).</span>
                   </div>
@@ -727,21 +727,21 @@ export default function FilePage() {
               // Step 9: Final Submission & Archive
               <div className="py-4">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">Route to Government Portal</h1>
-                <p className="text-sm text-gray-500 mb-6">We will now draft this application and forward it to the official state/central RTI portal on your behalf.</p>
+                <p className="text-sm text-gray-600 mb-6">We will now draft this application and forward it to the official state/central RTI portal on your behalf.</p>
                 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
                   <div className="flex items-start gap-4 mb-4">
                     <FileSignature size={24} className="text-gray-400 shrink-0" />
                     <div>
                       <p className="text-sm font-semibold text-gray-900">Application Ready for Routing</p>
-                      <p className="text-xs text-gray-500">Your draft and {attachments.length} attachments are packaged for the government portal.</p>
+                      <p className="text-xs text-gray-600">Your draft and {attachments.length} attachments are packaged for the government portal.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
                     <CheckCircle2 size={24} className="text-green-500 shrink-0" />
                     <div>
                       <p className="text-sm font-semibold text-gray-900">Fee {isBpl ? 'Waived (BPL)' : 'Paid'}</p>
-                      <p className="text-xs text-gray-500">Online payment verified.</p>
+                      <p className="text-xs text-gray-600">Online payment verified.</p>
                     </div>
                   </div>
                 </div>
@@ -776,10 +776,10 @@ export default function FilePage() {
                   <CheckCircle2 size={32} className="text-green-600" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">Routed to State Portal!</h1>
-                <p className="text-gray-500 mb-4 max-w-md mx-auto">Your application was successfully drafted and forwarded to the government portal. Keep your Registration ID safe.</p>
+                <p className="text-gray-600 mb-4 max-w-md mx-auto">Your application was successfully drafted and forwarded to the government portal. Keep your Registration ID safe.</p>
                 
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6 mx-auto max-w-sm inline-block">
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Registration Number</p>
+                  <p className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">Registration Number</p>
                   <p className="text-lg font-mono font-bold text-gray-900">{applications[0]?.id || "Processing..."}</p>
                 </div>
                 

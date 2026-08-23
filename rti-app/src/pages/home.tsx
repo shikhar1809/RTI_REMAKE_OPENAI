@@ -87,7 +87,7 @@ export default function HomePage() {
           <div className="bg-white p-6 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full mx-4 animate-in zoom-in-95 duration-200">
             <FcGlobe size={48} className="animate-spin-slow mb-4" />
             <h3 className="font-bold text-gray-900 text-lg mb-1">{t("applyingLang")}</h3>
-            <p className="text-gray-500 text-sm text-center">{t("syncingLang")}</p>
+            <p className="text-gray-600 text-sm text-center">{t("syncingLang")}</p>
           </div>
         </div>
       )}
@@ -127,7 +127,7 @@ export default function HomePage() {
                   </select>
                 </span>
                 <div className="w-px h-5 bg-gray-300"></div>
-                <span className="text-sm text-gray-500 font-bold">₹{stateInfo.fee}</span>
+                <span className="text-sm text-gray-600 font-bold">₹{stateInfo.fee}</span>
               </div>
             )}
             
@@ -340,7 +340,7 @@ export default function HomePage() {
             <div className="p-5">
               {!otpStep ? (
                 <>
-                  <p className="text-sm text-gray-500 mb-4">Get instant updates on your RTI via WhatsApp & Email.</p>
+                  <p className="text-sm text-gray-600 mb-4">Get instant updates on your RTI via WhatsApp & Email.</p>
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1">WhatsApp Number</label>
@@ -373,7 +373,7 @@ export default function HomePage() {
                 </>
               ) : (
                 <>
-                  <p className="text-sm text-gray-500 mb-4">Enter the 4-digit code sent to your WhatsApp.</p>
+                  <p className="text-sm text-gray-600 mb-4">Enter the 4-digit code sent to your WhatsApp.</p>
                   <input 
                     type="text" 
                     value={otp} 
@@ -413,7 +413,7 @@ export default function HomePage() {
                 <FcGlobe size={32} />
               </div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">SYNC REQUIRED</h2>
-              <p className="text-sm text-gray-500 mb-6">
+              <p className="text-sm text-gray-600 mb-6">
                 Your DigiLocker document vault is out of sync. Please sync to securely file RTI applications.
               </p>
               
