@@ -1,7 +1,7 @@
 import { Paperclip, X, ImageIcon, FileText, Upload } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2, ShieldCheck, AlertOctagon } from "lucide-react";
+import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2, ShieldCheck, AlertOctagon, Eye, EyeOff } from "lucide-react";
 import { useRTIStore } from "@/store/rtiStore";
 import { useDocumentStore } from "@/store/documentStore";
 import { generateMockDraft, translateDraft } from "@/data/mockDrafts";
@@ -10,6 +10,7 @@ import { trackWizardStarted, trackWizardStep, trackDraftGenerated, trackDraftCop
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
+import { useApplicationsStore } from "@/store/applicationsStore";
 
 const TOTAL_STEPS = 6;
 
@@ -44,7 +45,30 @@ export default function FilePage() {
   const [showToast, setShowToast] = useState(false);
   const [rating, setRating] = useState(0);
   const [attachments, setAttachments] = useState<{ name: string; size: string; type: string; url: string }[]>([]);
+  const [isPublicApp, setIsPublicApp] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const { addApplication } = useApplicationsStore();
+
+  const handleSubmitRTI = () => {
+    // Generate a mock application and push it to the store so tracking works
+    const newId = `rti-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+    const authorityName = STATES[selectedStateId]?.name || "Government Authority";
+    
+    addApplication({
+      id: newId,
+      subject: draft?.subject || "RTI Application",
+      authority: authorityName,
+      stateId: selectedStateId,
+      filedDate: new Date().toISOString(),
+      deadlineDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      status: "pending",
+      problemSummary: problemDescription,
+      isPublic: isPublicApp
+    });
+    
+    setCurrentStep(6);
+  };
 
   useEffect(() => {
     // If the user navigates back to this page and it was left on step 6, reset it
@@ -509,10 +533,33 @@ export default function FilePage() {
                   </button>
                 </div>
                 
-                <div className="mt-6 flex justify-center">
-                  <button onClick={() => setCurrentStep(6)} className="btn-primary w-full flex justify-center items-center gap-2 mt-4">
-                    Submit RTI <CheckCircle2 size={18} />
-                  </button>
+                <div className="mt-6 border-t border-gray-200 pt-6">
+                  {/* Public Archive Toggle */}
+                  <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl mb-4">
+                    <div className="flex flex-col pr-4">
+                      <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                        {isPublicApp ? <Eye size={18} className="text-green-600" /> : <EyeOff size={18} className="text-gray-400" />}
+                        Publish to Public Archive
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Make this RTI publicly accessible to help others facing similar issues.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsPublicApp(!isPublicApp)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${isPublicApp ? 'bg-green-600' : 'bg-gray-300'}`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isPublicApp ? 'translate-x-6' : 'translate-x-1'}`}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="flex justify-center">
+                    <button onClick={handleSubmitRTI} className="btn-primary w-full flex justify-center items-center gap-2 mt-2">
+                      Submit RTI <CheckCircle2 size={18} />
+                    </button>
+                  </div>
                 </div>
               </>
             ) : currentStep === 6 ? (
