@@ -103,9 +103,9 @@ export default function HomePage() {
       <div className="flex flex-col items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <div className="w-full max-w-xl p-4 sm:p-8 relative">
           
-          <div className="text-center mb-6 mt-4">
-            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 drop-shadow-md">{t("welcome", "Welcome")}, {userName}</h1>
-            <p className="text-gray-600 font-medium text-sm drop-shadow">{t("whatWouldYouLike", "WHAT DO YOU WANT TO KNOW TODAY ?")}</p>
+          <div className="text-center mb-6 mt-4 bg-white/70 backdrop-blur-md py-4 px-6 rounded-2xl shadow-sm border border-white/50 mx-auto w-full max-w-md">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1">{t("welcome", "Welcome")}, {userName}</h1>
+            <p className="text-gray-700 font-bold text-xs sm:text-sm tracking-wide">{t("whatWouldYouLike", "WHAT DO YOU WANT TO KNOW TODAY ?")}</p>
           </div>
 
           <div className="flex flex-col items-center gap-3 mb-8">
