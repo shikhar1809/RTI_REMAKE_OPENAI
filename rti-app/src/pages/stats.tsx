@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter, Eye, X, FileText, Image as ImageIcon, CheckCircle2, Download } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter, Eye, X, FileText, Image as ImageIcon, CheckCircle2, Download, PieChart as PieChartIcon, List } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MOCK_PUBLIC_RTIS, RTIApplication } from "@/data/mockRTIs";
 import { useApplicationsStore } from "@/store/applicationsStore";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
 
 export default function StatsPage() {
   const { t } = useTranslation(undefined, { keyPrefix: "stats" });
@@ -13,6 +14,7 @@ export default function StatsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [selectedApp, setSelectedApp] = useState<(RTIApplication & { views: number }) | null>(null);
+  const [viewMode, setViewMode] = useState<"list" | "chart">("list");
 
   const stats = {
     totalFiled: 12450,
@@ -32,6 +34,33 @@ export default function StatsPage() {
     const matchesLocation = locationFilter === "" || app.stateId.toLowerCase() === locationFilter.toLowerCase();
     return matchesSearch && matchesLocation;
   });
+
+  // Chart Data Processing
+  const statusData = useMemo(() => {
+    const counts = { pending: 0, replied: 0, resolved: 0 };
+    filteredArchive.forEach(app => {
+      if (counts[app.status as keyof typeof counts] !== undefined) {
+        counts[app.status as keyof typeof counts]++;
+      }
+    });
+    return [
+      { name: "Pending", value: counts.pending, color: "#f59e0b" },
+      { name: "Replied", value: counts.replied, color: "#3b82f6" },
+      { name: "Resolved", value: counts.resolved, color: "#10b981" }
+    ];
+  }, [filteredArchive]);
+
+  const stateData = useMemo(() => {
+    const stateCounts: Record<string, number> = {};
+    filteredArchive.forEach(app => {
+      const s = app.stateId.charAt(0).toUpperCase() + app.stateId.slice(1);
+      stateCounts[s] = (stateCounts[s] || 0) + 1;
+    });
+    return Object.entries(stateCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5); // top 5
+  }, [filteredArchive]);
 
   return (
     <ProtectedRoute>
@@ -77,7 +106,7 @@ export default function StatsPage() {
             </div>
           </div>
 
-          {/* Public Archive List */}
+          {/* Public Archive Section */}
           <div className="bg-white/95 rounded-2xl shadow-md border-2 border-gray-300 overflow-hidden flex flex-col">
             <div className="px-5 py-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -85,6 +114,23 @@ export default function StatsPage() {
                 <p className="text-xs text-gray-500">Find publicly accessible RTIs filed by others.</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
+                
+                {/* View Toggle */}
+                <div className="flex bg-gray-200 p-1 rounded-lg">
+                  <button 
+                    onClick={() => setViewMode("list")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "list" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                  >
+                    <List size={14} /> List
+                  </button>
+                  <button 
+                    onClick={() => setViewMode("chart")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "chart" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                  >
+                    <PieChartIcon size={14} /> Charts
+                  </button>
+                </div>
+
                 <div className="relative">
                   <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input 
@@ -113,52 +159,117 @@ export default function StatsPage() {
               </div>
             </div>
             
-            <div className="p-2 sm:p-4 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
-              {filteredArchive.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>No public RTIs found matching your criteria.</p>
-                </div>
-              ) : (
-                filteredArchive.map((app, idx) => {
-                  // Generate a deterministic view count based on app ID
-                  const views = (app.id.length * 137 + app.subject.length * 42) % 5000 + 100;
-                  
-                  return (
-                    <div key={idx} className="border border-gray-200 rounded-xl p-4 hover:border-green-300 hover:shadow-md transition-all bg-white flex flex-col gap-3">
-                      <div className="flex justify-between items-start gap-4">
-                        <h3 className="font-bold text-gray-900 leading-tight">{app.subject}</h3>
-                        <span className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${
-                          app.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                          app.status === 'replied' ? 'bg-blue-100 text-blue-700' :
-                          'bg-amber-100 text-amber-700'
-                        }`}>
-                          {app.status.toUpperCase()}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 line-clamp-2">{app.problemSummary}</p>
-                      
-                      <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
-                        <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-500">
-                          <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
-                            <MapPin size={12} /> {app.authority}
-                          </span>
-                          <span>Filed: {new Date(app.filedDate).toLocaleDateString()}</span>
-                          <span className="flex items-center gap-1 text-gray-500">
-                            <Eye size={12} /> {views.toLocaleString()} views
+            
+            {viewMode === "list" ? (
+              <div className="p-2 sm:p-4 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
+                {filteredArchive.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <p>No public RTIs found matching your criteria.</p>
+                  </div>
+                ) : (
+                  filteredArchive.map((app, idx) => {
+                    // Generate a deterministic view count based on app ID
+                    const views = (app.id.length * 137 + app.subject.length * 42) % 5000 + 100;
+                    
+                    return (
+                      <div key={idx} className="border border-gray-200 rounded-xl p-4 hover:border-green-300 hover:shadow-md transition-all bg-white flex flex-col gap-3">
+                        <div className="flex justify-between items-start gap-4">
+                          <h3 className="font-bold text-gray-900 leading-tight">{app.subject}</h3>
+                          <span className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${
+                            app.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                            app.status === 'replied' ? 'bg-blue-100 text-blue-700' :
+                            'bg-amber-100 text-amber-700'
+                          }`}>
+                            {app.status.toUpperCase()}
                           </span>
                         </div>
-                        <button 
-                          onClick={() => setSelectedApp({...app, views})}
-                          className="text-green-600 font-bold text-xs hover:text-green-800 transition-colors bg-green-50 px-3 py-1.5 rounded-lg border border-green-200 hover:bg-green-100"
-                        >
-                          View details
-                        </button>
+                        <p className="text-sm text-gray-600 line-clamp-2">{app.problemSummary}</p>
+                        
+                        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+                          <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-500">
+                            <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
+                              <MapPin size={12} /> {app.authority}
+                            </span>
+                            <span>Filed: {new Date(app.filedDate).toLocaleDateString()}</span>
+                            <span className="flex items-center gap-1 text-gray-500">
+                              <Eye size={12} /> {views.toLocaleString()} views
+                            </span>
+                          </div>
+                          <button 
+                            onClick={() => setSelectedApp({...app, views})}
+                            className="text-green-600 font-bold text-xs hover:text-green-800 transition-colors bg-green-50 px-3 py-1.5 rounded-lg border border-green-200 hover:bg-green-100"
+                          >
+                            View details
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
+                    );
+                  })
+                )}
+              </div>
+            ) : (
+              <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white min-h-[400px]">
+                {/* Chart 1: Status Distribution */}
+                <div className="border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col items-center">
+                  <h3 className="font-bold text-gray-900 mb-4 text-center">Status Distribution</h3>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={statusData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {statusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          formatter={(value: any) => [`${value} RTIs`, "Count"]}
+                          contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                        />
+                        <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Chart 2: Top States */}
+                <div className="border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col items-center">
+                  <h3 className="font-bold text-gray-900 mb-4 text-center">Top States by Volume</h3>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={stateData}
+                        margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                        <XAxis 
+                          dataKey="name" 
+                          tick={{ fontSize: 12, fill: '#6b7280' }} 
+                          axisLine={false}
+                          tickLine={false}
+                        />
+                        <YAxis 
+                          tick={{ fontSize: 12, fill: '#6b7280' }}
+                          axisLine={false}
+                          tickLine={false}
+                        />
+                        <Tooltip 
+                          cursor={{ fill: '#f3f4f6' }}
+                          contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                        />
+                        <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="RTIs Filed" barSize={40} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
         </div>
