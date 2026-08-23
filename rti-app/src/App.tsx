@@ -4,6 +4,7 @@ import { PostHogProvider } from '@/components/PostHogProvider';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { BootSequence } from '@/components/BootSequence';
 import { PageTransitionLoader } from '@/components/PageTransitionLoader';
+import { GlobalAIAssistant } from '@/components/GlobalAIAssistant';
 
 // Lazy load pages for performance
 const LoginPage = lazy(() => import('@/pages/login'));
@@ -42,6 +43,7 @@ export default function App() {
     <PostHogProvider>
       <div className="min-h-screen flex flex-col bg-home-responsive">
         <PageTransitionLoader />
+        <GlobalAIAssistant />
         {location.pathname !== '/home' && <LanguageSwitcher />}
         <main className="flex-1 flex flex-col">
           <Suspense fallback={
