@@ -7,13 +7,18 @@ import type { RTIDraft } from "@/data/mockDrafts";
 import type { ReplyAnalysis } from "@/data/mockReplies";
 
 export interface RTIWizardState {
-  // Step 1: Problem description
+  // Step 1: Personal Details
+  applicantName: string;
+  applicantAddress: string;
+  applicantMobile: string;
+
+  // Step 2: Problem description
   problemDescription: string;
 
-  // Step 2: State selection
+  // Step 3: State selection
   selectedStateId: string;
 
-  // Step 3: Generated draft
+  // Step 4: Generated draft
   draft: RTIDraft | null;
 
   // Reply checking
@@ -24,6 +29,9 @@ export interface RTIWizardState {
   currentStep: number;
 
   // Actions
+  setApplicantName: (name: string) => void;
+  setApplicantAddress: (address: string) => void;
+  setApplicantMobile: (mobile: string) => void;
   setProblemDescription: (text: string) => void;
   setSelectedStateId: (id: string) => void;
   setDraft: (draft: RTIDraft) => void;
@@ -36,6 +44,9 @@ export interface RTIWizardState {
 export const useRTIStore = create<RTIWizardState>()(
   persist(
     (set) => ({
+      applicantName: "",
+      applicantAddress: "",
+      applicantMobile: "",
       problemDescription: "",
       selectedStateId: "",
       draft: null,
@@ -43,6 +54,9 @@ export const useRTIStore = create<RTIWizardState>()(
       replyAnalysis: null,
       currentStep: 1,
 
+      setApplicantName: (name) => set({ applicantName: name }),
+      setApplicantAddress: (address) => set({ applicantAddress: address }),
+      setApplicantMobile: (mobile) => set({ applicantMobile: mobile }),
       setProblemDescription: (text) => set({ problemDescription: text }),
       setSelectedStateId: (id) => set({ selectedStateId: id }),
       setDraft: (draft) => set({ draft }),
@@ -51,6 +65,9 @@ export const useRTIStore = create<RTIWizardState>()(
       setCurrentStep: (step) => set({ currentStep: step }),
       resetWizard: () =>
         set({
+          applicantName: "",
+          applicantAddress: "",
+          applicantMobile: "",
           problemDescription: "",
           selectedStateId: "",
           draft: null,

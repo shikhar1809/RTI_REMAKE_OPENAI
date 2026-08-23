@@ -19,10 +19,16 @@ export default function FilePage() {
   const { t: tc } = useTranslation(undefined, { keyPrefix: "common" });
 
   const {
+    applicantName: name,
+    applicantAddress: address,
+    applicantMobile: mobile,
     problemDescription,
     selectedStateId,
     draft,
     currentStep,
+    setApplicantName: setName,
+    setApplicantAddress: setAddress,
+    setApplicantMobile: setMobile,
     setProblemDescription,
     setSelectedStateId,
     setDraft,
@@ -33,10 +39,7 @@ export default function FilePage() {
   const { lastSynced } = useDocumentStore();
 
   const { savedFullName, savedAddress, savedMobile, saveProfileDetails } = useAuthStore();
-  
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [mobile, setMobile] = useState("");
+
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [rating, setRating] = useState(0);
