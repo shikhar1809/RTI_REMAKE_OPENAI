@@ -38,7 +38,7 @@ export default function DocumentsPage() {
             <ArrowLeft size={16} /> Home
           </Link>
           
-          <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md mb-8">
+          <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md mb-6">
             <div className="flex items-center gap-3 mb-2">
               <FcDataBackup size={32} />
               <h1 className="text-2xl font-bold text-gray-900">Document Locker</h1>
@@ -46,6 +46,14 @@ export default function DocumentsPage() {
             <p className="text-sm text-gray-500 mt-1">
               Check if your identity and fee exemption documents are linked. These are automatically attached to your RTI applications when required.
             </p>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800 mb-3 shadow-sm">
+            <span className="font-semibold">Privacy Note:</span> We do not store your documents on our servers. They are securely transmitted directly to the RTI filing authority when you submit an application.
+          </div>
+          
+          <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-sm text-green-800 font-medium text-center mb-6 shadow-sm">
+            Note: Other than the above, NO extra document is required to file an RTI.
           </div>
 
           <div className="card mb-8">
@@ -97,14 +105,6 @@ export default function DocumentsPage() {
                 </div>
               )})}
             </div>
-          </div>
-          
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800 mb-3">
-            <span className="font-semibold">Privacy Note:</span> We do not store your documents on our servers. They are securely transmitted directly to the RTI filing authority when you submit an application.
-          </div>
-          
-          <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-sm text-green-800 font-medium text-center">
-            Note: Other than the above, NO extra document is required to file an RTI.
           </div>
         </div>
       </div>
