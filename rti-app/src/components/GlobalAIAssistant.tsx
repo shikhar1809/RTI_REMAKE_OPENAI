@@ -17,6 +17,30 @@ const getPageName = (pathname: string) => {
   return 'Dashboard';
 };
 
+
+const TooltipTypewriter = ({ text }: { text: string }) => {
+  const [displayed, setDisplayed] = useState("");
+  useEffect(() => {
+    let i = 0;
+    setDisplayed("");
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed(text.substring(0, i + 1));
+        i++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 40); // 40ms per character for smooth fast typing
+    return () => clearInterval(timer);
+  }, [text]);
+  return (
+    <span>
+      {displayed}
+      <span className="inline-block w-1 h-3.5 ml-0.5 align-middle bg-white/70 animate-pulse" />
+    </span>
+  );
+};
+
 export const GlobalAIAssistant = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -32,25 +56,26 @@ export const GlobalAIAssistant = () => {
   useEffect(() => {
     if (isExcluded) return;
     setShowTooltip(false);
-    // Initial delay before first tooltip
-    const initialTimer = setTimeout(() => {
-      setShowTooltip(true);
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const runCycle = () => {
+      setTipIndex(prev => (prev % 4) + 1);
       setIsTipVisible(true);
-    }, 3000);
-
-    // Cycle through tooltips every 5 seconds
-    const interval = setInterval(() => {
-      setIsTipVisible(false); // trigger fade out
-      setTimeout(() => {
-        setTipIndex(prev => (prev % 4) + 1);
-        setIsTipVisible(true); // trigger fade in
-      }, 300);
-    }, 5000);
-
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(interval);
+      setShowTooltip(true);
+      
+      // Keep it visible for 5 seconds
+      timeoutId = setTimeout(() => {
+        setIsTipVisible(false); // Fade out
+        
+        // Wait 600ms for fade out to finish before starting next cycle
+        timeoutId = setTimeout(runCycle, 600);
+      }, 5000);
     };
+
+    // Initial delay before first tooltip
+    timeoutId = setTimeout(runCycle, 3000);
+
+    return () => clearTimeout(timeoutId);
   }, [location.pathname, isExcluded]);
 
   // Don't render anything on excluded pages — AFTER all hooks
@@ -102,8 +127,8 @@ export const GlobalAIAssistant = () => {
         <div className="w-full max-w-md flex justify-end px-4 sm:px-6">
           <div className="pointer-events-auto flex items-center gap-3">
             {showTooltip && !isTransitioning && (
-              <div className={`bg-gray-900 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg relative transition-all duration-300 ${isTipVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"}`}>
-                {t(`tooltip${tipIndex}`, "Need help?")}
+              <div className={`bg-gray-900 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg relative transition-all duration-500 ease-in-out ${isTipVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"}`}>
+                <TooltipTypewriter text={t(`tooltip${tipIndex}`, "Need help?")} />
                 <div className="absolute top-1/2 -right-1.5 w-3 h-3 bg-gray-900 rotate-45 -translate-y-1/2" />
               </div>
             )}
