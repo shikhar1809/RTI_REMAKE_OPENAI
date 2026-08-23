@@ -117,20 +117,20 @@ export default function HomePage() {
           <div className="flex flex-col gap-3 max-w-sm mx-auto w-full">
             
             {currentStep > 1 && currentStep < 6 && (
-              <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 shadow-sm flex flex-col gap-3 mb-1 animate-in fade-in slide-in-from-bottom-2">
+              <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-3 shadow-sm flex flex-col gap-2 mb-1 animate-in fade-in slide-in-from-bottom-2">
                 <div className="flex items-start gap-2">
-                  <span className="text-amber-600 mt-0.5">⚠️</span>
-                  <p className="text-sm font-bold text-amber-900 leading-tight">
+                  <span className="text-amber-600 text-sm mt-0.5">⚠️</span>
+                  <p className="text-xs font-bold text-amber-900 leading-tight">
                     Your RTI filing stopped mid-progress (Step {currentStep}). Do you want to continue?
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Link to="/file" className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 rounded-lg text-center text-sm transition-colors shadow-sm">
+                  <Link to="/file" className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 rounded-md text-center text-xs transition-colors shadow-sm">
                     Continue Draft
                   </Link>
                   <button 
                     onClick={() => resetWizard()} 
-                    className="flex-1 bg-white hover:bg-amber-100 text-amber-700 border border-amber-300 font-bold py-2 rounded-lg text-center text-sm transition-colors shadow-sm"
+                    className="flex-1 bg-white hover:bg-amber-100 text-amber-700 border border-amber-300 font-bold py-1.5 rounded-md text-center text-xs transition-colors shadow-sm"
                   >
                     Start Fresh
                   </button>
