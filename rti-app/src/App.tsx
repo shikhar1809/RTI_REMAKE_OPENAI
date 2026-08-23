@@ -42,7 +42,7 @@ export default function App() {
 
   return (
     <PostHogProvider>
-      <div className="min-h-screen flex flex-col bg-home-responsive">
+      <div className={`min-h-screen flex flex-col ${location.pathname === '/stats' ? 'bg-slate-50' : 'bg-home-responsive bg-slate-50'}`}>
         <PageTransitionLoader />
         <GlobalAIAssistant />
         {location.pathname !== '/home' && <LanguageSwitcher />}
