@@ -14,7 +14,7 @@ export default function StatsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [selectedApp, setSelectedApp] = useState<(RTIApplication & { views: number }) | null>(null);
-  const [viewMode, setViewMode] = useState<"list" | "chart">("list");
+  const [viewMode, setViewMode] = useState<"list" | "chart" | "map">("list");
 
   const stats = {
     totalFiled: 12450,
@@ -129,6 +129,12 @@ export default function StatsPage() {
                   >
                     <PieChartIcon size={14} /> Charts
                   </button>
+                  <button 
+                    onClick={() => setViewMode("map")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "map" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                  >
+                    <MapPin size={14} /> Map
+                  </button>
                 </div>
 
                 <div className="relative">
@@ -159,8 +165,7 @@ export default function StatsPage() {
               </div>
             </div>
             
-            
-            {viewMode === "list" ? (
+            {viewMode === "list" && (
               <div className="p-2 sm:p-4 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
                 {filteredArchive.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
@@ -207,7 +212,9 @@ export default function StatsPage() {
                   })
                 )}
               </div>
-            ) : (
+            )}
+            
+            {viewMode === "chart" && (
               <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-white min-h-[400px]">
                 {/* Chart 1: Status Distribution */}
                 <div className="border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col items-center">
@@ -267,6 +274,32 @@ export default function StatsPage() {
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {viewMode === "map" && (
+              <div className="p-4 sm:p-6 bg-white min-h-[400px] flex flex-col items-center justify-center text-center">
+                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
+                  <MapPin size={48} />
+                </div>
+                <h3 className="font-bold text-gray-900 text-xl mb-2">Interactive Map View</h3>
+                <p className="text-gray-500 max-w-sm mb-6">
+                  Geographic distribution of public RTIs across India. This visualization requires the official production Map SDK to render.
+                </p>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setViewMode("chart")} 
+                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors text-sm"
+                  >
+                    View Charts
+                  </button>
+                  <button 
+                    onClick={() => setViewMode("list")} 
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors text-sm"
+                  >
+                    View List
+                  </button>
                 </div>
               </div>
             )}
