@@ -2,31 +2,32 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { NyayaAvatar } from "./NyayaAvatar";
 
+const EXCLUDE_PAGES = ['/login', '/onboarding/location', '/onboarding/rights', '/toolkit', '/home'];
+
 export const GlobalAIAssistant = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Exclude some pages, notably the toolkit page itself and the home page
-  const excludePages = ['/login', '/onboarding/location', '/onboarding/rights', '/toolkit', '/home'];
-  if (excludePages.includes(location.pathname)) return null;
+  const isExcluded = EXCLUDE_PAGES.includes(location.pathname);
 
+  // ALL hooks must be called before any early return
   useEffect(() => {
-    // Randomly show tooltip
+    if (isExcluded) return;
+    setShowTooltip(false);
     const timer = setTimeout(() => {
       setShowTooltip(true);
     }, Math.random() * 5000 + 3000);
-    
     return () => clearTimeout(timer);
-  }, [location.pathname]);
+  }, [location.pathname, isExcluded]);
+
+  // Don't render anything on excluded pages — AFTER all hooks
+  if (isExcluded) return null;
 
   const handleClick = () => {
-    // React to touch immediately, start transition
     setIsTransitioning(true);
     setShowTooltip(false);
-    
-    // Show loading state for exactly 3 seconds, then navigate to AI page
     setTimeout(() => {
       setIsTransitioning(false);
       navigate('/toolkit');
@@ -56,7 +57,7 @@ export const GlobalAIAssistant = () => {
             )}
             <button 
               onClick={handleClick}
-              className="w-16 h-16 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.15)] flex items-center justify-center border-2 border-green-400 hover:scale-110 hover:shadow-green-400/20 active:scale-90 transition-all duration-200"
+              className="w-16 h-16 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.15)] flex items-center justify-center border-2 border-green-400 hover:scale-110 active:scale-90 transition-all duration-200"
               style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <NyayaAvatar size={54} state="idle" />
