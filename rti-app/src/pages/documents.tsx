@@ -13,16 +13,25 @@ const ICON_MAP: Record<string, any> = {
 
 export default function DocumentsPage() {
   const [isSyncing, setIsSyncing] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const { documents, lastSynced, syncBPL } = useDocumentStore();
 
   const handleSync = async () => {
     setIsSyncing(true);
     await syncBPL();
     setIsSyncing(false);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
   };
 
   return (
     <ProtectedRoute>
+      {showToast && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 z-50 animate-in slide-in-from-bottom-5">
+          <CheckCircle2 className="text-green-400" size={20} />
+          <span className="font-medium text-sm">Documents synced successfully!</span>
+        </div>
+      )}
       <div className="flex flex-col items-center py-8 px-4">
         <div className="w-full max-w-3xl p-4 sm:p-8">
           <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
