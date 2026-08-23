@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "appName": "RTI Easy",
     "tagline": "कुछ ही मिनटों में सूचना का अधिकार दर्ज करें",
@@ -384,7 +384,7 @@
     "status_appealed": "अपील की गई"
   },
   "ai": {
-    "title": "RIGHTEOUS AI",
+    "title": "MR. MR. RIGHTEOUS",
     "subtitle": "आपका RTI कानूनी सहायक · वॉयस + चैट",
     "placeholder": "अपना संदेश यहाँ लिखें...",
     "listening": "सुन रहा हूँ...",
@@ -405,6 +405,6 @@
     "tooltip1": "मदद चाहिए?",
     "tooltip2": "क्या आपके पास RTI का सवाल है?",
     "tooltip3": "कहीं फंस गए हैं?",
-    "tooltip4": "RIGHTEOUS AI से पूछें!"
+    "tooltip4": "MR. MR. RIGHTEOUS से पूछें!"
   }
 }
