@@ -44,6 +44,7 @@ export default function FilePage() {
 
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [autoFillToast, setAutoFillToast] = useState(false);
   const [rating, setRating] = useState(0);
   const [attachments, setAttachments] = useState<{ name: string; size: string; type: string; url: string }[]>([]);
   const [isPublicApp, setIsPublicApp] = useState(false);
@@ -69,6 +70,8 @@ export default function FilePage() {
       setName(savedFullName);
       setAddress(savedAddress);
       setMobile(savedMobile);
+      setAutoFillToast(true);
+      setTimeout(() => setAutoFillToast(false), 3000);
     }
   }, [currentStep, name, address, mobile, savedFullName, savedAddress, savedMobile, setName, setAddress, setMobile]);
 
@@ -76,6 +79,8 @@ export default function FilePage() {
     setName(savedFullName);
     setAddress(savedAddress);
     setMobile(savedMobile);
+    setAutoFillToast(true);
+    setTimeout(() => setAutoFillToast(false), 3000);
   }
 
   function handleSaveProfile() {
@@ -741,6 +746,13 @@ export default function FilePage() {
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5">
           <CheckCircle2 size={20} className="text-green-400" />
           <span className="text-sm font-medium">{t("savedLater", "Details saved for later!")}</span>
+        </div>
+      )}
+
+      {autoFillToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5 z-50">
+          <ShieldCheck size={20} className="text-green-200 shrink-0" />
+          <span className="text-sm font-medium">Details auto-filled from your saved profile!</span>
         </div>
       )}
 
