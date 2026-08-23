@@ -1,4 +1,4 @@
-﻿import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Clock, AlertCircle, CheckCircle2, MessageSquare, Plus, Timer, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useApplicationsStore } from "@/store/applicationsStore";
@@ -133,7 +133,7 @@ function RTICard({ app }: { app: RTIApplication }) {
       </div>
       
       <div className="flex sm:flex-col justify-end gap-2 border-t sm:border-t-0 sm:border-l border-gray-100 pt-3 sm:pt-0 sm:pl-5">
-        <Link to={`/track/${app.id}`} className="btn-secondary w-full sm:w-auto flex-1">
+        <Link to={`/track/${encodeURIComponent(app.id)}`} className="btn-secondary w-full sm:w-auto flex-1">
           {t("viewDetails", "View details")}
         </Link>
         {app.status === "replied" && (
