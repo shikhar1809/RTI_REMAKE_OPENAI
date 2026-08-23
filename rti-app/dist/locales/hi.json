@@ -232,6 +232,13 @@
     "govReply": "सरकारी जवाब मिला",
     "receivedOn": "को प्राप्त हुआ",
     "download": "डाउनलोड",
-    "count": "संख्या"
+    "count": "संख्या",
+    "exportStats": "आँकड़े निर्यात करें",
+    "exportModalTitle": "पीडीएफ रिपोर्ट निर्यात करें",
+    "selectState": "राज्य चुनें",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
+    "exportPdf": "पीडीएफ निर्यात करें",
+    "cancel": "रद्द करें"
   }
 }

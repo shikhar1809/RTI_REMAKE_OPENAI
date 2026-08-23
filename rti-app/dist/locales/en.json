@@ -232,6 +232,13 @@
     "govReply": "Government Reply Received",
     "receivedOn": "Received on",
     "download": "Download",
-    "count": "Count"
+    "count": "Count",
+    "exportStats": "Export Stats",
+    "exportModalTitle": "Export PDF Report",
+    "selectState": "Select State",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "exportPdf": "Export PDF",
+    "cancel": "Cancel"
   }
 }

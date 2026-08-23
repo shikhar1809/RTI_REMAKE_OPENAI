@@ -8,6 +8,8 @@ import { useApplicationsStore } from "@/store/applicationsStore";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
 import { MapContainer, TileLayer, CircleMarker, Tooltip as LeafletTooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const STATE_COORDINATES: Record<string, [number, number]> = {
   Delhi: [28.7041, 77.1025],
@@ -30,6 +32,57 @@ export default function StatsPage() {
   const [locationFilter, setLocationFilter] = useState("");
   const [selectedApp, setSelectedApp] = useState<(RTIApplication & { views: number }) | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "chart" | "map">("list");
+  
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportStateId, setExportStateId] = useState("");
+  const [exportStartDate, setExportStartDate] = useState("");
+  const [exportEndDate, setExportEndDate] = useState("");
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExport = () => {
+    setIsExporting(true);
+    let dataToExport = allPublicRTIs;
+    
+    if (exportStateId) {
+      dataToExport = dataToExport.filter(r => r.stateId.toLowerCase() === exportStateId.toLowerCase());
+    }
+    if (exportStartDate) {
+      dataToExport = dataToExport.filter(r => new Date(r.filedDate) >= new Date(exportStartDate));
+    }
+    if (exportEndDate) {
+      dataToExport = dataToExport.filter(r => new Date(r.filedDate) <= new Date(exportEndDate));
+    }
+    
+    const doc = new jsPDF();
+    doc.text("Public RTI Archive Stats", 14, 15);
+    doc.setFontSize(10);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 22);
+    
+    const filters = [];
+    if (exportStateId) filters.push(`State: ${exportStateId}`);
+    if (exportStartDate) filters.push(`From: ${exportStartDate}`);
+    if (exportEndDate) filters.push(`To: ${exportEndDate}`);
+    if (filters.length > 0) doc.text(`Filters: ${filters.join(" | ")}`, 14, 28);
+    
+    const tableData = dataToExport.map(r => [
+      r.id.substring(0, 8),
+      r.subject.length > 40 ? r.subject.substring(0, 40) + "..." : r.subject,
+      r.authority,
+      r.status,
+      new Date(r.filedDate).toLocaleDateString()
+    ]);
+    
+    autoTable(doc, {
+      startY: 35,
+      head: [['ID', 'Subject', 'Authority', 'Status', 'Date']],
+      body: tableData,
+    });
+    
+    doc.save(`RTI_Stats_${new Date().getTime()}.pdf`);
+    
+    setIsExporting(false);
+    setShowExportModal(false);
+  };
 
   const stats = {
     totalFiled: 12450,
@@ -162,6 +215,7 @@ export default function StatsPage() {
                     className="pl-9 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                   />
                 </div>
+                
                 <div className="relative">
                   <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <select
@@ -177,6 +231,14 @@ export default function StatsPage() {
                     <option value="up">Uttar Pradesh</option>
                   </select>
                 </div>
+
+                <button
+                  onClick={() => setShowExportModal(true)}
+                  className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shrink-0"
+                >
+                  <Download size={16} />
+                  <span className="hidden sm:inline">{t("exportStats", "Export Stats")}</span>
+                </button>
               </div>
             </div>
             
@@ -440,6 +502,84 @@ export default function StatsPage() {
           </div>
         </div>
       )}
+
+      {/* Export Modal */}
+      {showExportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+              <div className="flex items-center gap-2">
+                <Download className="text-blue-600" size={20} />
+                <h3 className="font-bold text-gray-900">{t("exportModalTitle", "Export PDF Report")}</h3>
+              </div>
+              <button 
+                onClick={() => setShowExportModal(false)}
+                className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-5 flex flex-col gap-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">{t("selectState", "Select State")}</label>
+                <select
+                  value={exportStateId}
+                  onChange={(e) => setExportStateId(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">{t("allStates", "All States")}</option>
+                  <option value="delhi">Delhi</option>
+                  <option value="maharashtra">Maharashtra</option>
+                  <option value="karnataka">Karnataka</option>
+                  <option value="punjab">Punjab</option>
+                  <option value="up">Uttar Pradesh</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">{t("startDate", "Start Date")}</label>
+                  <input
+                    type="date"
+                    value={exportStartDate}
+                    onChange={(e) => setExportStartDate(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">{t("endDate", "End Date")}</label>
+                  <input
+                    type="date"
+                    value={exportEndDate}
+                    onChange={(e) => setExportEndDate(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3 mt-2">
+                <button
+                  onClick={() => setShowExportModal(false)}
+                  className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors text-sm"
+                >
+                  {t("cancel", "Cancel")}
+                </button>
+                <button
+                  onClick={handleExport}
+                  disabled={isExporting}
+                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors text-sm flex justify-center items-center gap-2"
+                >
+                  {isExporting ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  ) : (
+                    <Download size={16} />
+                  )}
+                  {t("exportPdf", "Export PDF")}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </ProtectedRoute>
   );
 }
