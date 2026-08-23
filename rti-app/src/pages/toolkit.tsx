@@ -8,21 +8,23 @@ interface ChatMessage {
   content: string;
 }
 
-// Nyaya reactive avatar - Claude-style organic blob
-const NyayaAvatar = ({ state }: { state: 'idle' | 'typing' | 'listening' }) => {
-  const configs = {
-    idle:      { bg: "from-green-400 to-emerald-600", border: "40% 60% 70% 30% / 40% 50% 60% 50%", glow: "shadow-green-400/30",  dot: "bg-white/90" },
-    typing:    { bg: "from-emerald-400 to-teal-500",  border: "30% 70% 50% 50% / 50% 50% 70% 50%", glow: "shadow-teal-400/40",   dot: "bg-white animate-ping" },
-    listening: { bg: "from-rose-400 to-red-500",      border: "50% 50% 50% 50%",                    glow: "shadow-red-400/40",    dot: "bg-white animate-bounce" },
-  };
-  const c = configs[state];
-  return (
-    <div className={`relative w-12 h-12 bg-gradient-to-tr ${c.bg} flex items-center justify-center shadow-xl ${c.glow} transition-all duration-700`}
-         style={{ borderRadius: c.border }}>
-      <div className={`w-3 h-3 rounded-full ${c.dot} transition-all duration-300`} />
-    </div>
-  );
-};
+// Smiley-orbit animated icon — same as home page button
+const NyayaAvatar = ({ size = 48 }: { state?: string; size?: number }) => (
+  <span className="inline-flex items-center justify-center relative shrink-0" style={{ width: size, height: size }}>
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width={size} height={size}>
+      <circle cx="24" cy="24" r="16" fill="#00F5A0"/>
+      <circle cx="19" cy="21" r="2" fill="#111"/>
+      <circle cx="29" cy="21" r="2" fill="#111"/>
+      <path d="M19 27 Q24 32 29 27" stroke="#111" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+      <g style={{ transformOrigin: '24px 24px', animation: 'orbit-spin 2s linear infinite' }}>
+        <path d="M8 26 Q5 14 18 9" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+        <path d="M36 9 Q47 18 40 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+        <path d="M38 32 L40 30 L36 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      </g>
+    </svg>
+    <style>{`@keyframes orbit-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
+  </span>
+);
 
 const FAQ_CHIPS = [
   "What is the RTI deadline?",
@@ -69,8 +71,6 @@ export default function ToolkitPage() {
     }, 1800);
   };
 
-  const agentState = isListening ? 'listening' : isTyping ? 'typing' : 'idle';
-
   const handleMicClick = () => {
     setIsListening(true);
     setTimeout(() => {
@@ -81,9 +81,7 @@ export default function ToolkitPage() {
 
   return (
     <ProtectedRoute>
-      {/* Full-page gradient bg like the screenshot */}
-      <div className="relative flex flex-col items-center h-[calc(100vh-4rem)] overflow-hidden bg-white"
-           >
+      <div className="relative flex flex-col items-center h-[calc(100vh-4rem)] overflow-hidden">
 
         {/* Soft glow blobs */}
 
@@ -99,7 +97,7 @@ export default function ToolkitPage() {
           <div className="flex flex-col items-center justify-center flex-1 px-4 pb-48 gap-8 w-full">
             {/* Avatar + name */}
             <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-              <NyayaAvatar state={agentState} />
+              <NyayaAvatar size={56} />
               <div className="text-center">
                 <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Nyaya AI</h1>
                 <p className="text-sm text-gray-500 mt-1">Your RTI Legal Assistant · Voice + Chat</p>
@@ -132,7 +130,7 @@ export default function ToolkitPage() {
                       <span className="text-white text-xs font-bold">U</span>
                     </div>
                   ) : (
-                    <NyayaAvatar state="idle" />
+                    <NyayaAvatar size={32} />
                   )}
                 </div>
                 <div className={`px-5 py-3.5 max-w-[80%] text-sm leading-relaxed shadow-sm ${
@@ -147,7 +145,7 @@ export default function ToolkitPage() {
 
             {isTyping && (
               <div className="flex gap-3 flex-row animate-in fade-in duration-300">
-                <NyayaAvatar state="typing" />
+                <NyayaAvatar size={32} />
                 <div className="px-5 py-4 bg-white/90 backdrop-blur-sm border border-green-100 rounded-3xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
