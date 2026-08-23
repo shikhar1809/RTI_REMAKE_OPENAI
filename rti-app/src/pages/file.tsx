@@ -8,12 +8,13 @@ import { generateMockDraft, translateDraft } from "@/data/mockDrafts";
 import { STATES, UNSUPPORTED_STATE_GUIDANCE } from "@/data/states";
 import { trackWizardStarted, trackWizardStep, trackDraftGenerated, trackDraftCopied } from "@/lib/analytics";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 
 const TOTAL_STEPS = 6;
 
 export default function FilePage() {
+  const navigate = useNavigate();
   const { t } = useTranslation(undefined, { keyPrefix: "file" });
   const { t: tc } = useTranslation(undefined, { keyPrefix: "common" });
 
@@ -147,6 +148,15 @@ export default function FilePage() {
     }
   }
 
+  function handleTopBack() {
+    if (currentStep === 1 || currentStep === 6) {
+      resetWizard();
+      navigate('/home');
+    } else {
+      goBack();
+    }
+  }
+
   async function copyDraft() {
     if (!draft) return;
     await navigator.clipboard.writeText(`${draft.subject}\n\n${draft.body}`);
@@ -169,9 +179,12 @@ export default function FilePage() {
     <ProtectedRoute>
       <div className="flex flex-col items-center py-8 px-4">
         <div className="w-full max-w-2xl p-4 sm:p-8">
-          <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
-            <ArrowLeft size={16} /> Home
-          </Link>
+          <button 
+            onClick={handleTopBack} 
+            className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md"
+          >
+            <ArrowLeft size={16} /> {currentStep === 1 || currentStep === 6 ? "Home" : "Back"}
+          </button>
           {lastSynced && (
             <div className="mb-8 bg-white/95 border-2 border-gray-300 rounded-2xl p-4 shadow-md">
               <div className="flex items-center justify-between text-sm font-bold text-gray-700 mb-2">
