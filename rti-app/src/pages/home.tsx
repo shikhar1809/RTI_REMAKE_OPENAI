@@ -289,7 +289,27 @@ export default function HomePage() {
               to="/toolkit"
               className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md flex items-center justify-center gap-2"
             >
-              <span className="text-lg">🤖📄</span> {t("rtiToolkit", "RTI AI AGENT")}
+              {/* Animated smiley-orbit AI icon */}
+              <span className="inline-flex items-center justify-center w-7 h-7 relative shrink-0">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                  {/* Green circle face */}
+                  <circle cx="24" cy="24" r="16" fill="#00F5A0"/>
+                  {/* Eyes */}
+                  <circle cx="19" cy="21" r="2" fill="#111"/>
+                  <circle cx="29" cy="21" r="2" fill="#111"/>
+                  {/* Smile */}
+                  <path d="M19 27 Q24 32 29 27" stroke="#111" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+                  {/* Orbit ring with arrow — animated spin */}
+                  <g style={{transformOrigin:'24px 24px', animation:'orbit-spin 2s linear infinite'}}>
+                    <path d="M8 26 Q5 14 18 9" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+                    <path d="M36 9 Q47 18 40 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+                    {/* Arrow head */}
+                    <path d="M38 32 L40 30 L36 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  </g>
+                </svg>
+                <style>{`@keyframes orbit-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
+              </span>
+              {t("rtiToolkit", "RTI AI AGENT")}
             </Link>
 
           </div>

@@ -82,12 +82,10 @@ export default function ToolkitPage() {
   return (
     <ProtectedRoute>
       {/* Full-page gradient bg like the screenshot */}
-      <div className="relative flex flex-col items-center h-[calc(100vh-4rem)] overflow-hidden"
-           style={{ background: 'linear-gradient(160deg, #d1fae5 0%, #f0fdf4 40%, #dcfce7 70%, #bbf7d0 100%)' }}>
+      <div className="relative flex flex-col items-center h-[calc(100vh-4rem)] overflow-hidden bg-white"
+           >
 
         {/* Soft glow blobs */}
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-green-300/30 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Back arrow — top left */}
         <div className="absolute top-4 left-4 z-30">
