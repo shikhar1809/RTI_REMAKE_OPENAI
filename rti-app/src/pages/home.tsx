@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -309,7 +309,7 @@ export default function HomePage() {
                 </svg>
                 <style>{`@keyframes orbit-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
               </span>
-              {t("rtiToolkit", "GET HELPED FROM MR Righteous")}
+              {t("rtiToolkit", "GET HELP FROM MR RIGHTEOUS")}
             </Link>
 
           </div>
