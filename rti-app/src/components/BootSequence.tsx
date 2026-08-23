@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Loader2 } from "lucide-react";
 
@@ -48,16 +48,14 @@ export function BootSequence({ onComplete }: { onComplete: () => void }) {
       <div className="w-full max-w-sm mx-auto text-center">
         {/* Visual Area */}
         <div className="flex items-center justify-center mb-8 relative">
-          <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-[2rem] overflow-hidden shadow-xl border-4 border-white bg-gray-100 flex items-center justify-center">
-            <video 
-              src="/boot-video.mp4" 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <video 
+            src="/boot-video.mp4" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-48 sm:w-56 h-auto mix-blend-multiply"
+          />
         </div>
 
         {/* Text Area */}
