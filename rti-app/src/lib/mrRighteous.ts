@@ -30,42 +30,42 @@ const KB: { patterns: RegExp[]; response: (ctx: ConversationContext) => string }
 
   // ── FAQ CHIP 1: RTI DEADLINE ──────────────────────────────────────────────
   {
-    patterns: [/deadline|30.?day|time.?limit|how long|when.*reply|response.*time|48.?hour/i],
+    patterns: [/\\b(deadline|30\\s?days?|time\\s?limit|how long|when.*reply|response.*time|48\\s?hours?)\\b/i],
     response: () =>
       `⏱️ **RTI Response Deadlines under Section 7:**\n\n| Situation | Deadline |\n|---|---|\n| Normal application | **30 days** |\n| Life or liberty matter | **48 hours** |\n| Info from 3rd party | **40 days** |\n| BPL applicant | **30 days** (priority) |\n| Info held by another dept | **35 days** |\n\n**What triggers the clock?** The day the PIO receives your application — NOT the day you sent it.\n\n**What if they miss it?**\n→ Silence is deemed **refusal** under Section 7(2)\n→ You can immediately file a **First Appeal**\n→ The PIO is personally liable for a penalty of ₹250/day (up to ₹25,000)\n\n💡 Pro tip: Always send your RTI via **Speed Post with acknowledgement** so you have proof of delivery with the exact date.\n\nWould you like help drafting an application or a First Appeal?`,
   },
 
   // ── FAQ CHIP 2: FIRST & SECOND APPEAL ────────────────────────────────────
   {
-    patterns: [/first.?appeal|second.?appeal|how.*appeal|file.*appeal|appeal.*process|cic|sic|information.?commission|appellate/i],
+    patterns: [/\\b(first\\s?appeal|second\\s?appeal|how.*appeal|file.*appeal|appeal.*process|cic|sic|information\\s?commission|appellate)\\b/i],
     response: () =>
       `⚖️ **The RTI Appeals Ladder — Step by Step:**\n\n**STEP 1 — First Appeal (Section 19(1))**\n→ File within **30 days** of: PIO's deadline passing OR unsatisfactory reply\n→ Address to: First Appellate Authority (FAA) — a senior officer in the same department\n→ FAA must decide within **30 days** (extendable to 45 days with reason)\n→ No fee required for First Appeal\n\n**STEP 2 — Second Appeal / Complaint (Section 19(3))**\n→ File within **90 days** of FAA's order (or FAA's deadline passing)\n→ For Central Govt → **Central Information Commission (CIC)**\n→ For State Govt → **State Information Commission (SIC)**\n→ CIC/SIC can order disclosure, impose penalty up to ₹25,000, and recommend disciplinary action\n\n**STEP 3 — High Court / Supreme Court**\n→ If CIC/SIC order is also unsatisfactory, you can challenge it in the relevant High Court under Article 226.\n\n📌 **Key grounds for appeal:**\n- Non-response within 30 days\n- Incomplete, vague, or misleading information\n- Unjustified rejection citing Section 8 exemptions\n- Charging excess fees\n\nWant me to draft an appeal notice for your specific case?`,
   },
 
   // ── FAQ CHIP 3: BPL / FEE EXEMPTION ──────────────────────────────────────
   {
-    patterns: [/bpl|below.?poverty|ration.*card|free.*rti|rti.*free|fee.*exempt|no.*fee|waiv.*fee|poor.*citizen/i],
+    patterns: [/\\b(bpl|below\\s?poverty|ration\\s?card|free\\s?rti|rti\\s?free|fee\\s?exempt|no\\s?fee|waiv.*fee|poor.*citizen)\\b/i],
     response: () =>
       `💚 **RTI is FREE for BPL Citizens!**\n\nUnder Rule 4 of the Right to Information (Regulation of Fee and Cost) Rules, 2005:\n\n✅ **Completely waived for BPL cardholders:**\n- Application fee (₹10)\n- Document inspection charges\n- Certified copy charges (₹2/page)\n- Postal/delivery charges\n- Diskette/floppy charges\n\n📄 **How to claim exemption:**\n1. Attach a self-attested copy of your BPL/AAY Ration Card\n2. Mention in your application: *"I am a BPL cardholder and hereby claim exemption from RTI fees as per Rule 4 of the RTI Fee Rules, 2005"*\n3. Our DigiLocker integration auto-fetches and verifies your BPL certificate — no manual upload needed!\n\n⚠️ **Important:** If the PIO demands a fee from a BPL applicant, this is a violation. You can report it in your First Appeal and seek penalty action under Section 20.\n\nDo you want to file a fee-exempt RTI right now?`,
   },
 
   // ── FAQ CHIP 4: ONLINE FILING ─────────────────────────────────────────────
   {
-    patterns: [/online|rtionline|portal|website|app.*file|file.*app|digital.*rti|e.?rti|how.*file|where.*file|submit.*rti/i],
+    patterns: [/\\b(online|rtionline|portal|website|digital\\s?rti|e-?rti|how.*file|where.*file|submit.*rti)\\b/i, /app.*file/i, /file.*app/i],
     response: () =>
       `🌐 **How to File RTI Online:**\n\n**Central Government Portal:**\n🔗 [rtionline.gov.in](https://rtionline.gov.in)\n- Covers: All 90+ Central Ministries & Departments\n- Payment: Online via credit/debit card, UPI, net banking\n- Fee: ₹10 (BPL: Free)\n- Track status online with your Registration Number\n\n**State-Wise Online Portals:**\n| State | Portal |\n|---|---|\n| Maharashtra | mahaonline.gov.in/RTI |\n| Karnataka | rti.kar.nic.in |\n| Delhi | rti.delhi.gov.in |\n| UP | rtionline.up.gov.in |\n| Kerala | rti.kerala.gov.in |\n| Tamil Nadu | rtionline.tn.gov.in |\n| Gujarat | rtionline.gujarat.gov.in |\n| Rajasthan | rti.rajasthan.gov.in |\n\n**Via This App (Recommended!):**\n→ Uses our 9-step AI wizard\n→ Auto-identifies the right PIO\n→ AI drafts the legal text for you\n→ Handles BPL fee verification automatically\n→ Tracks your deadline and sends reminders\n\nWant me to start the filing wizard now?`,
   },
 
   // ── FAQ CHIP 5: NO REPLY IN 30 DAYS ──────────────────────────────────────
   {
-    patterns: [/no.?reply|didn.*reply|silence|no.*response|missed.*deadline|overdue|ignored|not.*respond/i],
+    patterns: [/\\b(no\\s?reply|didn.*reply|silence|no\\s?response|missed.*deadline|overdue|ignored|not.*respond)\\b/i],
     response: () =>
       `🚨 **If You Got No Reply in 30 Days — Here's Exactly What to Do:**\n\n**Under Section 7(2) of the RTI Act — silence = refusal.** You have immediate legal recourse:\n\n**Option 1: First Appeal (Fastest)**\n→ File to the First Appellate Authority (FAA) in the same department\n→ Ground: *"Non-receipt of information within the statutory 30-day period under Section 7(1) of the RTI Act, 2005"*\n→ Attach: Copy of original RTI + proof of submission (postal receipt/acknowledgement)\n→ Timeline to file: Within 30 days of the PIO's deadline\n→ FAA must respond within 30-45 days\n\n**Option 2: Complaint to CIC/SIC (Stronger)**\n→ Under Section 18, you can directly file a complaint to the Information Commission\n→ This is separate from an appeal and can run simultaneously\n→ Useful when you suspect willful denial or corruption\n\n**Penalty the PIO Faces:**\n→ ₹250 per day of delay (up to ₹25,000 maximum)\n→ Disciplinary action under their service rules\n→ The penalty comes from the PIO's own salary — not the department budget\n\n📋 **Draft First Appeal — Key Phrases to Include:**\n- "The PIO failed to respond within the mandatory 30-day period"\n- "This silence constitutes deemed refusal under Section 7(2)"\n- "I request an order directing disclosure of the requested information"\n- "I request imposition of penalty under Section 19(8) read with Section 20"\n\nWant me to draft the complete First Appeal notice for you?`,
   },
 
   // ── FAQ CHIP 6: WHICH AUTHORITY ───────────────────────────────────────────
   {
-    patterns: [/which.?authority|which.?department|which.?ministry|who.*contact|where.*send|right.*department|correct.*pio|find.*pio|identify.*authority/i],
+    patterns: [/\\b(which\\s?authority|which\\s?department|which\\s?ministry|who.*contact|where.*send|right\\s?department|correct\\s?pio|find\\s?pio|identify\\s?authority)\\b/i],
     response: () =>
       `🏛️ **Finding the Right Authority — Complete Guide:**\n\n**RULE 1: Central vs. State**\n- Central Govt bodies (Railways, Income Tax, EPFO, Passports, Banks) → File with that Ministry's PIO\n- State Govt bodies (Police, Schools, Ration, Panchayat) → File with that State Department's PIO\n- Local bodies (Municipality, Corporation) → File with the local body's designated PIO\n\n**RULE 2: Common Departments & Their PIO Contacts**\n\n| Issue | Authority |\n|---|---|\n| Ration card, PDS | State Food & Civil Supplies Dept |\n| Pension (Central Govt) | Ministry of Finance / EPFO |\n| Land records, mutation | State Revenue Dept |\n| Road, pothole repairs | State PWD / Municipal Corporation |\n| Police FIR, complaint | State Home Dept / District SP office |\n| Income tax, PAN | Income Tax Dept, CBDT |\n| Bank account/loan issue | RBI (if PSU bank) |\n| Passport delay | Regional Passport Office |\n| Railway ticket refund | Zonal Railway HQ |\n| School fees, grants | State Education Dept |\n| Hospital negligence | State Health Dept |\n| MNREGA wages | State Rural Development Dept |\n| Scholarship status | State Social Welfare / Minority Affairs |\n| Contractor/Tender info | Relevant Ministry / State PWD |\n\n**RULE 3: When Unsure**\n→ File with the **nodal Ministry** that oversees the subject\n→ Under Section 6(3), the PIO is **legally bound** to transfer your application to the right department within 5 days — so even a wrong filing gets rerouted!\n\nJust tell me your specific problem and I'll instantly identify the exact PIO + department.`,
   },
@@ -81,7 +81,7 @@ const KB: { patterns: RegExp[]; response: (ctx: ConversationContext) => string }
 
   // ── FEE STRUCTURE ─────────────────────────────────────────────────────────
   {
-    patterns: [/fee|cost|charge|₹10|rupee|payment|how much|pricing|price/i],
+    patterns: [/\\b(fee|cost|charge|₹10|rupees?|payment|how much|pricing|price)\\b/i],
     response: () =>
       `💰 **Complete RTI Fee Structure:**\n\n**Application Fee (Central Govt):**\n→ ₹10 per application\n→ Mode: Indian Postal Order (IPO), Demand Draft, Banker's Cheque, or online payment\n→ Cash accepted at some offices\n\n**Additional Charges if Info is Provided:**\n| Type | Rate |\n|---|---|\n| Certified copy (A4) | ₹2 per page |\n| Certified copy (larger size) | Actual cost |\n| Soft copy (CD/Pendrive) | ₹50 per CD |\n| Sample/model | Actual cost |\n| Record inspection | Free for 1st hour, ₹5 per subsequent hour |\n\n**State-Wise Application Fees:**\n| State | Fee |\n|---|---|\n| Most states | ₹10 |\n| Maharashtra (online) | ₹20 |\n| Karnataka | ₹10 |\n| West Bengal | ₹10 |\n| J&K | ₹50 |\n\n**Free for BPL Citizens:** All fees waived — application + copies + inspection.\n\n**Appeals:** NO fee for First or Second Appeal.\n\nWant to know if you qualify for the BPL fee waiver?`,
   },
@@ -137,7 +137,7 @@ const KB: { patterns: RegExp[]; response: (ctx: ConversationContext) => string }
     },
   },
   {
-    patterns: [/road|pothole|bridge|construction|pwd|infrastructure|repair|contractor.*road/i],
+    patterns: [/\\b(road|pothole|bridge|construction|pwd|infrastructure|repair|contractor.*road)\\b/i],
     response: (ctx) => {
       ctx.userTopics.push('infrastructure/road');
       return `🚧 **Filing RTI for Road/Infrastructure Issues:**\n\n**Authority to file with:**\n→ **National Highways:** NHAI / Ministry of Road Transport & Highways\n→ **State Roads:** State Public Works Department (PWD)\n→ **City Roads:** Municipal Corporation / Nagar Panchayat\n→ **Village Roads (PMGSY):** District PMGSY office / State Rural Roads Agency\n\n**What to ask for in your RTI:**\n1. Details of the contractor awarded work on [Road Name/Section]\n2. Contract value and scope of work\n3. Date of work completion as per contract\n4. Quality inspection reports and results\n5. Complaint log and action taken\n6. Details of maintenance responsibility and schedule\n\n**This RTI has proven powerful for:**\n- Exposing shoddy construction and re-tendering scams\n- Holding contractors accountable by making their names public\n- Getting pothole repairs done — since officials know you're watching\n\n**Sample text:**\n*"Please provide copies of all contracts awarded for road construction/repair on [Name of Road] in the period [Year-Year], along with contractor details, amounts paid, and quality inspection reports."*\n\nWant me to generate the full RTI application?`;
