@@ -98,7 +98,13 @@
     "filedOn": "दर्ज किया",
     "authority": "विभाग",
     "viewDetails": "विवरण देखें",
-    "checkReply": "उत्तर जाँचें"
+    "checkReply": "उत्तर जाँचें",
+    "home": "होम",
+    "pageDesc": "अपने आरटीआई अनुरोधों की स्थिति और 30-दिन की समय सीमा की निगरानी करें।",
+    "fileNew": "नया",
+    "filed": "दायर किया गया:",
+    "publicStatus": "सार्वजनिक",
+    "daysRemaining": "दिन शेष"
   },
   "checkReply": {
     "pageTitle": "अपना RTI उत्तर जाँचें",

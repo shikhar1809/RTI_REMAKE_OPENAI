@@ -98,7 +98,13 @@
     "filedOn": "Filed on",
     "authority": "Authority",
     "viewDetails": "View details",
-    "checkReply": "Check Reply"
+    "checkReply": "Check Reply",
+    "home": "Home",
+    "pageDesc": "Monitor the status and 30-day deadlines of your RTI requests.",
+    "fileNew": "New",
+    "filed": "Filed:",
+    "publicStatus": "Public",
+    "daysRemaining": "days remaining"
   },
   "checkReply": {
     "pageTitle": "Check Your RTI Reply",

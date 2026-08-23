@@ -18,7 +18,7 @@ export default function TrackPage() {
       <div className="flex flex-col items-center py-8 px-4">
         <div className="w-full max-w-3xl p-4 sm:p-8">
           <Link to="/home" className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md">
-            <ArrowLeft size={16} /> Home
+            <ArrowLeft size={16} /> {t("home", "Home")}
           </Link>
           <div className="bg-white/95 border-2 border-gray-300 rounded-2xl p-5 shadow-md flex items-center justify-between mb-8">
             <div>
@@ -104,20 +104,20 @@ function RTICard({ app }: { app: RTIApplication }) {
         
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs">
           <div className="flex items-center gap-1.5 text-gray-500">
-            <span className="font-medium text-gray-700">Filed:</span>
+            <span className="font-medium text-gray-700">{t("filed", "Filed:")}</span>
             {new Date(app.filedDate).toISOString()}
           </div>
           {app.status === "pending" && (
             <div className={`flex items-center gap-1.5 font-medium ${isOverdue ? "text-red-600" : isUrgent ? "text-amber-600" : "text-green-600"}`}>
               <Timer size={14} />
-              {isOverdue ? `${Math.abs(daysRemaining)} days overdue` : `${daysRemaining} days remaining`}
+              {isOverdue ? `${Math.abs(daysRemaining)} ${t("daysOverdue", "days overdue")}` : `${daysRemaining} ${t("daysRemaining", "days remaining")}`}
             </div>
           )}
           
           <div className="flex items-center gap-2 border-l border-gray-200 pl-4 ml-2">
             <span className="font-medium text-gray-700 flex items-center gap-1">
               {app.isPublic ? <Eye size={14} className="text-green-600" /> : <EyeOff size={14} className="text-gray-400" />}
-              Public
+              {t("publicStatus", "Public")}
             </span>
             <button
               onClick={handleToggleClick}
@@ -135,7 +135,7 @@ function RTICard({ app }: { app: RTIApplication }) {
         </Link>
         {app.status === "replied" && (
           <Link to={`/check-reply`} className="btn-primary w-full sm:w-auto flex-1">
-            Check Reply
+            {t("checkReply", "Check Reply")}
           </Link>
         )}
       </div>
