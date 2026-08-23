@@ -384,7 +384,7 @@ export default function FilePage() {
                   </button>
                 </div>
               </>
-            ) : currentStep === 3 ? (
+            ) : currentStep === 4 ? (
               <>
                 <h1 className="text-xl font-bold text-gray-900 mb-2">{t("step2Title", "Select the Authority")}</h1>
                 <p className="text-sm text-gray-500 mb-6">{t("step2Desc", "Which state government or central authority?")}</p>
