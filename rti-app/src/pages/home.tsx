@@ -199,27 +199,27 @@ export default function HomePage() {
                     </button>
                   </div>
                   <div className="divide-y divide-gray-100 max-h-60 overflow-y-auto text-left">
-                    <div className="p-3 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <Link to="/track" className="p-3 hover:bg-gray-50 cursor-pointer transition-colors block">
                       <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                         {t("alert1Title", "Deadline Approaching")}
                       </p>
                       <p className="text-xs text-gray-600 mt-1">{t("alert1Desc", "Kerala Municipal Corporation has 2 days left to reply to your RTI on Road Repair.")}</p>
-                    </div>
-                    <div className="p-3 hover:bg-gray-50 cursor-pointer transition-colors">
+                    </Link>
+                    <Link to="/stats" className="p-3 hover:bg-gray-50 cursor-pointer transition-colors block">
                       <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                         {t("alert2Title", "Community Impact")}
                       </p>
                       <p className="text-xs text-gray-600 mt-1">{t("alert2Desc", "12 people viewed the RTI you published to the Public Archive!")}</p>
-                    </div>
-                    <div className="p-3 hover:bg-gray-50 cursor-pointer transition-colors">
+                    </Link>
+                    <Link to="/track" className="p-3 hover:bg-gray-50 cursor-pointer transition-colors block">
                       <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-green-500"></span>
                         {t("alert3Title", "Reply Received")}
                       </p>
                       <p className="text-xs text-gray-600 mt-1">{t("alert3Desc", "Your RTI on Land Mutation has been resolved. Tap to view.")}</p>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               )}
