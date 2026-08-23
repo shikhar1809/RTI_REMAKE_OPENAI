@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { Suspense, lazy, useState } from 'react';
+import { useState } from 'react';
 import { PostHogProvider } from '@/components/PostHogProvider';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { BootSequence } from '@/components/BootSequence';
@@ -7,20 +7,20 @@ import { PageTransitionLoader } from '@/components/PageTransitionLoader';
 import { GlobalAIAssistant } from '@/components/GlobalAIAssistant';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
-// Lazy load pages for performance
-const LoginPage = lazy(() => import('@/pages/login'));
-const LocationPage = lazy(() => import('@/pages/onboarding/location'));
-const RightsPage = lazy(() => import('@/pages/onboarding/rights'));
-const HomePage = lazy(() => import('@/pages/home'));
-const FilePage = lazy(() => import('@/pages/file'));
-const ManagePage = lazy(() => import('@/pages/manage'));
-const TrackPage = lazy(() => import('@/pages/track'));
-const TrackDetailPage = lazy(() => import('@/pages/track-detail'));
-const CheckReplyPage = lazy(() => import('@/pages/check-reply'));
-const AboutPage = lazy(() => import('@/pages/about'));
-const DocumentsPage = lazy(() => import('@/pages/documents'));
-const ToolkitPage = lazy(() => import('@/pages/toolkit'));
-const StatsPage = lazy(() => import('@/pages/stats'));
+// Static imports — avoids stale chunk errors on HMR/navigation
+import LoginPage from '@/pages/login';
+import LocationPage from '@/pages/onboarding/location';
+import RightsPage from '@/pages/onboarding/rights';
+import HomePage from '@/pages/home';
+import FilePage from '@/pages/file';
+import ManagePage from '@/pages/manage';
+import TrackPage from '@/pages/track';
+import TrackDetailPage from '@/pages/track-detail';
+import CheckReplyPage from '@/pages/check-reply';
+import AboutPage from '@/pages/about';
+import DocumentsPage from '@/pages/documents';
+import ToolkitPage from '@/pages/toolkit';
+import StatsPage from '@/pages/stats';
 
 export default function App() {
   const [hasBooted, setHasBooted] = useState(() => {
@@ -47,12 +47,7 @@ export default function App() {
         <GlobalAIAssistant />
         {location.pathname !== '/home' && <LanguageSwitcher />}
         <main className="flex-1 flex flex-col">
-          <Suspense fallback={
-            <div className="flex-1 flex items-center justify-center">
-              <div className="w-10 h-10 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
-            </div>
-          }>
-            <ErrorBoundary>
+          <ErrorBoundary>
             <Routes>
               {/* Redirect root to login */}
               <Route path="/" element={<Navigate to="/login" replace />} />
@@ -73,8 +68,7 @@ export default function App() {
 
               <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
-            </ErrorBoundary>
-          </Suspense>
+          </ErrorBoundary>
         </main>
       </div>
     </PostHogProvider>
