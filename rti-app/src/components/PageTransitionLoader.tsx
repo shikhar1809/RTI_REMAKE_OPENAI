@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { User, Scan, Send, MessageSquare } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function PageTransitionLoader() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const location = useLocation();
+  const { t } = useTranslation(undefined, { keyPrefix: "common" });
 
   useEffect(() => {
     // Every time the location changes, show the loader
@@ -42,10 +44,10 @@ export function PageTransitionLoader() {
   if (!isLoading) return null;
 
   const steps = [
-    { icon: User, label: "Citizen Filing" },
-    { icon: Scan, label: "Document Scanning" },
-    { icon: Send, label: "RTI Filed" },
-    { icon: MessageSquare, label: "Got Reply" }
+    { icon: User, label: t("loaderStep1", "Citizen Filing") },
+    { icon: Scan, label: t("loaderStep2", "Document Scanning") },
+    { icon: Send, label: t("loaderStep3", "RTI Filed") },
+    { icon: MessageSquare, label: t("loaderStep4", "Got Reply") }
   ];
 
   return (

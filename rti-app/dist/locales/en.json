@@ -17,7 +17,11 @@
     "error": "Something went wrong. Please try again.",
     "language": "Language",
     "step": "Step",
-    "of": "of"
+    "of": "of",
+    "loaderStep1": "Citizen Filing",
+    "loaderStep2": "Document Scanning",
+    "loaderStep3": "RTI Filed",
+    "loaderStep4": "Got Reply"
   },
   "landing": {
     "heroTitle": "Know Your Rights.",
