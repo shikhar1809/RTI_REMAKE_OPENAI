@@ -61,15 +61,40 @@ export default function FilePage() {
     setTimeout(() => setShowToast(false), 3000);
   }
 
+  const [fileError, setFileError] = useState("");
+
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    setFileError("");
     const files = Array.from(e.target.files || []);
-    const newAttachments = files.map(f => ({
-      name: f.name,
-      size: f.size > 1024 * 1024 ? `${(f.size / (1024 * 1024)).toFixed(1)} MB` : `${(f.size / 1024).toFixed(0)} KB`,
-      type: f.type.startsWith("image/") ? "image" : "document",
-      url: URL.createObjectURL(f),
-    }));
-    setAttachments(prev => [...prev, ...newAttachments]);
+    
+    // Only accept one file at a time per user instruction, but since we map we can handle if they somehow select multiple
+    const validFiles = [];
+    
+    for (const f of files) {
+      // Check file extension/type manually for better error message
+      const isImage = f.type.startsWith("image/") || /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name);
+      const isPdf = f.type === "application/pdf" || /\.pdf$/i.test(f.name);
+      const isWord = f.type === "application/msword" || 
+                     f.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || 
+                     /\.(doc|docx)$/i.test(f.name);
+                     
+      if (!isImage && !isPdf && !isWord) {
+        setFileError(`Invalid file type: ${f.name}. Please upload only Images, PDFs, or Word documents.`);
+        continue; // Skip invalid files
+      }
+      validFiles.push(f);
+    }
+    
+    if (validFiles.length > 0) {
+      const newAttachments = validFiles.map(f => ({
+        name: f.name,
+        size: f.size > 1024 * 1024 ? `${(f.size / (1024 * 1024)).toFixed(1)} MB` : `${(f.size / 1024).toFixed(0)} KB`,
+        type: f.type.startsWith("image/") || /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name) ? "image" : "document",
+        url: URL.createObjectURL(f),
+      }));
+      setAttachments(prev => [...prev, ...newAttachments]);
+    }
+    
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
@@ -231,14 +256,13 @@ export default function FilePage() {
                 <div className="mb-2">
                   <h2 className="text-sm font-semibold text-gray-700 mb-1">Attach Supporting Documents</h2>
                   <p className="text-sm text-gray-500 mb-4">
-                    Upload photos, screenshots, receipts, or any documents that support your RTI request. <span className="font-medium text-gray-700">This step is optional.</span>
+                    Please upload your documents <strong>one by one</strong> (photos, screenshots, receipts, or PDFs). <span className="font-medium text-gray-700">This step is optional.</span>
                   </p>
 
                   {/* Upload area */}
                   <input
                     ref={fileInputRef}
                     type="file"
-                    multiple
                     accept="image/*,.pdf,.doc,.docx"
                     onChange={handleFileSelect}
                     className="hidden"
@@ -250,9 +274,19 @@ export default function FilePage() {
                     <div className="w-12 h-12 bg-gray-100 group-hover:bg-green-100 rounded-full flex items-center justify-center transition-colors">
                       <Upload size={22} className="text-gray-400 group-hover:text-green-600 transition-colors" />
                     </div>
-                    <p className="text-sm font-semibold text-gray-600 group-hover:text-green-700">Click to upload files</p>
+                    <p className="text-sm font-semibold text-gray-600 group-hover:text-green-700">Click to upload a file</p>
                     <p className="text-xs text-gray-400">Images, PDFs, Word documents</p>
                   </button>
+                  
+                  {/* Error Message */}
+                  {fileError && (
+                    <div className="mt-3 bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
+                      <AlertOctagon size={16} className="text-red-600 mt-0.5 shrink-0" />
+                      <p className="text-xs text-red-800 font-medium leading-tight">
+                        {fileError}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Attached files list */}
