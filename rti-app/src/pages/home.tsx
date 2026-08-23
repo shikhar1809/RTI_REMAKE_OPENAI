@@ -109,7 +109,7 @@ export default function HomePage() {
                   >
                     {Object.values(STATES).map((state) => (
                       <option key={state.id} value={state.id}>
-                        {state.name}
+                        {t(`state_${state.id}`, state.name)}
                       </option>
                     ))}
                   </select>
@@ -146,7 +146,7 @@ export default function HomePage() {
                 }`}
               >
                 {notificationsEnabled ? <Bell size={18} /> : <BellOff size={18} />}
-                {notificationsEnabled ? "Alerts On" : "Alerts Off"}
+                {notificationsEnabled ? t("alertsOn", "Alerts On") : t("alertsOff", "Alerts Off")}
               </button>
             </div>
           </div>
@@ -158,18 +158,18 @@ export default function HomePage() {
                 <div className="flex items-start gap-2">
                   <span className="text-amber-600 text-sm mt-0.5">⚠️</span>
                   <p className="text-xs font-bold text-amber-900 leading-tight">
-                    Your RTI filing stopped mid-progress (Step {currentStep}). Do you want to continue?
+                    {t("midProgress", { step: currentStep, defaultValue: `Your RTI filing stopped mid-progress (Step ${currentStep}). Do you want to continue?` })}
                   </p>
                 </div>
                 <div className="flex gap-2">
                   <Link to="/file" className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-1.5 rounded-md text-center text-xs transition-colors shadow-sm">
-                    Continue Draft
+                    {t("continueDraft", "Continue Draft")}
                   </Link>
                   <button 
                     onClick={() => resetWizard()} 
                     className="flex-1 bg-white hover:bg-amber-100 text-amber-700 border border-amber-300 font-bold py-1.5 rounded-md text-center text-xs transition-colors shadow-sm"
                   >
-                    Start Fresh
+                    {t("startFresh", "Start Fresh")}
                   </button>
                 </div>
               </div>
@@ -183,17 +183,17 @@ export default function HomePage() {
               >
                 <div className="flex items-center gap-2">
                   <Bell size={18} />
-                  NOTIFICATIONS
+                  {t("notifications", "NOTIFICATIONS")}
                 </div>
                 <div className="bg-red-500 text-white text-xs font-black px-2 py-0.5 rounded-full shadow-sm animate-pulse">
-                  3 NEW
+                  3 {t("new", "NEW")}
                 </div>
               </button>
               
               {showNotifications && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden animate-in slide-in-from-top-2">
                   <div className="p-3 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
-                    <h3 className="font-bold text-gray-900 text-sm">Recent Alerts</h3>
+                    <h3 className="font-bold text-gray-900 text-sm">{t("recentAlerts", "Recent Alerts")}</h3>
                     <button onClick={() => setShowNotifications(false)} className="text-gray-400 hover:text-gray-600">
                       <X size={16} />
                     </button>
@@ -202,23 +202,23 @@ export default function HomePage() {
                     <div className="p-3 hover:bg-gray-50 cursor-pointer transition-colors">
                       <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                        Deadline Approaching
+                        {t("alert1Title", "Deadline Approaching")}
                       </p>
-                      <p className="text-xs text-gray-600 mt-1">Kerala Municipal Corporation has 2 days left to reply to your RTI on Road Repair.</p>
+                      <p className="text-xs text-gray-600 mt-1">{t("alert1Desc", "Kerala Municipal Corporation has 2 days left to reply to your RTI on Road Repair.")}</p>
                     </div>
                     <div className="p-3 hover:bg-gray-50 cursor-pointer transition-colors">
                       <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                        Community Impact
+                        {t("alert2Title", "Community Impact")}
                       </p>
-                      <p className="text-xs text-gray-600 mt-1">12 people viewed the RTI you published to the Public Archive!</p>
+                      <p className="text-xs text-gray-600 mt-1">{t("alert2Desc", "12 people viewed the RTI you published to the Public Archive!")}</p>
                     </div>
                     <div className="p-3 hover:bg-gray-50 cursor-pointer transition-colors">
                       <p className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                        Reply Received
+                        {t("alert3Title", "Reply Received")}
                       </p>
-                      <p className="text-xs text-gray-600 mt-1">Your RTI on Land Mutation has been resolved. Tap to view.</p>
+                      <p className="text-xs text-gray-600 mt-1">{t("alert3Desc", "Your RTI on Land Mutation has been resolved. Tap to view.")}</p>
                     </div>
                   </div>
                 </div>
@@ -229,7 +229,7 @@ export default function HomePage() {
               to="/manage"
               className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md flex justify-center items-center gap-2 relative"
             >
-              MANAGE REPORTS
+              {t("manageReports", "MANAGE REPORTS")}
               {newRepliesCount > 0 && (
                 <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
                   {newRepliesCount}
@@ -255,7 +255,7 @@ export default function HomePage() {
               to="/stats"
               className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
-              {t("rtiStats", "PUBLIC RTI ARCHIEVE")}
+              {t("rtiStats", "PUBLIC RTI ARCHIVE")}
             </Link>
 
             <Link
