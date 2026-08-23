@@ -107,11 +107,13 @@ export default function ToolkitPage() {
     <ProtectedRoute>
       <div className="relative flex flex-col items-center h-[calc(100vh-4rem)] overflow-hidden">
 
-        {/* Back arrow — top left */}
-        <div className="absolute top-4 left-4 z-30">
-          <Link to="/home" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/70 backdrop-blur-md text-gray-600 hover:bg-white shadow-sm transition-all">
-            <ArrowLeft size={20} />
-          </Link>
+        {/* Back arrow — top left constrained */}
+        <div className="absolute top-4 left-0 right-0 z-30 flex justify-center pointer-events-none px-4">
+          <div className="w-full max-w-2xl flex justify-start">
+            <Link to="/home" className="pointer-events-auto w-10 h-10 flex items-center justify-center rounded-full bg-white/70 backdrop-blur-md text-gray-600 hover:bg-white shadow-sm transition-all border border-gray-200">
+              <ArrowLeft size={20} />
+            </Link>
+          </div>
         </div>
 
         {/* ─── EMPTY STATE (before first message) ─── */}
