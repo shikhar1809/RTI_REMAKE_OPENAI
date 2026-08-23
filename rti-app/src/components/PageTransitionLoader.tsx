@@ -11,25 +11,14 @@ export function PageTransitionLoader() {
   const { t } = useTranslation(undefined, { keyPrefix: "common" });
 
   useEffect(() => {
-    // Randomize tip between 1 and 3
     setActiveTip(Math.floor(Math.random() * 3) + 1);
-    // Every time the location changes, show the loader
     setIsLoading(true);
     setActiveStep(0);
-    // Base minimum animation time is 2.5 seconds (locked)
-    const minAnimationTime = 2500;
-    // Step interval: 2500ms / 4 steps = 625ms per step
-    const stepInterval = 625;
-    
-    // Simulate real server load (e.g. fetching user data, checking API)
-    // In a real production app, this would be tied to your actual global isFetching state.
-    // Here we simulate a random server delay between 500ms and 4000ms
-    const simulatedServerLoadTime = Math.random() * 3500 + 500; 
-    
-    // The loader will stay for AT LEAST 2.5s. 
-    // If the server takes longer, it will wait for the server.
-    const totalWaitTime = Math.max(minAnimationTime, simulatedServerLoadTime);
-    
+
+    // Snappy 800ms transition — fast enough to not feel like a broken white screen
+    const totalWaitTime = 800;
+    const stepInterval = totalWaitTime / 4;
+
     const interval = setInterval(() => {
       setActiveStep(prev => (prev < 3 ? prev + 1 : prev));
     }, stepInterval);
