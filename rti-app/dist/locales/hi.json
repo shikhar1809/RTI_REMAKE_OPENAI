@@ -132,7 +132,32 @@
     "tipTitle": "सुझाव: सार्वजनिक संग्रह",
     "tipDesc": "आप अन्य लोगों की सहायता के लिए अपने ट्रैकिंग डैशबोर्ड से किसी भी समय अपनी आरटीआई को सार्वजनिक या निजी टॉगल कर सकते हैं।",
     "submitHome": "सर्वेक्षण जमा करें और होम पर जाएं",
-    "savedLater": "विवरण बाद के लिए सहेजे गए!"
+    "savedLater": "विवरण बाद के लिए सहेजे गए!",
+    "bplTitle": "BPL Verification",
+    "bplConfirmedTitle": "Below Poverty Line (BPL) Confirmed",
+    "bplConfirmedDesc": "We automatically verified your BPL status from your DigiLocker documents. You are completely exempt from the ₹10 RTI fee.",
+    "bplStandardTitle": "Standard Filing Required",
+    "bplStandardDesc": "No valid BPL certificate was found in your Document Vault. The standard ₹10 RTI processing fee will apply.",
+    "routingTitle": "Routing Application...",
+    "routingDesc": "Our AI is analyzing your problem to find the exact Ministry and Public Information Officer (PIO)...",
+    "authorityFoundTitle": "Public Authority Identified",
+    "authorityFoundLabel": "Target Authority",
+    "authorityFoundDesc": "Based on your query, we have routed this to the most appropriate Public Information Officer.",
+    "paymentTitle": "Payment Gateway",
+    "paymentSubtitle": "Please pay the mandatory RTI fee to proceed.",
+    "paymentFeeLabel": "RTI Application Fee",
+    "paymentTotal": "Total Amount",
+    "paymentProcessing": "Processing Payment...",
+    "paymentUpi": "Pay via UPI",
+    "paymentNetBanking": "Net Banking / Debit Card",
+    "submitTitle": "Final Review & Submit",
+    "submitSubtitle": "You are about to legally submit this RTI application.",
+    "submitAppReady": "Application Ready",
+    "submitAppReadyDesc": "Your draft and attachments are packaged.",
+    "submitFeePaid": "Fee Paid",
+    "submitFeeWaived": "Fee Waived (BPL)",
+    "submitFeeDesc": "All required payments are settled.",
+    "autoFillToast": "Details auto-filled from your saved profile!"
   },
   "track": {
     "pageTitle": "मेरे RTI आवेदन",
@@ -297,7 +322,8 @@
     "home": "होम",
     "manageReportsTitle": "रिपोर्ट प्रबंधित करें",
     "manageReportsDesc": "नया आरटीआई अनुरोध दायर करें या मौजूदा अनुरोधों की स्थिति जांचें।",
-    "fileNewRti": "एक नई आरटीआई दर्ज करें"
+    "fileNewRti": "एक नई आरटीआई दर्ज करें",
+    "fileNewDesc": "AI-guided • Takes 5 minutes • 100% free"
   },
   "stats": {
     "pageTitle": "सार्वजनिक आरटीआई संग्रह",

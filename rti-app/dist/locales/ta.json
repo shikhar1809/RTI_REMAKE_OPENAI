@@ -132,7 +132,32 @@
     "tipTitle": "உதவிக்குறிப்பு: பொது காப்பகம்",
     "tipDesc": "மற்றவர்களுக்கு உதவ உங்கள் கண்காணிப்பு டாஷ்போர்டில் இருந்து எந்த நேரத்திலும் உங்கள் ஆர்டிஐ பொது அல்லது தனிப்பட்டதாக மாற்றலாம்.",
     "submitHome": "கணக்கெடுப்பைச் சமர்ப்பித்து முகப்புக்குச் செல்லவும்",
-    "savedLater": "விவரங்கள் பின்னர் சேமிக்கப்பட்டன!"
+    "savedLater": "விவரங்கள் பின்னர் சேமிக்கப்பட்டன!",
+    "bplTitle": "BPL Verification",
+    "bplConfirmedTitle": "Below Poverty Line (BPL) Confirmed",
+    "bplConfirmedDesc": "We automatically verified your BPL status from your DigiLocker documents. You are completely exempt from the ₹10 RTI fee.",
+    "bplStandardTitle": "Standard Filing Required",
+    "bplStandardDesc": "No valid BPL certificate was found in your Document Vault. The standard ₹10 RTI processing fee will apply.",
+    "routingTitle": "Routing Application...",
+    "routingDesc": "Our AI is analyzing your problem to find the exact Ministry and Public Information Officer (PIO)...",
+    "authorityFoundTitle": "Public Authority Identified",
+    "authorityFoundLabel": "Target Authority",
+    "authorityFoundDesc": "Based on your query, we have routed this to the most appropriate Public Information Officer.",
+    "paymentTitle": "Payment Gateway",
+    "paymentSubtitle": "Please pay the mandatory RTI fee to proceed.",
+    "paymentFeeLabel": "RTI Application Fee",
+    "paymentTotal": "Total Amount",
+    "paymentProcessing": "Processing Payment...",
+    "paymentUpi": "Pay via UPI",
+    "paymentNetBanking": "Net Banking / Debit Card",
+    "submitTitle": "Final Review & Submit",
+    "submitSubtitle": "You are about to legally submit this RTI application.",
+    "submitAppReady": "Application Ready",
+    "submitAppReadyDesc": "Your draft and attachments are packaged.",
+    "submitFeePaid": "Fee Paid",
+    "submitFeeWaived": "Fee Waived (BPL)",
+    "submitFeeDesc": "All required payments are settled.",
+    "autoFillToast": "Details auto-filled from your saved profile!"
   },
   "track": {
     "pageTitle": "என் RTI விண்ணப்பங்கள்",
@@ -297,7 +322,8 @@
     "home": "முகப்பு",
     "manageReportsTitle": "அறிக்கைகளை நிர்வகிக்கவும்",
     "manageReportsDesc": "புதிய ஆர்டிஐ கோரிக்கையை தாக்கல் செய்யுங்கள் அல்லது இருக்கும் கோரிக்கைகளின் நிலையை சரிபார்க்கவும்.",
-    "fileNewRti": "புதிய ஆர்டிஐ தாக்கல் செய்"
+    "fileNewRti": "புதிய ஆர்டிஐ தாக்கல் செய்",
+    "fileNewDesc": "AI-guided • Takes 5 minutes • 100% free"
   },
   "stats": {
     "pageTitle": "பொது ஆர்டிஐ காப்பகம்",

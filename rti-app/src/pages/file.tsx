@@ -56,6 +56,9 @@ export default function FilePage() {
   const [isRouting, setIsRouting] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
   const [loadingText, setLoadingText] = useState("fetching basic details...");
+  const [routingError, setRoutingError] = useState(false);
+  const [generatingError, setGeneratingError] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
 
   const isBpl = isBPLVerified();
 
@@ -133,7 +136,13 @@ export default function FilePage() {
     if (currentStep === 4) {
       // Step 4 -> 5: AI Department Routing
       setIsRouting(true);
+      setRoutingError(false);
       setTimeout(() => {
+        if (Math.random() < 0.1) {
+          setIsRouting(false);
+          setRoutingError(true);
+          return;
+        }
         setIsRouting(false);
         const next = 5;
         setCurrentStep(next);
@@ -145,11 +154,17 @@ export default function FilePage() {
     if (currentStep === 6) {
       // Step 6 -> 7: AI Draft Generation
       setIsGenerating(true);
+      setGeneratingError(false);
       setLoadingText("analyzing department format...");
       setTimeout(() => setLoadingText("loading optimal template..."), 1500);
       setTimeout(() => setLoadingText("preparing final legal draft..."), 3000);
       
       setTimeout(() => {
+        if (Math.random() < 0.1) {
+          setIsGenerating(false);
+          setGeneratingError(true);
+          return;
+        }
         const profile = { 
           name: name || savedFullName || "[Your Name]", 
           address: address || savedAddress || "[Your Address]", 
@@ -218,8 +233,13 @@ export default function FilePage() {
 
   const handlePayment = () => {
     setIsPaying(true);
+    setPaymentError(false);
     setTimeout(() => {
       setIsPaying(false);
+      if (Math.random() < 0.1) {
+        setPaymentError(true);
+        return;
+      }
       goNext(); // Go to step 9
     }, 2000);
   };
@@ -266,27 +286,25 @@ export default function FilePage() {
           
           {lastSynced && currentStep < 10 && (
             <div className="mb-8 bg-white/95 border-2 border-gray-300 rounded-2xl p-4 shadow-md">
-              <div className="flex items-center justify-between text-sm font-bold text-gray-700 mb-2">
-                <span>
-                  {tc("step", "Step")} {currentStep} {tc("of", "of")} {TOTAL_STEPS}
-                </span>
-                <span className="text-gray-400 text-xs truncate max-w-[150px]">
-                  {currentStep === 1 && "Personal Details"}
-                  {currentStep === 2 && "BPL Verification"}
-                  {currentStep === 3 && "Problem Description"}
-                  {currentStep === 4 && "Authority Level"}
-                  {currentStep === 5 && "Department Routing"}
-                  {currentStep === 6 && "Attachments"}
-                  {currentStep === 7 && "Draft Review"}
-                  {currentStep === 8 && "Payment Gateway"}
-                  {currentStep === 9 && "Final Submission"}
+              <div className="flex items-center justify-between text-sm font-bold text-gray-700 mb-3">
+                <span>{tc("step", "Step")} {currentStep} {tc("of", "of")} {TOTAL_STEPS}</span>
+                <span className="text-xs text-gray-400 font-medium">
+                  {["Personal Details","BPL Check","Problem","Authority","Routing","Attachments","Draft","Payment","Submit"][currentStep - 1]}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
-                />
+              <div className="flex items-center gap-1 mb-3">
+                {Array.from({ length: TOTAL_STEPS - 1 }, (_, i) => (
+                  <div
+                    key={i}
+                    className={`flex-1 h-1.5 rounded-full transition-all duration-300 ${
+                      i + 1 < currentStep
+                        ? "bg-green-500"
+                        : i + 1 === currentStep
+                        ? "bg-green-600 ring-2 ring-green-300"
+                        : "bg-gray-200"
+                    }`}
+                  />
+                ))}
               </div>
             </div>
           )}
@@ -481,7 +499,19 @@ export default function FilePage() {
               </>
             ) : currentStep === 5 ? (
               // Step 5: Department Routing (AI Loading)
-              isRouting ? (
+              routingError ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <AlertOctagon size={32} />
+                  </div>
+                  <h1 className="text-xl font-bold text-gray-900 mb-2">Routing Failed</h1>
+                  <p className="text-sm text-gray-500 mb-6">We couldn't identify the exact authority. Please try again.</p>
+                  <div className="flex gap-3">
+                    <button onClick={goBack} className="btn-secondary flex-1"><ArrowLeft size={16} /> Back</button>
+                    <button onClick={() => { setRoutingError(false); goNext(); }} className="btn-primary flex-1">Retry <ArrowRight size={16} /></button>
+                  </div>
+                </div>
+              ) : isRouting ? (
                 <div className="flex flex-col items-center justify-center py-12 px-4 text-center min-h-[300px]">
                   <div className="relative w-16 h-16 mb-6">
                     <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
@@ -566,7 +596,19 @@ export default function FilePage() {
               </>
             ) : currentStep === 7 ? (
               // Step 7: Draft Generation & Review
-              isGenerating ? (
+              generatingError ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <AlertOctagon size={32} />
+                  </div>
+                  <h1 className="text-xl font-bold text-gray-900 mb-2">Draft Generation Failed</h1>
+                  <p className="text-sm text-gray-500 mb-6">The AI couldn't draft your application. Please try again.</p>
+                  <div className="flex gap-3">
+                    <button onClick={goBack} className="btn-secondary flex-1"><ArrowLeft size={16} /> Back</button>
+                    <button onClick={() => { setGeneratingError(false); goNext(); }} className="btn-primary flex-1">Retry <ArrowRight size={16} /></button>
+                  </div>
+                </div>
+              ) : isGenerating ? (
                 <div className="flex flex-col items-center justify-center py-12 px-4 text-center min-h-[300px]">
                   <div className="relative w-16 h-16 mb-6">
                     <div className="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
@@ -636,6 +678,18 @@ export default function FilePage() {
                   <div className="flex justify-center items-center py-6">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
                     <span className="ml-3 font-medium text-gray-600">Processing Payment...</span>
+                  </div>
+                ) : paymentError ? (
+                  <div className="text-center py-4">
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+                      <AlertOctagon size={24} className="text-red-500 mx-auto mb-2" />
+                      <p className="text-sm font-bold text-red-800">Payment Failed</p>
+                      <p className="text-xs text-red-600 mt-1">Transaction declined. Please try again.</p>
+                    </div>
+                    <div className="space-y-3">
+                      <button onClick={handlePayment} className="w-full btn-primary">Retry Payment <ArrowRight size={16} /></button>
+                      <button onClick={goBack} className="btn-secondary w-full"><ArrowLeft size={16} /> Back</button>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-3">

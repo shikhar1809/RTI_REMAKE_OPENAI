@@ -153,6 +153,21 @@ export default function HomePage() {
 
           <div className="flex flex-col gap-3 max-w-sm mx-auto w-full">
             
+            {applications.length === 0 && (
+              <Link
+                to="/file"
+                className="relative overflow-hidden bg-gradient-to-br from-green-600 to-emerald-700 text-white py-5 px-6 rounded-2xl font-bold text-center transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.99] block"
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-3xl">📋</span>
+                  <span className="text-lg font-black tracking-wide">{t("fileNewRti", "FILE A NEW RTI")}</span>
+                  <span className="text-green-100 text-xs font-medium">{t("fileNewDesc", "AI-guided • Takes 5 minutes • 100% free")}</span>
+                </div>
+                {/* Animated ring */}
+                <span className="absolute inset-0 rounded-2xl ring-4 ring-white/20 animate-ping opacity-30" />
+              </Link>
+            )}
+
             {currentStep > 1 && currentStep < 6 && (
               <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-3 shadow-sm flex flex-col gap-2 mb-1 animate-in fade-in slide-in-from-bottom-2">
                 <div className="flex items-start gap-2">
