@@ -37,7 +37,7 @@ export default function ManagePage() {
               className="bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 flex items-center justify-center gap-2"
             >
               <FileText size={20} />
-              {t("fileNewReq", "FILE NEW REQUEST")}
+              FILE A NEW RTI
             </Link>
 
             <Link
@@ -45,7 +45,7 @@ export default function ManagePage() {
               className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-4 px-6 rounded-xl font-bold text-center transition-all shadow-md flex items-center justify-center gap-2 relative"
             >
               <Activity size={20} />
-              {t("viewTrack", "VIEW / TRACK EXISTING REPORTS")}
+              VIEW/TRACK EXISTING REPORTS
               {newRepliesCount > 0 && (
                 <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
                   {newRepliesCount}
