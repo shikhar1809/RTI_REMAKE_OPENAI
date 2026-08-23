@@ -78,7 +78,7 @@ export default function AboutPage() {
           <div className="mb-16 max-w-3xl mx-auto text-left">
             
             {/* Recent Updates */}
-            <div className="bg-white/95 border-2 border-blue-300 shadow-md rounded-2xl p-8 mb-8">
+            <div className="bg-white/95 border-2 border-blue-300 shadow-md rounded-2xl p-5 md:p-8 mb-8">
               <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2 justify-center">
                 <BellRing className="text-blue-600" />
                 {t("recentChangesTitle", "Recent Changes & Updates on Rules")}
@@ -120,7 +120,7 @@ export default function AboutPage() {
             </div>
 
             {/* Clear Rules */}
-            <div className="bg-white/95 border-2 border-green-300 shadow-md rounded-2xl p-8 mb-8">
+            <div className="bg-white/95 border-2 border-green-300 shadow-md rounded-2xl p-5 md:p-8 mb-8">
               <h2 className="text-2xl font-bold text-green-700 mb-4 flex items-center gap-2 justify-center">
                 <CheckCircle className="text-green-600" />
                 {t("clearRulesTitle", "Clear Rules & Examples")}
@@ -145,7 +145,7 @@ export default function AboutPage() {
             </div>
 
             {/* When RTI CANNOT be filed */}
-            <div className="bg-white/95 border-2 border-red-300 shadow-md rounded-2xl p-8">
+            <div className="bg-white/95 border-2 border-red-300 shadow-md rounded-2xl p-5 md:p-8">
               <h2 className="text-2xl font-bold text-red-700 mb-4 flex items-center gap-2 justify-center">
                 <AlertOctagon className="text-red-600" />
                 {t("cannotFileTitle", "When an RTI CANNOT be filed")}

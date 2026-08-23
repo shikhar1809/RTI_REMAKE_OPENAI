@@ -225,22 +225,22 @@ export default function StatsPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 
                 {/* View Toggle */}
-                <div className="flex bg-gray-200 p-1 rounded-lg">
+                <div className="flex w-full sm:w-auto justify-between sm:justify-start bg-gray-200 p-1 rounded-lg">
                   <button 
                     onClick={() => setViewMode("list")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "list" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
+                    className={`flex-1 sm:flex-none flex justify-center items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "list" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
                   >
                     <List size={14} /> {t("list")}
                   </button>
                   <button 
                     onClick={() => setViewMode("chart")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "chart" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
+                    className={`flex-1 sm:flex-none flex justify-center items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "chart" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
                   >
                     <PieChartIcon size={14} /> {t("charts")}
                   </button>
                   <button 
                     onClick={() => setViewMode("map")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "map" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
+                    className={`flex-1 sm:flex-none flex justify-center items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${viewMode === "map" ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-700"}`}
                   >
                     <MapPin size={14} /> {t("map")}
                   </button>
@@ -275,7 +275,7 @@ export default function StatsPage() {
             </div>
 
             {/* Export — prominent standalone banner */}
-            <div className="px-5 py-3 bg-blue-50 border-b border-blue-100 flex items-center justify-between gap-4">
+            <div className="px-5 py-4 bg-blue-50 border-b border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
                   <Download size={15} className="text-blue-600" />
@@ -319,7 +319,7 @@ export default function StatsPage() {
                         </div>
                         <p className="text-sm text-gray-600 line-clamp-2">{t(`mock_${app.id}_desc`, app.problemSummary)}</p>
                         
-                        <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
                           <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-600">
                             <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
                               <MapPin size={12} /> {t(`mock_${app.id}_authority`, app.authority)}
@@ -331,7 +331,7 @@ export default function StatsPage() {
                           </div>
                           <button 
                             onClick={() => setSelectedApp({...app, views})}
-                            className="text-green-600 font-bold text-xs hover:text-green-800 transition-colors bg-green-50 px-3 py-1.5 rounded-lg border border-green-200 hover:bg-green-100"
+                            className="w-full sm:w-auto text-center text-green-600 font-bold text-xs hover:text-green-800 transition-colors bg-green-50 px-3 py-2 sm:py-1.5 rounded-lg border border-green-200 hover:bg-green-100"
                           >
                             {t("viewDetails")}
                           </button>
@@ -508,7 +508,7 @@ export default function StatsPage() {
               {/* Fake Attachments */}
               <div>
                 <h4 className="text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide">{t("attachedEvidence")} (2 {t("files")})</h4>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
                     <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
                       <ImageIcon size={18} />
@@ -587,7 +587,7 @@ export default function StatsPage() {
                   <option value="up">Uttar Pradesh</option>
                 </select>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 mb-1">{t("startDate", "Start Date")}</label>
                   <input
