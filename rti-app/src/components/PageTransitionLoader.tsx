@@ -91,12 +91,12 @@ export function PageTransitionLoader() {
       </div>
       
       {/* Dynamic Tooltip / Hint */}
-      <div className="absolute bottom-10 left-0 w-full px-6 flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both">
+      <div className="absolute top-12 left-0 w-full px-6 flex flex-col items-center animate-in fade-in slide-in-from-top-4 duration-700 delay-300 fill-mode-both">
         <span className="text-[10px] font-bold tracking-widest text-gray-400 mb-2 uppercase">
           {t("loaderTipTitle", "DID YOU KNOW?")}
         </span>
-        <div className="bg-gray-50 border border-gray-200 px-5 py-3 rounded-2xl max-w-[300px] text-center shadow-sm">
-          <p className="text-xs font-semibold text-green-700 leading-relaxed">
+        <div className="bg-green-50 border border-green-200 px-5 py-3 rounded-2xl max-w-[300px] text-center shadow-sm">
+          <p className="text-xs font-semibold text-green-800 leading-relaxed">
             {t(`loaderTip${activeTip}`, "YOU CAN EVEN FILE A RTI THROUGH WHATSAPP")}
           </p>
         </div>
