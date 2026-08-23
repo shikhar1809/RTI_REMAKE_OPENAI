@@ -2,49 +2,81 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ArrowLeft, Send, Mic, Paperclip, Globe, Smile, FolderOpen } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface ChatMessage {
   role: 'user' | 'ai';
   content: string;
 }
 
-// Smiley-orbit animated icon — same as home page button
-const NyayaAvatar = ({ size = 48 }: { state?: string; size?: number }) => (
-  <span className="inline-flex items-center justify-center relative shrink-0" style={{ width: size, height: size }}>
-    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width={size} height={size}>
-      <circle cx="24" cy="24" r="16" fill="#00F5A0"/>
-      <circle cx="19" cy="21" r="2" fill="#111"/>
-      <circle cx="29" cy="21" r="2" fill="#111"/>
-      <path d="M19 27 Q24 32 29 27" stroke="#111" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
-      <g style={{ transformOrigin: '24px 24px', animation: 'orbit-spin 2s linear infinite' }}>
-        <path d="M8 26 Q5 14 18 9" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-        <path d="M36 9 Q47 18 40 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-        <path d="M38 32 L40 30 L36 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-      </g>
-    </svg>
-    <style>{`@keyframes orbit-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
-  </span>
-);
+// Smiley-orbit animated icon with advanced states
+const NyayaAvatar = ({ size = 48, state = 'idle' }: { size?: number, state?: 'idle' | 'typing' | 'listening' }) => {
+  const orbitAnim = state === 'listening' ? 'orbit-pulse 1s ease-in-out infinite' : 'orbit-spin 3s linear infinite';
+  const faceAnim = state === 'idle' ? 'look-around 6s ease-in-out infinite' :
+                   state === 'typing' ? 'reading 1s ease-in-out infinite' : 'none';
 
-const FAQ_CHIPS = [
-  "What is the RTI deadline?",
-  "How to file a First Appeal?",
-  "Is RTI free for BPL citizens?",
-  "Can RTI be filed online?",
-  "What if no reply in 30 days?",
-  "Which authority to contact?",
-];
+  return (
+    <span className="inline-flex items-center justify-center relative shrink-0" style={{ width: size, height: size }}>
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width={size} height={size}>
+        <circle cx="24" cy="24" r="16" fill="#00F5A0"/>
+        
+        {/* Face Group */}
+        <g style={{ animation: faceAnim }}>
+          <circle cx="19" cy="21" r="2" fill="#111"/>
+          <circle cx="29" cy="21" r="2" fill="#111"/>
+          <path d="M19 27 Q24 32 29 27" stroke="#111" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+        </g>
 
-const MOCK_RESPONSES: Record<string, string> = {
-  "What is the RTI deadline?": "Under the RTI Act 2005, the Public Information Officer (PIO) must respond within **30 days** of receiving your application. For matters involving life or liberty, the deadline is **48 hours**.",
-  "How to file a First Appeal?": "If unsatisfied with the PIO's response (or no response), you can file a First Appeal with the **First Appellate Authority** within **30 days** of receiving the reply. I can draft this appeal for you — just say the word.",
-  "Is RTI free for BPL citizens?": "Yes! Citizens holding a valid **BPL (Below Poverty Line) card** are completely exempt from the ₹10 application fee and all document copying charges. Your DigiLocker vault auto-verifies this.",
-  "Can RTI be filed online?": "Absolutely. You can file Central Government RTIs at **rtionline.gov.in**. Many state portals also support online filing. Our app guides you through the exact process step by step.",
-  "What if no reply in 30 days?": "Silence is deemed a **refusal** under the RTI Act. You can immediately file a First Appeal citing non-response, and even escalate to the Central Information Commission (CIC) for a Second Appeal.",
-  "Which authority to contact?": "Our AI routing engine analyzes your problem and identifies the exact **Ministry and Public Information Officer (PIO)**. Just describe your issue and hit 'File RTI' — we'll figure out the right desk.",
+        {/* Orbit Group */}
+        <g style={{ transformOrigin: '24px 24px', animation: orbitAnim }}>
+          <path d="M8 26 Q5 14 18 9" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+          <path d="M36 9 Q47 18 40 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+          <path d="M38 32 L40 30 L36 30" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        </g>
+      </svg>
+      <style>{`
+        @keyframes orbit-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes orbit-pulse { 0%, 100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+        @keyframes look-around {
+          0%, 100% { transform: translate(0, 0); }
+          10%, 20% { transform: translate(2px, -2px); } /* look up-right */
+          30%, 40% { transform: translate(-2px, 1px); } /* look down-left */
+          50%, 60% { transform: translate(3px, 0px); }  /* look right */
+          70% { transform: translate(0px, 0px); }       /* center */
+          80%, 90% { transform: translate(0px, 2px); }  /* look down */
+        }
+        @keyframes reading {
+          0%, 100% { transform: translate(-1px, 0); }
+          25% { transform: translate(0px, 0); }
+          50% { transform: translate(1px, 0); }
+          75% { transform: translate(0px, 0); }
+        }
+      `}</style>
+    </span>
+  );
 };
 
 export default function ToolkitPage() {
+  const { t } = useTranslation(undefined, { keyPrefix: 'ai' });
+  
+  const FAQ_CHIPS = [
+    { key: "faq1", query: "What is the RTI deadline?" },
+    { key: "faq2", query: "How to file a First Appeal?" },
+    { key: "faq3", query: "Is RTI free for BPL citizens?" },
+    { key: "faq4", query: "Can RTI be filed online?" },
+    { key: "faq5", query: "What if no reply in 30 days?" },
+    { key: "faq6", query: "Which authority to contact?" },
+  ];
+
+  const MOCK_ANSWERS: Record<string, string> = {
+    "faq1": t("ans1"),
+    "faq2": t("ans2"),
+    "faq3": t("ans3"),
+    "faq4": t("ans4"),
+    "faq5": t("ans5"),
+    "faq6": t("ans6")
+  };
+
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -56,7 +88,7 @@ export default function ToolkitPage() {
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, isTyping]);
 
-  const handleSend = (text: string = inputValue) => {
+  const handleSend = (text: string = inputValue, answerKey?: string) => {
     if (!text.trim()) return;
     setHasStarted(true);
     setChatMessages(prev => [...prev, { role: 'user', content: text }]);
@@ -64,26 +96,25 @@ export default function ToolkitPage() {
     setIsTyping(true);
 
     setTimeout(() => {
-      const response = MOCK_RESPONSES[text] ??
-        "I'm cross-referencing the RTI Act and public archives... Based on established guidelines, you have strong grounds here. Want me to draft the exact application for you?";
+      const response = answerKey ? MOCK_ANSWERS[answerKey] : t("defaultAns");
       setChatMessages(prev => [...prev, { role: 'ai', content: response }]);
       setIsTyping(false);
     }, 1800);
   };
 
+  const agentState = isListening ? 'listening' : isTyping ? 'typing' : 'idle';
+
   const handleMicClick = () => {
     setIsListening(true);
     setTimeout(() => {
       setIsListening(false);
-      setInputValue("What happens if the PIO doesn't reply in 30 days?");
+      handleSend(t("micQuery"), "faq5");
     }, 2200);
   };
 
   return (
     <ProtectedRoute>
       <div className="relative flex flex-col items-center h-[calc(100vh-4rem)] overflow-hidden">
-
-        {/* Soft glow blobs */}
 
         {/* Back arrow — top left */}
         <div className="absolute top-4 left-4 z-30">
@@ -97,10 +128,10 @@ export default function ToolkitPage() {
           <div className="flex flex-col items-center justify-center flex-1 px-4 pb-48 gap-8 w-full">
             {/* Avatar + name */}
             <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-              <NyayaAvatar size={56} />
+              <NyayaAvatar size={96} state={agentState} />
               <div className="text-center">
-                <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Nyaya AI</h1>
-                <p className="text-sm text-gray-500 mt-1">Your RTI Legal Assistant · Voice + Chat</p>
+                <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">{t("title")}</h1>
+                <p className="text-sm text-gray-500 mt-1">{t("subtitle")}</p>
               </div>
             </div>
 
@@ -109,10 +140,10 @@ export default function ToolkitPage() {
               {FAQ_CHIPS.map((chip, i) => (
                 <button
                   key={i}
-                  onClick={() => handleSend(chip)}
+                  onClick={() => handleSend(t(chip.key), chip.key)}
                   className="px-4 py-2 bg-white/80 backdrop-blur-sm border border-green-200 hover:border-green-400 hover:bg-white text-gray-700 text-sm font-medium rounded-full shadow-sm transition-all hover:shadow-md"
                 >
-                  {chip}
+                  {t(chip.key)}
                 </button>
               ))}
             </div>
@@ -130,7 +161,7 @@ export default function ToolkitPage() {
                       <span className="text-white text-xs font-bold">U</span>
                     </div>
                   ) : (
-                    <NyayaAvatar size={32} />
+                    <NyayaAvatar size={32} state="idle" />
                   )}
                 </div>
                 <div className={`px-5 py-3.5 max-w-[80%] text-sm leading-relaxed shadow-sm ${
@@ -145,7 +176,7 @@ export default function ToolkitPage() {
 
             {isTyping && (
               <div className="flex gap-3 flex-row animate-in fade-in duration-300">
-                <NyayaAvatar size={32} />
+                <NyayaAvatar size={32} state="typing" />
                 <div className="px-5 py-4 bg-white/90 backdrop-blur-sm border border-green-100 rounded-3xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
@@ -166,7 +197,7 @@ export default function ToolkitPage() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={isListening ? "Listening..." : "Type your message here..."}
+              placeholder={isListening ? t("listening") : t("placeholder")}
               disabled={isListening}
               className="w-full bg-transparent text-white placeholder:text-gray-400 text-[15px] px-5 pt-4 pb-2 focus:outline-none disabled:opacity-60"
             />

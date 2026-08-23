@@ -382,5 +382,25 @@
     "status_replied": "REPLIED",
     "status_resolved": "RESOLVED",
     "status_appealed": "APPEALED"
+  },
+  "ai": {
+    "title": "Nyaya AI",
+    "subtitle": "Your RTI Legal Assistant · Voice + Chat",
+    "placeholder": "Type your message here...",
+    "listening": "Listening...",
+    "faq1": "What is the RTI deadline?",
+    "faq2": "How to file a First Appeal?",
+    "faq3": "Is RTI free for BPL citizens?",
+    "faq4": "Can RTI be filed online?",
+    "faq5": "What if no reply in 30 days?",
+    "faq6": "Which authority to contact?",
+    "ans1": "Under the RTI Act 2005, the Public Information Officer (PIO) must respond within **30 days** of receiving your application. For matters involving life or liberty, the deadline is **48 hours**.",
+    "ans2": "If unsatisfied with the PIO's response (or no response), you can file a First Appeal with the **First Appellate Authority** within **30 days** of receiving the reply. I can draft this appeal for you — just say the word.",
+    "ans3": "Yes! Citizens holding a valid **BPL (Below Poverty Line) card** are completely exempt from the ₹10 application fee and all document copying charges. Your DigiLocker vault auto-verifies this.",
+    "ans4": "Absolutely. You can file Central Government RTIs at **rtionline.gov.in**. Many state portals also support online filing. Our app guides you through the exact process step by step.",
+    "ans5": "Silence is deemed a **refusal** under the RTI Act. You can immediately file a First Appeal citing non-response, and even escalate to the Central Information Commission (CIC) for a Second Appeal.",
+    "ans6": "Our AI routing engine analyzes your problem and identifies the exact **Ministry and Public Information Officer (PIO)**. Just describe your issue and hit 'File RTI' — we'll figure out the right desk.",
+    "defaultAns": "I'm cross-referencing the RTI Act and public archives... Based on established guidelines, you have strong grounds here. Want me to draft the exact application for you?",
+    "micQuery": "What happens if the PIO doesn't reply in 30 days?"
   }
 }
