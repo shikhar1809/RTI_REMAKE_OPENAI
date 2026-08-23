@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ArrowLeft, Send, Mic, Paperclip, Globe, Smile, FolderOpen } from "lucide-react";
@@ -72,11 +72,12 @@ export default function ToolkitPage() {
   const location = useLocation();
   const sourcePage = location.state?.sourcePage;
   const screenshot = location.state?.screenshot;
+  const initialMessage = location.state?.initialMessage;
 const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
     if (sourcePage) {
       return [{ 
         role: 'ai', 
-        content: `I see you were looking at the **${sourcePage}** page. I have analyzed its context. How may I help you with it?`,
+        content: initialMessage || `I see you were looking at the **${sourcePage}** page. I have analyzed its context. How may I help you with it?`,
         isTypingEffect: true,
         screenshot: screenshot
       }];

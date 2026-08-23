@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter, Eye, X, FileText, Image as ImageIcon, CheckCircle2, Download, PieChart as PieChartIcon, List, Sparkles, Bot, Send } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MOCK_PUBLIC_RTIS, RTIApplication } from "@/data/mockRTIs";
 import { useApplicationsStore } from "@/store/applicationsStore";
@@ -27,6 +27,25 @@ const STATE_COORDINATES: Record<string, [number, number]> = {
 export default function StatsPage() {
   const { t } = useTranslation(undefined, { keyPrefix: "stats" });
   const { applications } = useApplicationsStore();
+  const navigate = useNavigate();
+  
+  const handleOpenArchiveAI = async () => {
+    let screenshotData = null;
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(document.body, { scale: 0.4 });
+      screenshotData = canvas.toDataURL("image/jpeg", 0.4);
+    } catch (e) {
+      console.warn("Screenshot failed:", e);
+    }
+    navigate("/toolkit", {
+      state: {
+        sourcePage: "Public RTI Archive",
+        screenshot: screenshotData,
+        initialMessage: "I can see the Public RTI Archive. What topics, precedents, or historical RTIs would you like me to search for you?"
+      }
+    });
+  };
   
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
@@ -227,17 +246,15 @@ export default function StatsPage() {
                   </button>
                 </div>
 
-                <div className="relative cursor-pointer" onClick={() => setIsChatOpen(true)}>
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input 
-                    type="text" 
-                    readOnly
-                    placeholder={t("searchPlaceholder")}
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    className="pl-9 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all cursor-pointer pointer-events-none"
-                  />
-                </div>
+                {/* Search Topics → opens MR. RIGHTEOUS */}
+                <button
+                  onClick={handleOpenArchiveAI}
+                  className="flex items-center gap-2 pl-3 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-500 hover:border-green-500 hover:text-green-700 hover:shadow-md transition-all w-full sm:w-48 font-medium"
+                >
+                  <Search size={16} className="text-gray-400 shrink-0" />
+                  <span>{t("searchPlaceholder")}</span>
+                  <span className="ml-auto text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded-full">AI</span>
+                </button>
                 
                 <div className="relative">
                   <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -254,15 +271,27 @@ export default function StatsPage() {
                     <option value="up">Uttar Pradesh</option>
                   </select>
                 </div>
-
-                <button
-                  onClick={() => setShowExportModal(true)}
-                  className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 px-3 py-2 rounded-lg text-sm font-bold transition-colors flex items-center gap-2 shrink-0"
-                >
-                  <Download size={16} />
-                  <span className="hidden sm:inline">{t("exportStats", "Export Stats")}</span>
-                </button>
               </div>
+            </div>
+
+            {/* Export — prominent standalone banner */}
+            <div className="px-5 py-3 bg-blue-50 border-b border-blue-100 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                  <Download size={15} className="text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-blue-900">Export Public Archive Data</p>
+                  <p className="text-xs text-blue-600">Download a filtered PDF report of RTIs</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowExportModal(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl text-sm font-bold transition-colors flex items-center gap-2 shadow-sm shrink-0"
+              >
+                <Download size={15} />
+                {t("exportStats", "Export PDF")}
+              </button>
             </div>
             
             {viewMode === "list" && (
