@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { FcDataBackup, FcApproval, FcPrivacy } from "react-icons/fc";
+﻿import { useState, useEffect } from "react";
+
 import { Loader2 } from "lucide-react";
 
 export function BootSequence({ onComplete }: { onComplete: () => void }) {
@@ -46,29 +46,18 @@ export function BootSequence({ onComplete }: { onComplete: () => void }) {
   return (
     <div className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-sm mx-auto text-center">
-        {/* Icons Area */}
-        <div className="h-32 flex items-center justify-center mb-8 relative">
-          {stage === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center animate-pulse">
-              <div className="w-24 h-24 bg-gray-50 rounded-3xl flex items-center justify-center border border-gray-100 shadow-sm">
-                <FcDataBackup size={56} />
-              </div>
-            </div>
-          )}
-          {stage === 1 && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
-              <div className="w-24 h-24 bg-blue-50 rounded-3xl flex items-center justify-center border border-blue-100 shadow-sm">
-                <FcPrivacy size={56} />
-              </div>
-            </div>
-          )}
-          {stage === 2 && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center animate-in fade-in zoom-in scale-in duration-300">
-              <div className="w-24 h-24 bg-green-50 rounded-3xl flex items-center justify-center border border-green-100 shadow-sm">
-                <FcApproval size={56} />
-              </div>
-            </div>
-          )}
+        {/* Visual Area */}
+        <div className="flex items-center justify-center mb-8 relative">
+          <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-[2rem] overflow-hidden shadow-xl border-4 border-white bg-gray-100 flex items-center justify-center">
+            <video 
+              src="/boot-video.mp4" 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
 
         {/* Text Area */}
