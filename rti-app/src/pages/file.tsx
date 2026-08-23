@@ -87,6 +87,15 @@ export default function FilePage() {
     }
   }, []);
 
+  useEffect(() => {
+    // Auto-fill details on step 1 if they exist in auth store and aren't already set
+    if (currentStep === 1 && !name && !address && !mobile && savedFullName) {
+      setName(savedFullName);
+      setAddress(savedAddress);
+      setMobile(savedMobile);
+    }
+  }, [currentStep, name, address, mobile, savedFullName, savedAddress, savedMobile, setName, setAddress, setMobile]);
+
   function handleImport() {
     setName(savedFullName);
     setAddress(savedAddress);
