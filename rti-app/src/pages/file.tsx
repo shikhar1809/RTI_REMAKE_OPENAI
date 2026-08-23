@@ -491,32 +491,6 @@ export default function FilePage() {
                     </div>
                   )}
                 </div>
-                
-                {selectedStateId !== "other" && STATES[selectedStateId] ? (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-sm">
-                    <p className="font-semibold text-blue-900 mb-1">Filing Instructions</p>
-                    <p className="text-blue-800 mb-2">Portal: {STATES[selectedStateId].portalUrl}</p>
-                    <p className="text-blue-800 mb-3">
-                      Fee: {useDocumentStore.getState().isBPLVerified() ? "₹0 (Exempt under BPL)" : `₹${STATES[selectedStateId].fee}`}
-                    </p>
-                    <a
-                      href={`https://${STATES[selectedStateId].portalUrl}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1 font-semibold text-blue-700 hover:underline"
-                    >
-                      Open Portal <ExternalLink size={14} />
-                    </a>
-                  </div>
-                ) : (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-sm text-amber-800">
-                    <p className="font-semibold mb-2">{UNSUPPORTED_STATE_GUIDANCE.message}</p>
-                    <p className="whitespace-pre-wrap">{UNSUPPORTED_STATE_GUIDANCE.instructions}</p>
-                    <a href={UNSUPPORTED_STATE_GUIDANCE.doptDirectory} target="_blank" rel="noreferrer" className="inline-flex mt-2 font-semibold hover:underline">
-                      View State Contact Directory <ExternalLink size={14} className="ml-1" />
-                    </a>
-                  </div>
-                )}
 
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button onClick={goBack} className="btn-secondary flex-1">
