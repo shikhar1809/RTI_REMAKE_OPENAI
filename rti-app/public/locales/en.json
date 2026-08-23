@@ -384,7 +384,7 @@
     "status_appealed": "APPEALED"
   },
   "ai": {
-    "title": "MR. MR. RIGHTEOUS",
+    "title": "MR. RIGHTEOUS",
     "subtitle": "Your RTI Legal Assistant · Voice + Chat",
     "placeholder": "Type your message here...",
     "listening": "Listening...",
@@ -405,6 +405,6 @@
     "tooltip1": "Need help?",
     "tooltip2": "Have an RTI question?",
     "tooltip3": "Stuck somewhere?",
-    "tooltip4": "Ask MR. MR. RIGHTEOUS!"
+    "tooltip4": "Ask MR. RIGHTEOUS!"
   }
 }

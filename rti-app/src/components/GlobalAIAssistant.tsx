@@ -118,7 +118,7 @@ export const GlobalAIAssistant = () => {
         <div id="ai-widget-overlay" className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-md flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-300">
           <RighteousAvatar size={120} state="typing" />
           <h2 className="mt-8 text-2xl font-bold text-gray-900 animate-pulse tracking-tight">Analyzing context...</h2>
-          <p className="text-gray-500 mt-2 font-medium">Preparing MR. MR. RIGHTEOUS</p>
+          <p className="text-gray-500 mt-2 font-medium">Preparing MR. RIGHTEOUS</p>
         </div>
       )}
 
