@@ -4,6 +4,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ArrowLeft, Send, Mic, Paperclip, Globe, Smile, FolderOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { RighteousAvatar } from "@/components/RighteousAvatar";
+import { generateMRRighteousResponse, type ConversationTurn } from "@/lib/mrRighteous";
 
 interface ChatMessage {
   role: 'user' | 'ai';
@@ -96,19 +97,31 @@ const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, isTyping]);
 
-  const handleSend = (text: string = inputValue, answerKey?: string, directResponse?: string) => {
+  const handleSend = (text: string = inputValue, _answerKey?: string, directResponse?: string) => {
     if (!text.trim()) return;
     setHasStarted(true);
-    setChatMessages(prev => [...prev, { role: 'user', content: text }]);
-    setInputValue("");
-    setIsTyping(true); // AI enters reading/searching state
 
-    // 3 seconds delay as requested before generating text
+    const userMsg: ChatMessage = { role: 'user', content: text };
+    setChatMessages(prev => {
+      const updated = [...prev, userMsg];
+      return updated;
+    });
+    setInputValue("");
+    setIsTyping(true);
+
+    // Build conversation history for AI context
+    const historyForAI: ConversationTurn[] = chatMessages.map(m => ({
+      role: m.role,
+      content: m.content,
+    }));
+
     setTimeout(() => {
-      const response = directResponse ? directResponse : (answerKey && MOCK_ANSWERS[answerKey] ? MOCK_ANSWERS[answerKey] : t("defaultAns"));
-      setIsTyping(false); // AI finishes reading, goes back to idle state
+      const response = directResponse
+        ? directResponse
+        : generateMRRighteousResponse(text, historyForAI);
+      setIsTyping(false);
       setChatMessages(prev => [...prev, { role: 'ai', content: response, isTypingEffect: true }]);
-    }, 3000);
+    }, 1800 + Math.random() * 1000); // 1.8–2.8s for natural feel
   };
 
   const agentState = isListening ? 'listening' : isTyping ? 'typing' : 'idle';
