@@ -1,18 +1,31 @@
-import { useParams, Link, Navigate } from "react-router-dom";
-import { ArrowLeft, Clock, CheckCircle2, AlertCircle, Timer, FileText, Download, Eye, EyeOff } from "lucide-react";
+import { Link, useParams, useNavigate, Navigate } from "react-router-dom";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useApplicationsStore } from "@/store/applicationsStore";
 import { getDaysRemaining } from "@/data/mockRTIs";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { ArrowLeft, Clock, CheckCircle2, AlertCircle, FileText, Download, Eye, EyeOff, Timer } from "lucide-react";
+import { useState } from "react";
+import { PublicConsentModal } from "@/components/PublicConsentModal";
 
 export default function TrackDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { applications, togglePublic } = useApplicationsStore();
+  const [showConsent, setShowConsent] = useState(false);
   
   const app = applications.find(a => a.id === id);
   
   if (!app) {
     return <Navigate to="/track" replace />;
   }
+
+  const handleToggleClick = () => {
+    if (app.isPublic) {
+      // If currently public, just turn it off directly
+      togglePublic(app.id);
+    } else {
+      // If currently private, show consent form before turning on
+      setShowConsent(true);
+    }
+  };
 
   const daysRemaining = getDaysRemaining(app.deadlineDate);
   const isOverdue = daysRemaining < 0;
@@ -117,7 +130,7 @@ export default function TrackDetailPage() {
                   </p>
                 </div>
                 <button
-                  onClick={() => togglePublic(app.id)}
+                  onClick={handleToggleClick}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${app.isPublic ? 'bg-green-600' : 'bg-gray-300'}`}
                 >
                   <span
@@ -147,6 +160,12 @@ export default function TrackDetailPage() {
           </div>
         </div>
       </div>
+
+      <PublicConsentModal 
+        isOpen={showConsent} 
+        onClose={() => setShowConsent(false)} 
+        onConfirm={() => togglePublic(app.id)} 
+      />
     </ProtectedRoute>
   );
 }

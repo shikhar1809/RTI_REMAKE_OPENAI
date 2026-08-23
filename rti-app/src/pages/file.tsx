@@ -11,6 +11,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { useApplicationsStore } from "@/store/applicationsStore";
+import { PublicConsentModal } from "@/components/PublicConsentModal";
 
 const TOTAL_STEPS = 6;
 
@@ -46,9 +47,18 @@ export default function FilePage() {
   const [rating, setRating] = useState(0);
   const [attachments, setAttachments] = useState<{ name: string; size: string; type: string; url: string }[]>([]);
   const [isPublicApp, setIsPublicApp] = useState(false);
+  const [showConsent, setShowConsent] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { addApplication } = useApplicationsStore();
+
+  const handleToggleClick = () => {
+    if (isPublicApp) {
+      setIsPublicApp(false);
+    } else {
+      setShowConsent(true);
+    }
+  };
 
   const handleSubmitRTI = () => {
     // Generate a mock application and push it to the store so tracking works
@@ -546,7 +556,7 @@ export default function FilePage() {
                       </p>
                     </div>
                     <button
-                      onClick={() => setIsPublicApp(!isPublicApp)}
+                      onClick={handleToggleClick}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${isPublicApp ? 'bg-green-600' : 'bg-gray-300'}`}
                     >
                       <span
@@ -590,6 +600,10 @@ export default function FilePage() {
                     placeholder="Short description of your experience..." 
                     className="w-full h-24 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none resize-none mb-4"
                   />
+                  <div className="bg-blue-50 text-blue-800 text-xs p-3 rounded-lg text-left mb-6 font-medium">
+                    <strong className="block mb-1">Tip: Public Archive</strong>
+                    You can toggle your RTI public or private at any time from your tracking dashboard to help others.
+                  </div>
                   <Link to="/home" onClick={() => resetWizard()} className="btn-primary w-full">
                     Submit Survey & Go Home
                   </Link>
@@ -607,6 +621,12 @@ export default function FilePage() {
           <span className="text-sm font-medium">Details saved for later!</span>
         </div>
       )}
+
+      <PublicConsentModal 
+        isOpen={showConsent} 
+        onClose={() => setShowConsent(false)} 
+        onConfirm={() => setIsPublicApp(true)} 
+      />
     </ProtectedRoute>
   );
 }
