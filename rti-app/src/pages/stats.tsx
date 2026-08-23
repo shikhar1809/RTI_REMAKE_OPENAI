@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Star, TrendingUp, Search, Filter, Eye, X, FileText, Image as ImageIcon, CheckCircle2, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { MOCK_PUBLIC_RTIS, RTIApplication } from "@/data/mockRTIs";
@@ -12,6 +12,7 @@ export default function StatsPage() {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
+  const [selectedApp, setSelectedApp] = useState<(RTIApplication & { views: number }) | null>(null);
 
   const stats = {
     totalFiled: 12450,
@@ -118,33 +119,143 @@ export default function StatsPage() {
                   <p>No public RTIs found matching your criteria.</p>
                 </div>
               ) : (
-                filteredArchive.map((app, idx) => (
-                  <div key={idx} className="border border-gray-200 rounded-xl p-4 hover:border-green-300 hover:shadow-md transition-all bg-white flex flex-col gap-2">
-                    <div className="flex justify-between items-start gap-4">
-                      <h3 className="font-bold text-gray-900 leading-tight">{app.subject}</h3>
-                      <span className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${
-                        app.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                        app.status === 'replied' ? 'bg-blue-100 text-blue-700' :
-                        'bg-amber-100 text-amber-700'
-                      }`}>
-                        {app.status.toUpperCase()}
-                      </span>
+                filteredArchive.map((app, idx) => {
+                  // Generate a deterministic view count based on app ID
+                  const views = (app.id.length * 137 + app.subject.length * 42) % 5000 + 100;
+                  
+                  return (
+                    <div key={idx} className="border border-gray-200 rounded-xl p-4 hover:border-green-300 hover:shadow-md transition-all bg-white flex flex-col gap-3">
+                      <div className="flex justify-between items-start gap-4">
+                        <h3 className="font-bold text-gray-900 leading-tight">{app.subject}</h3>
+                        <span className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${
+                          app.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                          app.status === 'replied' ? 'bg-blue-100 text-blue-700' :
+                          'bg-amber-100 text-amber-700'
+                        }`}>
+                          {app.status.toUpperCase()}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 line-clamp-2">{app.problemSummary}</p>
+                      
+                      <div className="flex flex-wrap items-center justify-between gap-3 mt-1">
+                        <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-500">
+                          <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
+                            <MapPin size={12} /> {app.authority}
+                          </span>
+                          <span>Filed: {new Date(app.filedDate).toLocaleDateString()}</span>
+                          <span className="flex items-center gap-1 text-gray-500">
+                            <Eye size={12} /> {views.toLocaleString()} views
+                          </span>
+                        </div>
+                        <button 
+                          onClick={() => setSelectedApp({...app, views})}
+                          className="text-green-600 font-bold text-xs hover:text-green-800 transition-colors bg-green-50 px-3 py-1.5 rounded-lg border border-green-200 hover:bg-green-100"
+                        >
+                          View details
+                        </button>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-600 line-clamp-2">{app.problemSummary}</p>
-                    <div className="flex flex-wrap items-center gap-3 mt-2 text-xs font-medium text-gray-500">
-                      <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-md text-gray-700">
-                        <MapPin size={12} /> {app.authority}
-                      </span>
-                      <span>Filed: {new Date(app.filedDate).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>
 
         </div>
       </div>
+
+      {/* Public App Detail Modal */}
+      {selectedApp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in zoom-in-95">
+            <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 sticky top-0">
+              <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                Public Archive File
+              </h3>
+              <button onClick={() => setSelectedApp(null)} className="text-gray-400 hover:text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-full p-1 transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <div className="flex justify-between items-start gap-4 mb-4">
+                <h2 className="text-xl font-bold text-gray-900">{selectedApp.subject}</h2>
+                <span className={`text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ${
+                  selectedApp.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                  selectedApp.status === 'replied' ? 'bg-blue-100 text-blue-700' :
+                  'bg-amber-100 text-amber-700'
+                }`}>
+                  {selectedApp.status.toUpperCase()}
+                </span>
+              </div>
+              
+              <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-500 mb-6 pb-6 border-b border-gray-100">
+                <span className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-lg text-gray-800">
+                  <MapPin size={16} className="text-gray-500" /> {selectedApp.authority}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock size={16} className="text-gray-400" /> Filed: {new Date(selectedApp.filedDate).toLocaleDateString()}
+                </span>
+                <span className="flex items-center gap-1.5 text-gray-400">
+                  <Eye size={16} /> {selectedApp.views.toLocaleString()} views
+                </span>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-bold text-gray-900 mb-2">Problem Description</h4>
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
+                    {selectedApp.problemSummary}
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    Attached Evidence <span className="text-xs font-normal bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">2 files</span>
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="border border-gray-200 rounded-xl p-3 flex items-center gap-3 bg-white">
+                      <div className="bg-blue-50 p-2 rounded-lg text-blue-600">
+                        <ImageIcon size={24} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-gray-900 truncate">site_photos_proof.jpg</p>
+                        <p className="text-xs text-gray-500">2.4 MB</p>
+                      </div>
+                    </div>
+                    <div className="border border-gray-200 rounded-xl p-3 flex items-center gap-3 bg-white">
+                      <div className="bg-red-50 p-2 rounded-lg text-red-600">
+                        <FileText size={24} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-gray-900 truncate">previous_complaints.pdf</p>
+                        <p className="text-xs text-gray-500">1.1 MB</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {selectedApp.status === "replied" || selectedApp.status === "resolved" ? (
+                  <div className="mt-8 border-t border-gray-200 pt-6">
+                    <h4 className="font-bold text-green-700 mb-3 flex items-center gap-2">
+                      <CheckCircle2 size={18} /> Government Reply Received
+                    </h4>
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex justify-between items-center">
+                      <div>
+                        <p className="text-sm font-bold text-gray-900">official_response.pdf</p>
+                        <p className="text-xs text-gray-500 mt-0.5">Received on {new Date().toLocaleDateString()}</p>
+                      </div>
+                      <button className="text-green-700 bg-white border border-green-200 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-100 transition-colors flex items-center gap-1">
+                        <Download size={14} /> Download
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </ProtectedRoute>
   );
 }
