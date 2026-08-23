@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/authStore";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { STATES } from "@/data/states";
 import { useApplicationsStore } from "@/store/applicationsStore";
+import { useRTIStore } from "@/store/rtiStore";
 import { useTranslation } from "react-i18next";
 import { FcGlobe, FcSmartphoneTablet } from "react-icons/fc";
 import { Bell, BellOff, X, CheckCircle2 } from "lucide-react";
@@ -19,6 +20,8 @@ export default function HomePage() {
 
   const { applications } = useApplicationsStore();
   const newRepliesCount = applications.filter((app) => app.status === "replied").length;
+  
+  const { currentStep, resetWizard } = useRTIStore();
 
   const [showModal, setShowModal] = useState(false);
   const [wa, setWa] = useState("");
@@ -56,7 +59,8 @@ export default function HomePage() {
             <p className="text-gray-600 font-medium text-sm drop-shadow">{t("whatWouldYouLike", "What would you like to do today?")}</p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+          <div className="flex flex-col items-center gap-3 mb-8">
+            {/* Row 1: Area Selector */}
             {stateInfo && (
               <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-4 py-1.5 flex items-center gap-2">
                 <span className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
@@ -78,35 +82,62 @@ export default function HomePage() {
               </div>
             )}
             
-            <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-3 py-1.5 flex items-center gap-1.5">
-              <FcGlobe size={16} />
-              <select 
-                value={i18n.language}
-                onChange={(e) => i18n.changeLanguage(e.target.value)}
-                className="bg-transparent text-sm font-bold text-gray-700 outline-none cursor-pointer hover:text-gray-900"
-              >
-                <option value="en">EN</option>
-                <option value="hi">HI</option>
-                <option value="bn">BN</option>
-                <option value="ta">TA</option>
-              </select>
-            </div>
+            {/* Row 2: Language Selector + Alerts */}
+            <div className="flex items-center justify-center gap-3">
+              {/* Language Selector */}
+              <div className="bg-white/95 border-2 border-gray-300 shadow-sm rounded-full px-3 py-1.5 flex items-center gap-1.5">
+                <FcGlobe size={16} />
+                <select 
+                  value={i18n.language}
+                  onChange={(e) => i18n.changeLanguage(e.target.value)}
+                  className="bg-transparent text-sm font-bold text-gray-700 outline-none cursor-pointer hover:text-gray-900"
+                >
+                  <option value="en">English</option>
+                  <option value="hi">हिंदी</option>
+                  <option value="bn">বাংলা</option>
+                  <option value="ta">தமிழ்</option>
+                </select>
+              </div>
 
-            <button 
-              onClick={handleToggle}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold transition-all border-2 shadow-sm ${
-                notificationsEnabled 
-                  ? "bg-green-50/95 border-green-400 text-green-700 hover:bg-green-100" 
-                  : "bg-white/95 border-gray-300 text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              {notificationsEnabled ? <Bell size={14} /> : <BellOff size={14} />}
-              {notificationsEnabled ? "Alerts On" : "Alerts Off"}
-            </button>
+              {/* Alerts Button */}
+              <button 
+                onClick={handleToggle}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold transition-all border-2 shadow-sm ${
+                  notificationsEnabled 
+                    ? "bg-green-50/95 border-green-400 text-green-700 hover:bg-green-100" 
+                    : "bg-white/95 border-gray-300 text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                {notificationsEnabled ? <Bell size={14} /> : <BellOff size={14} />}
+                {notificationsEnabled ? "Alerts On" : "Alerts Off"}
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col gap-3 max-w-sm mx-auto w-full">
             
+            {currentStep > 1 && currentStep < 5 && (
+              <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 shadow-sm flex flex-col gap-3 mb-1 animate-in fade-in slide-in-from-bottom-2">
+                <div className="flex items-start gap-2">
+                  <span className="text-amber-600 mt-0.5">⚠️</span>
+                  <p className="text-sm font-bold text-amber-900 leading-tight">
+                    Your RTI filing stopped mid-progress (Step {currentStep}). Do you want to continue?
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Link to="/file" className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 rounded-lg text-center text-sm transition-colors shadow-sm">
+                    Continue Draft
+                  </Link>
+                  <button 
+                    onClick={() => resetWizard()} 
+                    className="flex-1 bg-white hover:bg-amber-100 text-amber-700 border border-amber-300 font-bold py-2 rounded-lg text-center text-sm transition-colors shadow-sm"
+                  >
+                    Start Fresh
+                  </button>
+                </div>
+              </div>
+            )}
+
             <Link
               to="/file"
               className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 relative"

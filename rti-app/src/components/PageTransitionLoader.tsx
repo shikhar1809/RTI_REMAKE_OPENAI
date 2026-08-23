@@ -1,30 +1,89 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { User, Scan, Send, MessageSquare } from "lucide-react";
 
 export function PageTransitionLoader() {
   const [isLoading, setIsLoading] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
     // Every time the location changes, show the loader
     setIsLoading(true);
+    setActiveStep(0);
+    // Base minimum animation time is 2.5 seconds (locked)
+    const minAnimationTime = 2500;
+    // Step interval: 2500ms / 4 steps = 625ms per step
+    const stepInterval = 625;
     
-    // Fake a 800ms load time to ensure contents are "loaded"
+    // Simulate real server load (e.g. fetching user data, checking API)
+    // In a real production app, this would be tied to your actual global isFetching state.
+    // Here we simulate a random server delay between 500ms and 4000ms
+    const simulatedServerLoadTime = Math.random() * 3500 + 500; 
+    
+    // The loader will stay for AT LEAST 2.5s. 
+    // If the server takes longer, it will wait for the server.
+    const totalWaitTime = Math.max(minAnimationTime, simulatedServerLoadTime);
+    
+    const interval = setInterval(() => {
+      setActiveStep(prev => (prev < 3 ? prev + 1 : prev));
+    }, stepInterval);
+
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 800);
+    }, totalWaitTime);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
   }, [location.pathname]);
 
   if (!isLoading) return null;
 
+  const steps = [
+    { icon: User, label: "Citizen Filing" },
+    { icon: Scan, label: "Document Scanning" },
+    { icon: Send, label: "RTI Filed" },
+    { icon: MessageSquare, label: "Got Reply" }
+  ];
+
   return (
     <div className="fixed inset-0 z-[999] bg-white flex flex-col items-center justify-center">
-      <Loader2 size={48} className="text-green-600 animate-spin mb-4" />
-      <h2 className="text-xl font-bold text-gray-900 mb-2">Loading...</h2>
-      <p className="text-sm text-gray-500">Preparing content securely</p>
+      <div className="relative">
+        {/* Background line */}
+        <div className="absolute left-5 top-5 bottom-5 w-0.5 bg-gray-100 -z-10" />
+        
+        {/* Animated green line progress */}
+        <div 
+          className="absolute left-5 top-5 w-0.5 bg-green-500 -z-10 transition-all duration-1000 ease-in-out" 
+          style={{ height: `${(activeStep / (steps.length - 1)) * 100}%` }} 
+        />
+
+        {steps.map((step, index) => {
+          const Icon = step.icon;
+          const isActive = index <= activeStep;
+          const isCurrent = index === activeStep;
+          
+          return (
+            <div key={index} className="flex items-center gap-5 mb-8 last:mb-0">
+              <div 
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-1000 
+                  ${isActive ? 'bg-green-50 border-2 border-green-500 text-green-600 shadow-sm' : 'bg-white border-2 border-gray-100 text-gray-300'}
+                  ${isCurrent ? 'scale-110 ring-4 ring-green-50' : 'scale-100'}
+                `}
+              >
+                <Icon size={18} />
+              </div>
+              <div className="w-40 text-left">
+                <span className={`text-sm font-bold tracking-wide transition-all duration-1000 ${isActive ? 'text-gray-900' : 'text-gray-400'}`}>
+                  {step.label}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

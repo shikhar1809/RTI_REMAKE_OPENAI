@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowLeft, Copy, Check, ExternalLink, CheckCircle2, ShieldCheck, AlertOctagon } from "lucide-react";
 import { useRTIStore } from "@/store/rtiStore";
 import { useDocumentStore } from "@/store/documentStore";
 import { generateMockDraft, translateDraft } from "@/data/mockDrafts";
@@ -25,6 +25,7 @@ export default function FilePage() {
     setSelectedStateId,
     setDraft,
     setCurrentStep,
+    resetWizard,
   } = useRTIStore();
 
   const { lastSynced } = useDocumentStore();
@@ -37,6 +38,13 @@ export default function FilePage() {
   const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    // If the user navigates back to this page and it was left on step 5, reset it
+    if (currentStep === 5) {
+      resetWizard();
+    }
+  }, []);
 
   function handleImport() {
     setName(savedFullName);
@@ -230,8 +238,18 @@ export default function FilePage() {
                   value={problemDescription}
                   onChange={(e) => setProblemDescription(e.target.value)}
                   placeholder={t("step1Placeholder", "For example: I applied for a ration card 6 months ago...")}
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm resize-none mb-6"
+                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm resize-none mb-2"
                 />
+                
+                {["why is", "why hasn't", "when will", "take action", "punish", "complaint against", "resolve my", "action against", "your opinion"].some(kw => problemDescription.toLowerCase().includes(kw)) && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 flex items-start gap-2">
+                    <AlertOctagon size={16} className="text-amber-600 mt-0.5 shrink-0" />
+                    <p className="text-xs text-amber-800 font-medium leading-tight">
+                      <strong>Wait!</strong> This request might not be valid under the RTI Act. RTIs can only ask for existing records, not opinions, future plans, or direct action. Please review the <Link to="/about" className="underline font-bold text-blue-600 hover:text-blue-800">KNOW YOUR RTI</Link> rules first.
+                    </p>
+                  </div>
+                )}
+                <div className="mb-6"></div>
                 <div className="flex gap-3">
                   <button onClick={goBack} className="btn-secondary flex-1">
                     <ArrowLeft size={16} />
@@ -341,8 +359,8 @@ export default function FilePage() {
                 </div>
                 
                 <div className="mt-6 flex justify-center">
-                  <button onClick={() => setCurrentStep(5)} className="text-green-600 font-semibold hover:underline flex items-center gap-1">
-                    I have filed the RTI <ArrowRight size={16} />
+                  <button onClick={() => setCurrentStep(5)} className="btn-primary w-full flex justify-center items-center gap-2 mt-4">
+                    Submit RTI <CheckCircle2 size={18} />
                   </button>
                 </div>
               </>
@@ -374,7 +392,7 @@ export default function FilePage() {
                     placeholder="Short description of your experience..." 
                     className="w-full h-24 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none resize-none mb-4"
                   />
-                  <Link to="/home" className="btn-primary w-full">
+                  <Link to="/home" onClick={() => resetWizard()} className="btn-primary w-full">
                     Submit Survey & Go Home
                   </Link>
                 </div>

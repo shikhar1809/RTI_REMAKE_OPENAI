@@ -25,7 +25,7 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
@@ -36,7 +36,7 @@ export function LanguageSwitcher() {
         </button>
         
         {open && (
-          <div className="absolute right-0 mt-2 w-36 bg-white border border-gray-200 rounded-xl shadow-lg py-1">
+          <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-36 bg-white border border-gray-200 rounded-xl shadow-lg py-1">
             {LOCALES.map((loc) => (
               <button
                 key={loc.code}
