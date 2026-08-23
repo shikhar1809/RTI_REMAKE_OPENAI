@@ -11,6 +11,7 @@ const LocationPage = lazy(() => import('@/pages/onboarding/location'));
 const RightsPage = lazy(() => import('@/pages/onboarding/rights'));
 const HomePage = lazy(() => import('@/pages/home'));
 const FilePage = lazy(() => import('@/pages/file'));
+const ManagePage = lazy(() => import('@/pages/manage'));
 const TrackPage = lazy(() => import('@/pages/track'));
 const TrackDetailPage = lazy(() => import('@/pages/track-detail'));
 const CheckReplyPage = lazy(() => import('@/pages/check-reply'));
@@ -56,6 +57,7 @@ export default function App() {
               <Route path="/onboarding/location" element={<LocationPage />} />
               <Route path="/onboarding/rights" element={<RightsPage />} />
               <Route path="/home" element={<HomePage />} />
+              <Route path="/manage" element={<ManagePage />} />
               <Route path="/file" element={<FilePage />} />
               <Route path="/track" element={<TrackPage />} />
               <Route path="/track/:id" element={<TrackDetailPage />} />

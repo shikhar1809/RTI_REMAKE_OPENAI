@@ -7,7 +7,7 @@ import { useApplicationsStore } from "@/store/applicationsStore";
 import { useRTIStore } from "@/store/rtiStore";
 import { useTranslation } from "react-i18next";
 import { FcGlobe, FcSmartphoneTablet } from "react-icons/fc";
-import { Bell, BellOff, X, CheckCircle2, ChevronDown, ChevronUp } from "lucide-react";
+import { Bell, BellOff, X, CheckCircle2 } from "lucide-react";
 
 export default function HomePage() {
   const { 
@@ -29,7 +29,6 @@ export default function HomePage() {
   const [otpStep, setOtpStep] = useState(false);
   const [otp, setOtp] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [showManageReports, setShowManageReports] = useState(false);
 
   const handleToggle = () => {
     if (notificationsEnabled) {
@@ -139,47 +138,17 @@ export default function HomePage() {
               </div>
             )}
 
-            {!showManageReports ? (
-              <button
-                onClick={() => setShowManageReports(true)}
-                className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 flex justify-center items-center gap-2 relative"
-              >
-                MANAGE REPORTS <ChevronDown size={20} />
-                {newRepliesCount > 0 && (
-                  <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
-                    {newRepliesCount}
-                  </div>
-                )}
-              </button>
-            ) : (
-              <div className="flex flex-col gap-3 bg-white/60 border-2 border-gray-200 rounded-2xl p-3 animate-in fade-in slide-in-from-top-2">
-                <button 
-                  onClick={() => setShowManageReports(false)}
-                  className="flex justify-between items-center px-2 py-1 text-gray-500 hover:text-gray-800 transition-colors w-full"
-                >
-                  <span className="text-sm font-bold tracking-wide">MANAGE REPORTS</span>
-                  <ChevronUp size={20} />
-                </button>
-                <Link
-                  to="/file"
-                  className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600"
-                >
-                  {t("fileNewReq", "FILE NEW REQUEST")}
-                </Link>
-
-                <Link
-                  to="/track"
-                  className="bg-white hover:bg-gray-50 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-sm border-2 border-gray-300 relative"
-                >
-                  {t("viewTrack", "VIEW / TRACK EXISTING REPORTS")}
-                  {newRepliesCount > 0 && (
-                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
-                      {newRepliesCount}
-                    </div>
-                  )}
-                </Link>
-              </div>
-            )}
+            <Link
+              to="/manage"
+              className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 flex justify-center items-center gap-2 relative"
+            >
+              MANAGE REPORTS
+              {newRepliesCount > 0 && (
+                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
+                  {newRepliesCount}
+                </div>
+              )}
+            </Link>
 
             <Link
               to="/documents"

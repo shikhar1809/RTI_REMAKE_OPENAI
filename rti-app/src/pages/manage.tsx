@@ -1,0 +1,60 @@
+import { Link, useNavigate } from "react-router-dom";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useTranslation } from "react-i18next";
+import { useApplicationsStore } from "@/store/applicationsStore";
+import { ArrowLeft, FileText, Activity } from "lucide-react";
+
+export default function ManagePage() {
+  const { t } = useTranslation(undefined, { keyPrefix: "dashboard" });
+  const navigate = useNavigate();
+  
+  const { applications } = useApplicationsStore();
+  const newRepliesCount = applications.filter((app) => app.status === "replied").length;
+
+  return (
+    <ProtectedRoute>
+      <div className="flex flex-col items-center py-8 px-4 min-h-[calc(100vh-4rem)]">
+        <div className="w-full max-w-md p-4 sm:p-8">
+          <button 
+            onClick={() => navigate("/home")} 
+            className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md"
+          >
+            <ArrowLeft size={16} /> Home
+          </button>
+
+          <div className="text-center mb-8">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 drop-shadow-md">
+              Manage Reports
+            </h1>
+            <p className="text-gray-600 font-medium text-sm drop-shadow">
+              File a new RTI request or check the status of existing ones.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <Link
+              to="/file"
+              className="bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 flex items-center justify-center gap-2"
+            >
+              <FileText size={20} />
+              {t("fileNewReq", "FILE NEW REQUEST")}
+            </Link>
+
+            <Link
+              to="/track"
+              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-4 px-6 rounded-xl font-bold text-center transition-all shadow-md flex items-center justify-center gap-2 relative"
+            >
+              <Activity size={20} />
+              {t("viewTrack", "VIEW / TRACK EXISTING REPORTS")}
+              {newRepliesCount > 0 && (
+                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
+                  {newRepliesCount}
+                </div>
+              )}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </ProtectedRoute>
+  );
+}
