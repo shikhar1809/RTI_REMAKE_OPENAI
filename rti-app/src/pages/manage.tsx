@@ -31,23 +31,23 @@ export default function ManagePage() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <Link
               to="/file"
-              className="bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-bold text-center transition-all shadow-md border-2 border-green-600 flex items-center justify-center gap-2"
+              className="bg-green-600 hover:bg-green-700 text-white p-6 rounded-3xl font-bold text-center transition-all shadow-lg border-2 border-green-700 flex flex-col items-center justify-center gap-3 h-48"
             >
-              <FileText size={20} />
-              FILE A NEW RTI
+              <FileText size={48} className="drop-shadow-md mb-1" />
+              <span className="text-xl tracking-wide">FILE A NEW RTI</span>
             </Link>
 
             <Link
               to="/track"
-              className="bg-white/95 border-2 border-gray-300 hover:border-gray-400 hover:bg-white text-gray-800 py-4 px-6 rounded-xl font-bold text-center transition-all shadow-md flex items-center justify-center gap-2 relative"
+              className="bg-white/95 hover:bg-white text-gray-800 p-6 rounded-3xl font-bold text-center transition-all shadow-lg border-2 border-gray-300 hover:border-gray-400 flex flex-col items-center justify-center gap-3 h-48 relative"
             >
-              <Activity size={20} />
-              VIEW/TRACK EXISTING REPORTS
+              <Activity size={48} className="text-green-600 drop-shadow-sm mb-1" />
+              <span className="text-xl tracking-wide">VIEW/TRACK EXISTING REPORTS</span>
               {newRepliesCount > 0 && (
-                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full shadow-md border-2 border-white">
+                <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-black w-8 h-8 flex items-center justify-center rounded-full shadow-md border-2 border-white">
                   {newRepliesCount}
                 </div>
               )}
