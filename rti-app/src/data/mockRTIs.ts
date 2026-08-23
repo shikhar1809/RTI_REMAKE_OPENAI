@@ -15,7 +15,57 @@ export interface RTIApplication {
   hasReply?: boolean;
   replyScore?: number; // 0-100
   replyText?: string;
+  isPublic?: boolean;
 }
+
+export const MOCK_PUBLIC_RTIS: RTIApplication[] = [
+  {
+    id: "pub-001",
+    subject: "Details of Expenditure on City Beautification (G20 Summit)",
+    authority: "Municipal Corporation, Delhi",
+    stateId: "delhi",
+    filedDate: "2024-11-10T10:00:00Z",
+    deadlineDate: "2024-12-10T10:00:00Z",
+    status: "resolved",
+    problemSummary: "Seeking breakdown of funds spent on painting walls and installing statues during the summit.",
+    hasReply: true,
+    isPublic: true,
+  },
+  {
+    id: "pub-002",
+    subject: "Environmental Clearance for Coastal Road Project",
+    authority: "Ministry of Environment, Forest and Climate Change, Maharashtra",
+    stateId: "maharashtra",
+    filedDate: "2025-01-05T09:30:00Z",
+    deadlineDate: "2025-02-05T09:30:00Z",
+    status: "pending",
+    problemSummary: "Seeking copy of the latest environmental clearance report and public consultation minutes.",
+    isPublic: true,
+  },
+  {
+    id: "pub-003",
+    subject: "Pothole Repair Contracts - Ward 15",
+    authority: "Bruhat Bengaluru Mahanagara Palike (BBMP), Karnataka",
+    stateId: "karnataka",
+    filedDate: "2025-02-15T14:20:00Z",
+    deadlineDate: "2025-03-15T14:20:00Z",
+    status: "replied",
+    problemSummary: "Requesting copies of work orders and contractor names for road repair in Ward 15.",
+    hasReply: true,
+    isPublic: true,
+  },
+  {
+    id: "pub-004",
+    subject: "Water Supply Contamination Reports",
+    authority: "Water Supply and Sewerage Board, Punjab",
+    stateId: "punjab",
+    filedDate: "2025-03-01T11:00:00Z",
+    deadlineDate: "2025-03-31T11:00:00Z",
+    status: "pending",
+    problemSummary: "Seeking lab testing results for water samples collected from Sector 42 over the last 3 months.",
+    isPublic: true,
+  }
+];
 
 export const MOCK_APPLICATIONS: RTIApplication[] = [
   {

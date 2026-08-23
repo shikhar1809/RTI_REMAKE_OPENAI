@@ -5,6 +5,7 @@ import { RTIApplication, MOCK_APPLICATIONS } from "@/data/mockRTIs";
 interface ApplicationsState {
   applications: RTIApplication[];
   addApplication: (app: RTIApplication) => void;
+  togglePublic: (id: string) => void;
 }
 
 export const useApplicationsStore = create<ApplicationsState>()(
@@ -13,6 +14,11 @@ export const useApplicationsStore = create<ApplicationsState>()(
       applications: MOCK_APPLICATIONS,
       addApplication: (app) => set((state) => ({ 
         applications: [app, ...state.applications] 
+      })),
+      togglePublic: (id) => set((state) => ({
+        applications: state.applications.map(app => 
+          app.id === id ? { ...app, isPublic: !app.isPublic } : app
+        )
       })),
     }),
     {

@@ -168,7 +168,7 @@ export default function HomePage() {
               to="/stats"
               className="bg-white/95 border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 hover:text-green-700 text-gray-800 py-3 px-6 rounded-xl font-bold text-center transition-all shadow-md"
             >
-              {t("rtiStats", "CHECK RTI STATS")}
+              {t("rtiStats", "PUBLIC RTI ARCHIEVE")}
             </Link>
 
             <Link

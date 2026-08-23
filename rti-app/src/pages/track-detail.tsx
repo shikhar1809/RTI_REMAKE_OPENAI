@@ -1,12 +1,12 @@
 import { useParams, Link, Navigate } from "react-router-dom";
-import { ArrowLeft, Clock, CheckCircle2, AlertCircle, Timer, FileText, Download } from "lucide-react";
+import { ArrowLeft, Clock, CheckCircle2, AlertCircle, Timer, FileText, Download, Eye, EyeOff } from "lucide-react";
 import { useApplicationsStore } from "@/store/applicationsStore";
 import { getDaysRemaining } from "@/data/mockRTIs";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 export default function TrackDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { applications } = useApplicationsStore();
+  const { applications, togglePublic } = useApplicationsStore();
   
   const app = applications.find(a => a.id === id);
   
@@ -103,6 +103,27 @@ export default function TrackDetailPage() {
                 <div className="bg-green-50/50 p-5 rounded-xl border border-green-100 text-gray-700 leading-relaxed font-medium">
                   {app.problemSummary}
                 </div>
+              </div>
+
+              {/* Public Archive Toggle */}
+              <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                <div className="flex flex-col pr-4">
+                  <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                    {app.isPublic ? <Eye size={18} className="text-green-600" /> : <EyeOff size={18} className="text-gray-400" />}
+                    Public Archive
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Allow others to view and download this RTI to help the community.
+                  </p>
+                </div>
+                <button
+                  onClick={() => togglePublic(app.id)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${app.isPublic ? 'bg-green-600' : 'bg-gray-300'}`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${app.isPublic ? 'translate-x-6' : 'translate-x-1'}`}
+                  />
+                </button>
               </div>
 
               {/* Actions */}
