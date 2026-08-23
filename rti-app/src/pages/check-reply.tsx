@@ -92,7 +92,15 @@ export default function CheckReplyPage() {
                   {/* PIO Message */}
                   <div className="self-start max-w-[90%]">
                     <div className="bg-white rounded-2xl rounded-tl-sm p-4 shadow-sm text-sm text-gray-800 border border-gray-200 relative break-words">
-                      <p className="whitespace-pre-wrap break-words">{replyText}</p>
+                      <div className="mb-2">
+                        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Paste Official Reply Below</span>
+                      </div>
+                      <textarea
+                        className="w-full min-h-[150px] text-sm text-gray-800 bg-slate-50 p-3 border border-dashed border-gray-300 rounded-lg focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 outline-none resize-none transition-all"
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                        placeholder="Paste the PIO's reply here to analyze it..."
+                      />
                       <div className="text-[10px] text-gray-400 text-right mt-2 mb-3">09:15 AM</div>
                       
                       {/* Analyze Button attached to the reply */}
