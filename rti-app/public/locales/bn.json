@@ -384,7 +384,7 @@
     "status_appealed": "আপিল করা হয়েছে"
   },
   "ai": {
-    "title": "MR. RIGHTEOUS",
+    "title": "MR Righteous",
     "subtitle": "আপনার RTI আইনি সহকারী · ভয়েস + চ্যাট",
     "placeholder": "আপনার বার্তা এখানে টাইপ করুন...",
     "listening": "শুনছি...",
@@ -405,6 +405,6 @@
     "tooltip1": "সাহায্য প্রয়োজন?",
     "tooltip2": "আপনার কি RTI প্রশ্ন আছে?",
     "tooltip3": "কোথাও আটকে গেছেন?",
-    "tooltip4": "MR. RIGHTEOUS কে জিজ্ঞাসা করুন!"
+    "tooltip4": "MR Righteous কে জিজ্ঞাসা করুন!"
   }
 }

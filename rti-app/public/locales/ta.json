@@ -384,7 +384,7 @@
     "status_appealed": "மேல்முறையீடு செய்யப்பட்டது"
   },
   "ai": {
-    "title": "MR. RIGHTEOUSா AI",
+    "title": "MR Righteousா AI",
     "subtitle": "உங்கள் RTI சட்ட உதவியாளர் · குரல் + அரட்டை",
     "placeholder": "உங்கள் செய்தியை இங்கே தட்டச்சு செய்யவும்...",
     "listening": "கேட்கிறது...",
@@ -405,6 +405,6 @@
     "tooltip1": "உதவி தேவையா?",
     "tooltip2": "RTI கேள்வி உள்ளதா?",
     "tooltip3": "எங்காவது சிக்கிக்கொண்டீர்களா?",
-    "tooltip4": "MR. RIGHTEOUS-யிடம் கேளுங்கள்!"
+    "tooltip4": "MR Righteous-யிடம் கேளுங்கள்!"
   }
 }
