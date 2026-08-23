@@ -161,7 +161,7 @@
     "signOut": "Sign out securely",
     "whatWouldYouLike": "What would you like to do today?",
     "fileNewReq": "FILE NEW REQUEST",
-    "viewTrack": "VIEW / TRACK EXISTING REPORTS",
+    "viewTrack": "VIEW/TRACK EXISTING REPORTS",
     "docConnect": "DOCUMENT VAULT",
     "knowRules": "KNOW RTI RULES",
     "rtiToolkit": "RTI TOOLKIT",
@@ -197,7 +197,11 @@
     "state_rajasthan": "Rajasthan",
     "state_bihar": "Bihar",
     "state_hp": "Himachal Pradesh",
-    "state_jk": "Jammu & Kashmir"
+    "state_jk": "Jammu & Kashmir",
+    "home": "Home",
+    "manageReportsTitle": "Manage Reports",
+    "manageReportsDesc": "File a new RTI request or check the status of existing ones.",
+    "fileNewRti": "FILE A NEW RTI"
   },
   "stats": {
     "pageTitle": "Public RTI Archive",

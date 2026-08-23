@@ -19,15 +19,15 @@ export default function ManagePage() {
             onClick={() => navigate("/home")} 
             className="inline-flex items-center gap-1 text-sm font-bold text-gray-600 hover:text-gray-900 mb-6 transition-all bg-white/95 border-2 border-gray-300 px-3 py-1.5 rounded-full shadow-md"
           >
-            <ArrowLeft size={16} /> Home
+            <ArrowLeft size={16} /> {t("home", "Home")}
           </button>
 
           <div className="text-center mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 drop-shadow-md">
-              Manage Reports
+              {t("manageReportsTitle", "Manage Reports")}
             </h1>
             <p className="text-gray-600 font-medium text-sm drop-shadow">
-              File a new RTI request or check the status of existing ones.
+              {t("manageReportsDesc", "File a new RTI request or check the status of existing ones.")}
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export default function ManagePage() {
               className="bg-white/95 hover:bg-green-50 text-gray-800 hover:text-green-700 p-6 rounded-3xl font-bold text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border-2 border-gray-300 hover:border-green-500 flex flex-col items-center justify-center gap-3 h-48"
             >
               <FileText size={48} className="drop-shadow-sm mb-1 transition-colors" />
-              <span className="text-xl tracking-wide">FILE A NEW RTI</span>
+              <span className="text-xl tracking-wide">{t("fileNewRti", "FILE A NEW RTI")}</span>
             </Link>
 
             <Link
@@ -45,7 +45,7 @@ export default function ManagePage() {
               className="bg-white/95 hover:bg-green-50 text-gray-800 hover:text-green-700 p-6 rounded-3xl font-bold text-center transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 border-2 border-gray-300 hover:border-green-500 flex flex-col items-center justify-center gap-3 h-48 relative"
             >
               <Activity size={48} className="drop-shadow-sm mb-1 transition-colors" />
-              <span className="text-xl tracking-wide">VIEW/TRACK EXISTING REPORTS</span>
+              <span className="text-xl tracking-wide">{t("viewTrack", "VIEW/TRACK EXISTING REPORTS")}</span>
               {newRepliesCount > 0 && (
                 <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-black w-8 h-8 flex items-center justify-center rounded-full shadow-md border-2 border-white">
                   {newRepliesCount}
